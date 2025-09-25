@@ -5,24 +5,26 @@ format: html
 
 # Financial Transaction Analysis
 
-This section analyzes the financial transactions from the `balancesheet_2425.xlsx` file.
+This section presents a dynamic analysis of the club's financial activities. The underlying data is sourced directly from a real-time ledger maintained in Google Sheets. The visualizations herein are programmatically generated and will automatically update to reflect any modifications to the source ledger, ensuring continuous and accurate financial reporting.
 
-```{r transaction-analysis-from-file, message=FALSE, warning=FALSE}
+```{r transaction-analysis-from-google-sheet, message=FALSE, warning=FALSE}
 # Load necessary libraries
-library(readxl)
+library(googlesheets4)
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(scales)
 library(stringr)
-library(here)
 
-# Define the path to the Excel file
-file_path <- here("data", "balancesheet_2425.xlsx")
+# --- Authenticate and Load Data from Google Sheets ---
+# This allows the script to read a public sheet without requiring a login each time.
+gs4_deauth()
 
-# --- Load and Clean Data from Excel ---
-# Read the data, assuming the first row contains the headers.
-raw_data <- read_excel(file_path, skip = 0)
+# The URL of your Google Sheet
+sheet_url <- "https://docs.google.com/spreadsheets/d/1QUmtSwyRjy1oQ6fqXGbksyNcvsLl_8wC0t6PSgTduJ8/edit?usp=sharing" 
+
+# Read the data from the first sheet of your Google Sheet
+raw_data <- read_sheet(sheet_url, sheet = 1)
 
 # Standardize column names for easier use
 colnames(raw_data) <- make.names(colnames(raw_data), unique = TRUE)
