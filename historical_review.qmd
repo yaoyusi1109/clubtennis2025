@@ -68,4 +68,42 @@ ggplot(transactions, aes(x = Date, y = Amount_Num, fill = Type)) +
   ) +
   theme_minimal(base_size = 14) +
   theme(legend.title = element_blank())
+
+# --- Spending Pie Chart ---
+# Step 1: Isolate and categorize spending data.
+spending_categorized <- cleaned_data %>%
+  filter(Amount_Num < 0) %>%
+  mutate(
+    Category = case_when(
+      str_detect(Description, regex("trip|rooms|Inn|Suites|van|Hotel", ignore_case = TRUE)) ~ "Travel & Lodging",
+      str_detect(Description, regex("Balls|Uniforms|Merch", ignore_case = TRUE))           ~ "Equipment & Gear",
+      str_detect(Description, regex("Bagels|food", ignore_case = TRUE))                    ~ "Food & Refreshments",
+      str_detect(Description, regex("Entry Fee|registration|Championship", ignore_case = TRUE)) ~ "Tournament & Entry Fees",
+      str_detect(Description, regex("Certs|CPRO", ignore_case = TRUE))                      ~ "Training & Certification",
+      str_detect(Description, regex("Indoor Courts", ignore_case = TRUE))                  ~ "Facility Rental",
+      TRUE                                                                                 ~ "Miscellaneous"
+    ),
+    Spending = abs(Amount_Num)
+  )
+
+# Step 2: Summarize data for the pie chart.
+spending_summary <- spending_categorized %>%
+  group_by(Category) %>%
+  summarise(TotalSpending = sum(Spending)) %>%
+  mutate(Percentage = TotalSpending / sum(TotalSpending) * 100)
+
+# Step 3: Create the pie chart.
+ggplot(spending_summary, aes(x = "", y = TotalSpending, fill = Category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = paste0(round(Percentage), "%\n", "(", dollar(TotalSpending), ")")), 
+            position = position_stack(vjust = 0.5), 
+            color = "white", 
+            size = 3.5) +
+  labs(
+    title = "Spending Distribution by Category",
+    fill = "Spending Category"
+  ) +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
 ```
