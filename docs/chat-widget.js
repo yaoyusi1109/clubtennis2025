@@ -25,46 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
     chatBody.scrollTop = chatBody.scrollHeight;
   };
 
-  // Conversation state we send to backend
-  const history = [
-    { role: 'system', content: 'You are a helpful assistant for the VT Club Tennis website. Be concise, accurate, and polite.' }
-  ];
-
-  async function sendMessage(text) {
-    // Echo locally
+  function sendMessage(text) {
     appendMessage(text, 'sent');
-    history.push({ role: 'user', content: text });
-
-    // Call Netlify Function
-    try {
-      sendBtn.disabled = true;
-      chatInput.disabled = true;
-
-      const resp = await fetch('/.netlify/functions/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history })
-      });
-
-      if (!resp.ok) {
-        const errText = await resp.text();
-        appendMessage('Sorry—there was an error. Please try again.');
-        console.error('Chat error:', errText);
-        return;
-      }
-
-      const data = await resp.json();
-      const reply = data?.content || '(no response)';
-      appendMessage(reply, 'received');
-      history.push({ role: 'assistant', content: reply });
-    } catch (e) {
-      appendMessage('Network error. Please try again.');
-      console.error(e);
-    } finally {
-      sendBtn.disabled = false;
-      chatInput.disabled = false;
-      chatInput.focus();
-    }
+    const to = 'yusiyao@vt.edu';
+    const subject = encodeURIComponent('Club Tennis Website Inquiry');
+    const body = encodeURIComponent(`Hello,\n\n${text}\n\n— Sent from VT Club Tennis site`);
+    const mailto = `mailto:${to}?subject=${subject}&body=${body}`;
+    window.location.href = mailto;
   }
 
   // Event listeners
@@ -88,4 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
       sendMessage(text);
     }
   });
+
+  // Email-based flow; no backend probe
 });
