@@ -1,0 +1,7 @@
+[build]
+  command = ""            # no build on Netlify; we commit prebuilt docs
+  publish = "docs"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
