@@ -1,35 +1,38 @@
 // Netlify Function: Chat proxy to OpenAI (no API key in the browser)
 // Usage: POST /.netlify/functions/chat with JSON { messages: [{role, content}, ...] }
 
-const CORS_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
+const allowed = process.env.ALLOWED_ORIGIN || "*";
+function corsHeaders(origin = allowed) {
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json",
+  };
+}
 
 exports.handler = async (event) => {
   // CORS preflight
   if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 204,
-      headers: {
-        "Access-Control-Allow-Origin": CORS_ORIGIN,
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-      body: "",
-    };
+    return { statusCode: 204, headers: corsHeaders(), body: "" };
   }
 
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+    return { statusCode: 405, headers: corsHeaders(), body: JSON.stringify({ error: "Method Not Allowed" }) };
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return { statusCode: 500, body: "Missing OPENAI_API_KEY" };
+    return { statusCode: 500, headers: corsHeaders(), body: JSON.stringify({ error: "Missing OPENAI_API_KEY" }) };
   }
 
   try {
+    if ((event.body || "").length > 64 * 1024) {
+      return { statusCode: 413, headers: corsHeaders(), body: JSON.stringify({ error: "Payload too large" }) };
+    }
     const { messages } = JSON.parse(event.body || "{}");
     if (!Array.isArray(messages) || messages.length === 0) {
-      return { statusCode: 400, body: "Missing messages array" };
+      return { statusCode: 400, headers: corsHeaders(), body: JSON.stringify({ error: "Missing messages array" }) };
     }
 
     const resp = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -47,25 +50,14 @@ exports.handler = async (event) => {
 
     if (!resp.ok) {
       const errText = await resp.text();
-      return {
-        statusCode: resp.status,
-        headers: { "Access-Control-Allow-Origin": CORS_ORIGIN },
-        body: `OpenAI error: ${errText}`,
-      };
+      return { statusCode: resp.status, headers: corsHeaders(), body: JSON.stringify({ error: `OpenAI error: ${errText}` }) };
     }
 
     const data = await resp.json();
     const reply = data?.choices?.[0]?.message?.content ?? "";
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": CORS_ORIGIN,
-      },
-      body: JSON.stringify({ content: reply }),
-    };
+    return { statusCode: 200, headers: corsHeaders(), body: JSON.stringify({ content: reply }) };
   } catch (e) {
-    return { statusCode: 500, body: `Server error: ${e.message}` };
+    return { statusCode: 500, headers: corsHeaders(), body: JSON.stringify({ error: `Server error: ${e.message}` }) };
   }
 };
