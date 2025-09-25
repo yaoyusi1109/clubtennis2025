@@ -48,7 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!resp.ok) {
         const errText = await resp.text();
-        appendMessage('Sorry—there was an error. Please try again.');
+        let msg = 'Sorry—there was an error. Please try again.';
+        try {
+          const parsed = JSON.parse(errText);
+          if (parsed?.error) msg += `\n${parsed.error}`;
+        } catch {}
+        appendMessage(msg);
         console.error('Chat error:', errText);
         return;
       }
@@ -88,4 +93,16 @@ document.addEventListener('DOMContentLoaded', () => {
       sendMessage(text);
     }
   });
+
+  // Optional: probe function health once per load (non-blocking)
+  try {
+    fetch('/.netlify/functions/ping')
+      .then(r => r.json())
+      .then(info => {
+        if (info && info.ok === false) {
+          console.warn('Chat backend not configured:', info);
+        }
+      })
+      .catch(() => {});
+  } catch {}
 });
