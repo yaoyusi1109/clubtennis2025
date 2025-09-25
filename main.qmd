@@ -1,76 +1,11 @@
 ---
-title: "VT Club Tennis: Project Outline"
-author: "Yusi Yao, Caleb Ramsey, Parker Trahan, KEMPTON"
-date: "2025-09-25"
-format: 
-  html:
-    toc: true
-    toc-location: left
-    theme: united
+title: "VT Club Tennis Project"
 ---
 
-# Introduction
+Welcome! This project has two primary goals:
 
-This document outlines the strategic plan for the VT Club Tennis project. The project is divided into two primary initiatives: Financial Analysis and Performance Analytics. Our goal is to provide actionable insights and tools to enhance the club's financial stability and competitive performance.
+1.  **Financial Analysis:** To strengthen the club's financial health through data-driven strategies.
+2.  **Performance Analytics:** To improve player and team performance using advanced analytics.
 
----
+You can explore each of these sections through the navigation bar at the top of the page.
 
-# 1. Financial Analysis
-
-This section focuses on strengthening the club's financial health through data-driven strategies.
-
-## A. Historical Review
-
-- **Objective:** Analyze financial data from the last 2–3 years to understand revenue streams and spending habits.
-- **Data Sources:** Dues, parent contributions, Giving Day revenue, and historical costs for travel, gear, and other expenses.
-- **Goal:** Identify spending patterns, highlight inefficiencies, and establish a financial baseline.
-
-## B. Fundraising Strategy
-
-- **Objective:** Develop and execute a targeted fundraising plan to maximize revenue.
-- **Key Initiatives:**
-    - **Giving Day (Feb 19):**
-        - Launch dedicated campaigns for parents and players.
-        - Actively monitor hourly leaderboards to capture prize bonuses.
-    - **Secondary Streams:**
-        - Explore opportunities for selling merchandise.
-        - Organize tennis clinics for the community.
-        - Develop an alumni outreach and donation program.
-
-## C. Budget Modeling
-
-- **Objective:** Create a dynamic and user-friendly tool for annual budget management.
-- **Implementation:**
-    - **Tool:** Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.
-    - **Features:**
-        - Provide scenarios for different season types (e.g., travel-heavy vs. local-heavy).
-        - Automate recommendations for allocating funds to entry fees, travel, and equipment.
-
----
-
-# 2. Performance Analytics
-
-This section is dedicated to improving player and team performance through advanced analytics.
-
-## A. Ladder Ranking System
-
-- **Objective:** Implement a modern, data-driven ranking system to foster competition and transparency.
-- **Methodology:**
-    - **Data Collection:** Gather historical match data, including challenge matches, tournaments, and practice sets.
-    - **Ranking Algorithm:** Build a system based on Elo or Glicko-2, which accounts for opponent strength and match recency.
-- **Deliverable:** A live dashboard for players and leadership to view current rankings and track progress.
-
-## B. Swing Vision Integration
-
-- **Objective:** Leverage Swing Vision technology to provide players with personalized performance feedback.
-- **Process:**
-    - **Data Extraction:** Train players to record matches and extract key statistics (e.g., serve percentage, rally length, unforced errors, winners).
-    - **Feedback Loop:** Generate concise feedback reports that identify one key area for improvement for each player.
-
-## C. Doubles Pairing Analysis
-
-- **Objective:** Use data to identify and recommend optimal doubles pairings.
-- **Analysis:**
-    - **Data Points:** Combine Swing Vision stats and match results to evaluate team chemistry.
-    - **Metrics:** Analyze net vs. baseline play, serve/return dynamics, and overall win percentages for various pairings.
-- **Outcome:** Provide data-backed recommendations for doubles teams in practices and tournaments.

@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Yusi">
 
-<title>VT Club Tennis Project – VT Club Tennis Analysis</title>
+<title>Financial Analysis – VT Club Tennis Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -90,13 +91,24 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./main.html" aria-current="page"> 
+    <a class="nav-link" href="./main.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./financial_analysis.html"> 
-<span class="menu-text">Financial Analysis</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-financial-analysis" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Financial Analysis</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-financial-analysis">    
+        <li>
+    <a class="dropdown-item" href="./financial_analysis.html">
+ <span class="dropdown-text">Overview</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./historical_review.html">
+ <span class="dropdown-text">Historical Review</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="./performance_analysis.html"> 
 <span class="menu-text">Performance Analysis</span></a>
@@ -112,21 +124,35 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a.-historical-review" id="toc-a.-historical-review" class="nav-link active" data-scroll-target="#a.-historical-review">A. Historical Review</a></li>
+  <li><a href="#b.-fundraising-strategy" id="toc-b.-fundraising-strategy" class="nav-link" data-scroll-target="#b.-fundraising-strategy">B. Fundraising Strategy</a></li>
+  <li><a href="#c.-budget-modeling" id="toc-c.-budget-modeling" class="nav-link" data-scroll-target="#c.-budget-modeling">C. Budget Modeling</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">VT Club Tennis Project</h1>
+<h1 class="title">Financial Analysis</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yusi </p>
+          </div>
+  </div>
     
   
     
@@ -137,14 +163,52 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome! This project has two primary goals:</p>
-<ol type="1">
-<li><strong>Financial Analysis:</strong> To strengthen the club’s financial health through data-driven strategies.</li>
-<li><strong>Performance Analytics:</strong> To improve player and team performance using advanced analytics.</li>
-</ol>
-<p>You can explore each of these sections through the navigation bar at the top of the page.</p>
+<p>This section focuses on strengthening the club’s financial health through data-driven strategies.</p>
+<section id="a.-historical-review" class="level2">
+<h2 class="anchored" data-anchor-id="a.-historical-review">A. Historical Review</h2>
+<ul>
+<li>Objective: Analyze financial data from the last 2–3 years to understand revenue streams and spending habits.</li>
+<li>Data Sources: Dues, parent contributions, Giving Day revenue, and historical costs for travel, gear, and other expenses.</li>
+<li>Goal: Identify spending patterns, highlight inefficiencies, and establish a financial baseline.</li>
+</ul>
+</section>
+<section id="b.-fundraising-strategy" class="level2">
+<h2 class="anchored" data-anchor-id="b.-fundraising-strategy">B. Fundraising Strategy</h2>
+<ul>
+<li><strong>Objective:</strong> Develop and execute a targeted fundraising plan to maximize revenue.</li>
+<li><strong>Key Initiatives:</strong>
+<ul>
+<li><strong>Giving Day (Feb 19):</strong>
+<ul>
+<li>Launch dedicated campaigns for parents and players.</li>
+<li>Actively monitor hourly leaderboards to capture prize bonuses.</li>
+</ul></li>
+<li><strong>Secondary Streams:</strong>
+<ul>
+<li>Explore opportunities for selling merchandise.</li>
+<li>Organize tennis clinics for the community.</li>
+<li>Develop an alumni outreach and donation program.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="c.-budget-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="c.-budget-modeling">C. Budget Modeling</h2>
+<ul>
+<li><strong>Objective:</strong> Create a dynamic and user-friendly tool for annual budget management.</li>
+<li><strong>Implementation:</strong>
+<ul>
+<li><strong>Tool:</strong> Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.</li>
+<li><strong>Features:</strong>
+<ul>
+<li>Provide scenarios for different season types (e.g., travel-heavy vs.&nbsp;local-heavy).</li>
+<li>Automate recommendations for allocating funds to entry fees, travel, and equipment.</li>
+</ul></li>
+</ul></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

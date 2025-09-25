@@ -1,0 +1,69 @@
+---
+title: "Historical Review"
+format: html
+---
+
+# Financial Transaction Analysis
+
+This section analyzes the financial transactions from the `balancesheet_2425.xlsx` file.
+
+```{r transaction-analysis-from-file, message=FALSE, warning=FALSE}
+# Load necessary libraries
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(scales)
+library(stringr)
+library(here)
+
+# Define the path to the Excel file
+file_path <- here("data", "balancesheet_2425.xlsx")
+
+# --- Load and Clean Data from Excel ---
+# Read the data, assuming the first row contains the headers.
+raw_data <- read_excel(file_path, skip = 0)
+
+# Standardize column names for easier use
+colnames(raw_data) <- make.names(colnames(raw_data), unique = TRUE)
+
+cleaned_data <- raw_data %>%
+  # Ensure Date column is in Date format
+  mutate(Date = as.Date(Date)) %>%
+  # Rename columns for clarity. The data is already clean.
+  rename(Amount_Num = Amount, Total_Num = Total) %>%
+  # Add a transaction type column
+  mutate(Type = ifelse(Amount_Num >= 0, "Income", "Spending")) %>%
+  # Filter out any rows where key data is missing
+  filter(!is.na(Date) & !is.na(Amount_Num))
+
+# Filter out the beginning balance for the income/spending chart
+transactions <- cleaned_data %>%
+  filter(Vendor != "Beginning balance")
+
+# --- Visualization 1: Balance Over Time ---
+ggplot(cleaned_data, aes(x = Date, y = Total_Num)) +
+  geom_line(color = "#0073C2", size = 1) +
+  geom_point(color = "#0073C2", size = 3) +
+  scale_y_continuous(labels = dollar_format()) +
+  labs(
+    title = "Club Balance Over Time (2024-2025)",
+    x = "Date",
+    y = "Total Balance"
+  ) +
+  theme_minimal(base_size = 14)
+
+# --- Visualization 2: Income vs. Spending ---
+ggplot(transactions, aes(x = Date, y = Amount_Num, fill = Type)) +
+  geom_col(position = "identity") +
+  scale_fill_manual(values = c("Income" = "#4CAF50", "Spending" = "#F44336")) +
+  scale_y_continuous(labels = dollar_format()) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Income and Spending Transactions",
+    x = "Date",
+    y = "Amount"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(legend.title = element_blank())
+```

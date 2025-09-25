@@ -1,0 +1,30 @@
+---
+title: "Performance Analytics"
+format: html
+author: TBD
+---
+
+This section is dedicated to improving player and team performance through advanced analytics.
+
+## A. Ladder Ranking System
+
+- **Objective:** Implement a modern, data-driven ranking system to foster competition and transparency.
+- **Methodology:**
+    - **Data Collection:** Gather historical match data, including challenge matches, tournaments, and practice sets.
+    - **Ranking Algorithm:** Build a system based on Elo or Glicko-2, which accounts for opponent strength and match recency.
+- **Deliverable:** A live dashboard for players and leadership to view current rankings and track progress.
+
+## B. Swing Vision Integration
+
+- **Objective:** Leverage Swing Vision technology to provide players with personalized performance feedback.
+- **Process:**
+    - **Data Extraction:** Train players to record matches and extract key statistics (e.g., serve percentage, rally length, unforced errors, winners).
+    - **Feedback Loop:** Generate concise feedback reports that identify one key area for improvement for each player.
+
+## C. Doubles Pairing Analysis
+
+- **Objective:** Use data to identify and recommend optimal doubles pairings.
+- **Analysis:**
+    - **Data Points:** Combine Swing Vision stats and match results to evaluate team chemistry.
+    - **Metrics:** Analyze net vs. baseline play, serve/return dynamics, and overall win percentages for various pairings.
+- **Outcome:** Provide data-backed recommendations for doubles teams in practices and tournaments.

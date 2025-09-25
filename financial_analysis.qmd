@@ -1,0 +1,34 @@
+---
+title: "Financial Analysis"
+format: html
+author: Yusi
+---
+
+This section focuses on strengthening the club's financial health through data-driven strategies.
+
+## A. Historical Review
+
+- Objective: Analyze financial data from the last 2–3 years to understand revenue streams and spending habits.
+- Data Sources: Dues, parent contributions, Giving Day revenue, and historical costs for travel, gear, and other expenses.
+- Goal: Identify spending patterns, highlight inefficiencies, and establish a financial baseline.
+
+## B. Fundraising Strategy
+
+- **Objective:** Develop and execute a targeted fundraising plan to maximize revenue.
+- **Key Initiatives:**
+    - **Giving Day (Feb 19):**
+        - Launch dedicated campaigns for parents and players.
+        - Actively monitor hourly leaderboards to capture prize bonuses.
+    - **Secondary Streams:**
+        - Explore opportunities for selling merchandise.
+        - Organize tennis clinics for the community.
+        - Develop an alumni outreach and donation program.
+
+## C. Budget Modeling
+
+- **Objective:** Create a dynamic and user-friendly tool for annual budget management.
+- **Implementation:**
+    - **Tool:** Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.
+    - **Features:**
+        - Provide scenarios for different season types (e.g., travel-heavy vs. local-heavy).
+        - Automate recommendations for allocating funds to entry fees, travel, and equipment.

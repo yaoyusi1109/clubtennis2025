@@ -1,51 +1,121 @@
 [
   {
+    "objectID": "performance_analysis.html",
+    "href": "performance_analysis.html",
+    "title": "Performance Analytics",
+    "section": "",
+    "text": "This section is dedicated to improving player and team performance through advanced analytics."
+  },
+  {
+    "objectID": "performance_analysis.html#a.-ladder-ranking-system",
+    "href": "performance_analysis.html#a.-ladder-ranking-system",
+    "title": "Performance Analytics",
+    "section": "A. Ladder Ranking System",
+    "text": "A. Ladder Ranking System\n\nObjective: Implement a modern, data-driven ranking system to foster competition and transparency.\nMethodology:\n\nData Collection: Gather historical match data, including challenge matches, tournaments, and practice sets.\nRanking Algorithm: Build a system based on Elo or Glicko-2, which accounts for opponent strength and match recency.\n\nDeliverable: A live dashboard for players and leadership to view current rankings and track progress."
+  },
+  {
+    "objectID": "performance_analysis.html#b.-swing-vision-integration",
+    "href": "performance_analysis.html#b.-swing-vision-integration",
+    "title": "Performance Analytics",
+    "section": "B. Swing Vision Integration",
+    "text": "B. Swing Vision Integration\n\nObjective: Leverage Swing Vision technology to provide players with personalized performance feedback.\nProcess:\n\nData Extraction: Train players to record matches and extract key statistics (e.g., serve percentage, rally length, unforced errors, winners).\nFeedback Loop: Generate concise feedback reports that identify one key area for improvement for each player."
+  },
+  {
+    "objectID": "performance_analysis.html#c.-doubles-pairing-analysis",
+    "href": "performance_analysis.html#c.-doubles-pairing-analysis",
+    "title": "Performance Analytics",
+    "section": "C. Doubles Pairing Analysis",
+    "text": "C. Doubles Pairing Analysis\n\nObjective: Use data to identify and recommend optimal doubles pairings.\nAnalysis:\n\nData Points: Combine Swing Vision stats and match results to evaluate team chemistry.\nMetrics: Analyze net vs. baseline play, serve/return dynamics, and overall win percentages for various pairings.\n\nOutcome: Provide data-backed recommendations for doubles teams in practices and tournaments."
+  },
+  {
     "objectID": "main.html",
     "href": "main.html",
-    "title": "VT Club Tennis: Project Outline",
+    "title": "VT Club Tennis Project",
     "section": "",
-    "text": "This document outlines the strategic plan for the VT Club Tennis project. The project is divided into two primary initiatives: Financial Analysis and Performance Analytics. Our goal is to provide actionable insights and tools to enhance the club’s financial stability and competitive performance."
+    "text": "Welcome! This project has two primary goals:\n\nFinancial Analysis: To strengthen the club’s financial health through data-driven strategies.\nPerformance Analytics: To improve player and team performance using advanced analytics.\n\nYou can explore each of these sections through the navigation bar at the top of the page."
+  },
+  {
+    "objectID": "main.html#project-sections",
+    "href": "main.html#project-sections",
+    "title": "VT Club Tennis: Project Homepage",
+    "section": "",
+    "text": "Financial Analysis: This section covers historical financial reviews, fundraising strategies, and budget modeling.\nPerformance Analytics: This section focuses on player rankings, Swing Vision integration, and doubles pairing analysis."
   },
   {
     "objectID": "main.html#a.-historical-review",
     "href": "main.html#a.-historical-review",
-    "title": "VT Club Tennis: Project Outline",
+    "title": "VT Club Tennis Project",
     "section": "A. Historical Review",
     "text": "A. Historical Review\n\nObjective: Analyze financial data from the last 2–3 years to understand revenue streams and spending habits.\nData Sources: Dues, parent contributions, Giving Day revenue, and historical costs for travel, gear, and other expenses.\nGoal: Identify spending patterns, highlight inefficiencies, and establish a financial baseline."
   },
   {
     "objectID": "main.html#b.-fundraising-strategy",
     "href": "main.html#b.-fundraising-strategy",
-    "title": "VT Club Tennis: Project Outline",
+    "title": "VT Club Tennis Project",
     "section": "B. Fundraising Strategy",
     "text": "B. Fundraising Strategy\n\nObjective: Develop and execute a targeted fundraising plan to maximize revenue.\nKey Initiatives:\n\nGiving Day (Feb 19):\n\nLaunch dedicated campaigns for parents and players.\nActively monitor hourly leaderboards to capture prize bonuses.\n\nSecondary Streams:\n\nExplore opportunities for selling merchandise.\nOrganize tennis clinics for the community.\nDevelop an alumni outreach and donation program."
   },
   {
     "objectID": "main.html#c.-budget-modeling",
     "href": "main.html#c.-budget-modeling",
-    "title": "VT Club Tennis: Project Outline",
+    "title": "VT Club Tennis Project",
     "section": "C. Budget Modeling",
-    "text": "C. Budget Modeling\n\nObjective: Create a dynamic and user-friendly tool for annual budget management.\nImplementation:\n\nTool: Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.\nFeatures:\n\nProvide scenarios for different season types (e.g., travel-heavy vs. local-heavy).\nAutomate recommendations for allocating funds to entry fees, travel, and equipment."
+    "text": "C. Budget Modeling\n\nObjective: Create a dynamic and user-friendly tool for annual budget management.\nImplementation:\n\nTool: Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.\nFeatures:\n\nProvide scenarios for different season types (e.g., travel-heavy vs. local-heavy).\nAutomate recommendations for allocating funds to entry fees, travel, and equipment.\n\n\n\n\n# Load necessary libraries\nlibrary(readxl)\nlibrary(here)\n\nhere() starts at /Users/yusiyao/Desktop/VT/clubtennis2025\n\nlibrary(purrr)\n\n# Path to the budget file\nbudget_path &lt;- here(\"data\", \"budget.xlsx\")\n\n# Get sheet names\nsheet_names &lt;- excel_sheets(budget_path)\nprint(\"Sheet Names:\")\n\n[1] \"Sheet Names:\"\n\nprint(sheet_names)\n\n[1] \"FY 25-26\"     \"Roster 25-26\" \"VTF 25-26\"    \"C2HFE \"       \"FY 24-25\"    \n[6] \"Roster 24-25\"\n\n# Read each sheet into a list of data frames\nbudget_data &lt;- map(sheet_names, ~read_excel(budget_path, sheet = .x))\n\nNew names:\n• `` -&gt; `...2`\n• `` -&gt; `...3`\n• `` -&gt; `...4`\n• `` -&gt; `...5`\n• `` -&gt; `...6`\n• `` -&gt; `...7`\n• `` -&gt; `...8`\n• `` -&gt; `...9`\n\n\nNew names:\nNew names:\nNew names:\nNew names:\nNew names:\n• `` -&gt; `...2`\n• `` -&gt; `...3`\n• `` -&gt; `...4`\n• `` -&gt; `...5`\n• `` -&gt; `...6`\n• `Key` -&gt; `Key...7`\n• `` -&gt; `...8`\n• `` -&gt; `...10`\n• `` -&gt; `...11`\n• `` -&gt; `...12`\n• `` -&gt; `...13`\n• `` -&gt; `...14`\n• `Key` -&gt; `Key...15`\n\nnames(budget_data) &lt;- sheet_names\n\n# Display the first few rows of each sheet to understand the content\nfor (name in sheet_names) {\n  cat(paste(\"\\n--- Data from sheet:\", name, \"---\\n\"))\n  print(head(budget_data[[name]]))\n}\n\n\n--- Data from sheet: FY 25-26 ---\n# A tibble: 6 × 9\n  `Account #` ...2                     ...3  ...4  ...5  ...6  ...7  ...8  ...9 \n  &lt;chr&gt;       &lt;chr&gt;                    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;\n1 Date        Vendor                   Desc… Docu… Amou… Total Acct… Reco… &lt;NA&gt; \n2 45839       Beginning balance        fund… &lt;NA&gt;  &lt;NA&gt;  1867… &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; \n3 45866       Deposit                  allo… FJ08… 10    1868… 0152  X     &lt;NA&gt; \n4 45862       University  of Tennessee canc… C324… 350   1903… 12211 X     *che…\n5 45890       Kaitlin Ly               Tour… P465… -350  1868… 12211 X     &lt;NA&gt; \n6 45895       Amazon                   Penn… ESTI… -139… 1854… &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; \n\n--- Data from sheet: Roster 25-26 ---\n# A tibble: 6 × 15\n  `Fall 2025 Roster` ...2       ...3             ...4  ...5  ...6  Key...7 ...8 \n  &lt;chr&gt;              &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt;   &lt;lgl&gt;\n1 &lt;NA&gt;               &lt;NA&gt;       &lt;NA&gt;             &lt;NA&gt;  &lt;NA&gt;  NA    Comple… NA   \n2 Last Name          First Name VT Email         IMLe… Comm… NA    Not Co… NA   \n3 Women's Team       &lt;NA&gt;       &lt;NA&gt;             &lt;NA&gt;  &lt;NA&gt;  NA    &lt;NA&gt;    NA   \n4 Aprahamian         Sophie     sophieaprahamia… &lt;NA&gt;  &lt;NA&gt;  NA    &lt;NA&gt;    NA   \n5 Bishop             Kate       katebishop892@v… &lt;NA&gt;  &lt;NA&gt;  NA    &lt;NA&gt;    NA   \n6 Blaylock           Alex       alb1512@vt.edu   &lt;NA&gt;  &lt;NA&gt;  NA    &lt;NA&gt;    NA   \n# ℹ 7 more variables: `Spring 2026 Roster` &lt;chr&gt;, ...10 &lt;chr&gt;, ...11 &lt;chr&gt;,\n#   ...12 &lt;chr&gt;, ...13 &lt;chr&gt;, ...14 &lt;lgl&gt;, Key...15 &lt;chr&gt;\n\n--- Data from sheet: VTF 25-26 ---\n# A tibble: 6 × 8\n  `Account #878091` ...2              ...3         ...4  ...5  ...6  ...7  ...8 \n  &lt;chr&gt;             &lt;chr&gt;             &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;\n1 Date              Vendor            Description  Docu… Amou… Total Acct… Reco…\n2 45839             Beginning Balance fund balanc… &lt;NA&gt;  &lt;NA&gt;  2338… &lt;NA&gt;  &lt;NA&gt; \n3 &lt;NA&gt;              &lt;NA&gt;              &lt;NA&gt;         &lt;NA&gt;  &lt;NA&gt;  2338… &lt;NA&gt;  &lt;NA&gt; \n4 &lt;NA&gt;              &lt;NA&gt;              &lt;NA&gt;         &lt;NA&gt;  &lt;NA&gt;  2338… &lt;NA&gt;  &lt;NA&gt; \n5 &lt;NA&gt;              &lt;NA&gt;              &lt;NA&gt;         &lt;NA&gt;  &lt;NA&gt;  2338… &lt;NA&gt;  &lt;NA&gt; \n6 &lt;NA&gt;              &lt;NA&gt;              &lt;NA&gt;         &lt;NA&gt;  &lt;NA&gt;  2338… &lt;NA&gt;  &lt;NA&gt; \n\n--- Data from sheet: C2HFE  ---\n# A tibble: 6 × 9\n  `yashpaw@vt.edu`        Yash     Pawnarkar ...4  Aprahamian Sophie ...7  ...8 \n  &lt;chr&gt;                   &lt;chr&gt;    &lt;chr&gt;     &lt;lgl&gt; &lt;chr&gt;      &lt;chr&gt;  &lt;lgl&gt; &lt;lgl&gt;\n1 sophieaprahamian@vt.edu Sophie   Aprahami… NA    Balcells   Lucas  NA    NA   \n2 lbalcells@vt.edu        Lucas    Balcells  NA    Bashir     Aden   NA    NA   \n3 adenbashir2003@vt.edu   Aden     Bashir    NA    Baskaran   Haris… NA    NA   \n4 harisharanb@vt.edu      Harisha… Baskaran  NA    Belfort    Diego  NA    NA   \n5 dbelfort@vt.edu         Diego    Belfort   NA    Bermudez   Nico   NA    NA   \n6 katebishop892@vt.edu    Kate     Bishop    NA    Bishop     Kate   NA    NA   \n# ℹ 1 more variable: `88 percent` &lt;chr&gt;\n\n--- Data from sheet: FY 24-25 ---\n# A tibble: 6 × 9\n  `Account #` ...2                     ...3  ...4  ...5  ...6  ...7  ...8  ...9 \n  &lt;chr&gt;       &lt;chr&gt;                    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;\n1 Date        Vendor                   Desc… Docu… Amou… Total Acct… Reco… &lt;NA&gt; \n2 45474       Beginning balance        fund… &lt;NA&gt;  &lt;NA&gt;  1326… &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; \n3 45489       Foundation Transfer      Foun… ESTI… 8500  2176… 0152  X     &lt;NA&gt; \n4 45498       Deposit                  allo… FJ07… 10    2177… 0152  X     &lt;NA&gt; \n5 45534       Dicks Sporting Goods     Tenn… AG-0… -70.… 2170… 13784 X     &lt;NA&gt; \n6 45541       Towneplace Suites Frede… 2 ro… JR-1… -799  2090… 12850 X     &lt;NA&gt; \n\n--- Data from sheet: Roster 24-25 ---\n# A tibble: 6 × 15\n  `Fall 2024 Roster` ...2       ...3             ...4  ...5  ...6  Key...7 ...8 \n  &lt;chr&gt;              &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt;   &lt;lgl&gt;\n1 &lt;NA&gt;               &lt;NA&gt;       &lt;NA&gt;             &lt;NA&gt;  &lt;NA&gt;  NA    Comple… NA   \n2 Last Name          First Name VT Email         IMLe… Comm… NA    Not Co… NA   \n3 Womens Team        &lt;NA&gt;       &lt;NA&gt;             &lt;NA&gt;  &lt;NA&gt;  NA    &lt;NA&gt;    NA   \n4 Aprahamian         Sophie     sophieaprahamia… &lt;NA&gt;  &lt;NA&gt;  NA    &lt;NA&gt;    NA   \n5 Augenstein         Amelia     ameliaaugenstei… &lt;NA&gt;  &lt;NA&gt;  NA    &lt;NA&gt;    NA   \n6 Barad Itzhaki      Tamara     btamara@vt.edu   &lt;NA&gt;  &lt;NA&gt;  NA    &lt;NA&gt;    NA   \n# ℹ 7 more variables: `Spring 2025 Roster` &lt;chr&gt;, ...10 &lt;chr&gt;, ...11 &lt;chr&gt;,\n#   ...12 &lt;chr&gt;, ...13 &lt;chr&gt;, ...14 &lt;lgl&gt;, Key...15 &lt;chr&gt;"
   },
   {
     "objectID": "main.html#a.-ladder-ranking-system",
     "href": "main.html#a.-ladder-ranking-system",
-    "title": "VT Club Tennis: Project Outline",
+    "title": "VT Club Tennis Project",
     "section": "A. Ladder Ranking System",
     "text": "A. Ladder Ranking System\n\nObjective: Implement a modern, data-driven ranking system to foster competition and transparency.\nMethodology:\n\nData Collection: Gather historical match data, including challenge matches, tournaments, and practice sets.\nRanking Algorithm: Build a system based on Elo or Glicko-2, which accounts for opponent strength and match recency.\n\nDeliverable: A live dashboard for players and leadership to view current rankings and track progress."
   },
   {
     "objectID": "main.html#b.-swing-vision-integration",
     "href": "main.html#b.-swing-vision-integration",
-    "title": "VT Club Tennis: Project Outline",
+    "title": "VT Club Tennis Project",
     "section": "B. Swing Vision Integration",
     "text": "B. Swing Vision Integration\n\nObjective: Leverage Swing Vision technology to provide players with personalized performance feedback.\nProcess:\n\nData Extraction: Train players to record matches and extract key statistics (e.g., serve percentage, rally length, unforced errors, winners).\nFeedback Loop: Generate concise feedback reports that identify one key area for improvement for each player."
   },
   {
     "objectID": "main.html#c.-doubles-pairing-analysis",
     "href": "main.html#c.-doubles-pairing-analysis",
-    "title": "VT Club Tennis: Project Outline",
+    "title": "VT Club Tennis Project",
     "section": "C. Doubles Pairing Analysis",
     "text": "C. Doubles Pairing Analysis\n\nObjective: Use data to identify and recommend optimal doubles pairings.\nAnalysis:\n\nData Points: Combine Swing Vision stats and match results to evaluate team chemistry.\nMetrics: Analyze net vs. baseline play, serve/return dynamics, and overall win percentages for various pairings.\n\nOutcome: Provide data-backed recommendations for doubles teams in practices and tournaments."
+  },
+  {
+    "objectID": "financial_analysis.html",
+    "href": "financial_analysis.html",
+    "title": "Financial Analysis",
+    "section": "",
+    "text": "This section focuses on strengthening the club’s financial health through data-driven strategies."
+  },
+  {
+    "objectID": "financial_analysis.html#a.-historical-review",
+    "href": "financial_analysis.html#a.-historical-review",
+    "title": "Financial Analysis",
+    "section": "A. Historical Review",
+    "text": "A. Historical Review\n\nObjective: Analyze financial data from the last 2–3 years to understand revenue streams and spending habits.\nData Sources: Dues, parent contributions, Giving Day revenue, and historical costs for travel, gear, and other expenses.\nGoal: Identify spending patterns, highlight inefficiencies, and establish a financial baseline."
+  },
+  {
+    "objectID": "financial_analysis.html#b.-fundraising-strategy",
+    "href": "financial_analysis.html#b.-fundraising-strategy",
+    "title": "Financial Analysis",
+    "section": "B. Fundraising Strategy",
+    "text": "B. Fundraising Strategy\n\nObjective: Develop and execute a targeted fundraising plan to maximize revenue.\nKey Initiatives:\n\nGiving Day (Feb 19):\n\nLaunch dedicated campaigns for parents and players.\nActively monitor hourly leaderboards to capture prize bonuses.\n\nSecondary Streams:\n\nExplore opportunities for selling merchandise.\nOrganize tennis clinics for the community.\nDevelop an alumni outreach and donation program."
+  },
+  {
+    "objectID": "financial_analysis.html#c.-budget-modeling",
+    "href": "financial_analysis.html#c.-budget-modeling",
+    "title": "Financial Analysis",
+    "section": "C. Budget Modeling",
+    "text": "C. Budget Modeling\n\nObjective: Create a dynamic and user-friendly tool for annual budget management.\nImplementation:\n\nTool: Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.\nFeatures:\n\nProvide scenarios for different season types (e.g., travel-heavy vs. local-heavy).\nAutomate recommendations for allocating funds to entry fees, travel, and equipment."
+  },
+  {
+    "objectID": "historical_review.html",
+    "href": "historical_review.html",
+    "title": "Historical Review",
+    "section": "",
+    "text": "Financial Transaction Analysis\nThis section analyzes the financial transactions from the balancesheet_2425.xlsx file.\n\n# Load necessary libraries\nlibrary(readxl)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(lubridate)\nlibrary(scales)\nlibrary(stringr)\nlibrary(here)\n\n# Define the path to the Excel file\nfile_path &lt;- here(\"data\", \"balancesheet_2425.xlsx\")\n\n# --- Load and Clean Data from Excel ---\n# Read the data, assuming the first row contains the headers.\nraw_data &lt;- read_excel(file_path, skip = 0)\n\n# Standardize column names for easier use\ncolnames(raw_data) &lt;- make.names(colnames(raw_data), unique = TRUE)\n\ncleaned_data &lt;- raw_data %&gt;%\n  # Ensure Date column is in Date format\n  mutate(Date = as.Date(Date)) %&gt;%\n  # Rename columns for clarity. The data is already clean.\n  rename(Amount_Num = Amount, Total_Num = Total) %&gt;%\n  # Add a transaction type column\n  mutate(Type = ifelse(Amount_Num &gt;= 0, \"Income\", \"Spending\")) %&gt;%\n  # Filter out any rows where key data is missing\n  filter(!is.na(Date) & !is.na(Amount_Num))\n\n# Filter out the beginning balance for the income/spending chart\ntransactions &lt;- cleaned_data %&gt;%\n  filter(Vendor != \"Beginning balance\")\n\n# --- Visualization 1: Balance Over Time ---\nggplot(cleaned_data, aes(x = Date, y = Total_Num)) +\n  geom_line(color = \"#0073C2\", size = 1) +\n  geom_point(color = \"#0073C2\", size = 3) +\n  scale_y_continuous(labels = dollar_format()) +\n  labs(\n    title = \"Club Balance Over Time (2024-2025)\",\n    x = \"Date\",\n    y = \"Total Balance\"\n  ) +\n  theme_minimal(base_size = 14)\n\n\n\n\n\n\n\n# --- Visualization 2: Income vs. Spending ---\nggplot(transactions, aes(x = Date, y = Amount_Num, fill = Type)) +\n  geom_col(position = \"identity\") +\n  scale_fill_manual(values = c(\"Income\" = \"#4CAF50\", \"Spending\" = \"#F44336\")) +\n  scale_y_continuous(labels = dollar_format()) +\n  geom_hline(yintercept = 0, linetype = \"dashed\") +\n  labs(\n    title = \"Income and Spending Transactions\",\n    x = \"Date\",\n    y = \"Amount\"\n  ) +\n  theme_minimal(base_size = 14) +\n  theme(legend.title = element_blank())"
   }
 ]
