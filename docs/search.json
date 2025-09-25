@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "main.html",
+    "href": "main.html",
+    "title": "VT Club Tennis: Project Outline",
+    "section": "",
+    "text": "This document outlines the strategic plan for the VT Club Tennis project. The project is divided into two primary initiatives: Financial Analysis and Performance Analytics. Our goal is to provide actionable insights and tools to enhance the club’s financial stability and competitive performance."
+  },
+  {
+    "objectID": "main.html#a.-historical-review",
+    "href": "main.html#a.-historical-review",
+    "title": "VT Club Tennis: Project Outline",
+    "section": "A. Historical Review",
+    "text": "A. Historical Review\n\nObjective: Analyze financial data from the last 2–3 years to understand revenue streams and spending habits.\nData Sources: Dues, parent contributions, Giving Day revenue, and historical costs for travel, gear, and other expenses.\nGoal: Identify spending patterns, highlight inefficiencies, and establish a financial baseline."
+  },
+  {
+    "objectID": "main.html#b.-fundraising-strategy",
+    "href": "main.html#b.-fundraising-strategy",
+    "title": "VT Club Tennis: Project Outline",
+    "section": "B. Fundraising Strategy",
+    "text": "B. Fundraising Strategy\n\nObjective: Develop and execute a targeted fundraising plan to maximize revenue.\nKey Initiatives:\n\nGiving Day (Feb 19):\n\nLaunch dedicated campaigns for parents and players.\nActively monitor hourly leaderboards to capture prize bonuses.\n\nSecondary Streams:\n\nExplore opportunities for selling merchandise.\nOrganize tennis clinics for the community.\nDevelop an alumni outreach and donation program."
+  },
+  {
+    "objectID": "main.html#c.-budget-modeling",
+    "href": "main.html#c.-budget-modeling",
+    "title": "VT Club Tennis: Project Outline",
+    "section": "C. Budget Modeling",
+    "text": "C. Budget Modeling\n\nObjective: Create a dynamic and user-friendly tool for annual budget management.\nImplementation:\n\nTool: Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.\nFeatures:\n\nProvide scenarios for different season types (e.g., travel-heavy vs. local-heavy).\nAutomate recommendations for allocating funds to entry fees, travel, and equipment."
+  },
+  {
+    "objectID": "main.html#a.-ladder-ranking-system",
+    "href": "main.html#a.-ladder-ranking-system",
+    "title": "VT Club Tennis: Project Outline",
+    "section": "A. Ladder Ranking System",
+    "text": "A. Ladder Ranking System\n\nObjective: Implement a modern, data-driven ranking system to foster competition and transparency.\nMethodology:\n\nData Collection: Gather historical match data, including challenge matches, tournaments, and practice sets.\nRanking Algorithm: Build a system based on Elo or Glicko-2, which accounts for opponent strength and match recency.\n\nDeliverable: A live dashboard for players and leadership to view current rankings and track progress."
+  },
+  {
+    "objectID": "main.html#b.-swing-vision-integration",
+    "href": "main.html#b.-swing-vision-integration",
+    "title": "VT Club Tennis: Project Outline",
+    "section": "B. Swing Vision Integration",
+    "text": "B. Swing Vision Integration\n\nObjective: Leverage Swing Vision technology to provide players with personalized performance feedback.\nProcess:\n\nData Extraction: Train players to record matches and extract key statistics (e.g., serve percentage, rally length, unforced errors, winners).\nFeedback Loop: Generate concise feedback reports that identify one key area for improvement for each player."
+  },
+  {
+    "objectID": "main.html#c.-doubles-pairing-analysis",
+    "href": "main.html#c.-doubles-pairing-analysis",
+    "title": "VT Club Tennis: Project Outline",
+    "section": "C. Doubles Pairing Analysis",
+    "text": "C. Doubles Pairing Analysis\n\nObjective: Use data to identify and recommend optimal doubles pairings.\nAnalysis:\n\nData Points: Combine Swing Vision stats and match results to evaluate team chemistry.\nMetrics: Analyze net vs. baseline play, serve/return dynamics, and overall win percentages for various pairings.\n\nOutcome: Provide data-backed recommendations for doubles teams in practices and tournaments."
+  }
+]
