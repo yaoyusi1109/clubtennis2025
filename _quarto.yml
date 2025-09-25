@@ -20,5 +20,6 @@ website:
 format:
   html:
     theme: cosmo
-    css: styles.css
+    css: chat-widget.css
+    include-after-body: chat-widget.html
     toc: true
