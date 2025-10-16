@@ -9,7 +9,10 @@ library(shiny)
 library(bslib)
 
 # Load & clean
-TennisFinData = read_excel("C:/Users/caleb/Downloads/TennisClubFinancialData (1).xlsx") %>%
+data_path = file.path("data", "TennisClubFinancialData.xlsx")
+stopifnot(file.exists(data_path))
+TennisFinData = readxl::read_excel(data_path)
+TennisFinData = TennisFinData %>%
   mutate(
     Date = as.Date(Date),
     Flow = str_to_title(trimws(as.character(Flow))),
@@ -295,3 +298,4 @@ server = function(input, output, session)
   }
 
 shinyApp(ui, server)
+
