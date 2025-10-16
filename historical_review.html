@@ -141,6 +141,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./historical_review.html">
  <span class="dropdown-text">Historical Review</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./financial_tools.html">
+ <span class="dropdown-text">Analysis Tools</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -307,6 +311,75 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div>
 <figure class="figure">
 <p><img src="historical_review_files/figure-html/transaction-analysis-from-google-sheet-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl); <span class="fu">library</span>(dplyr); <span class="fu">library</span>(ggplot2); <span class="fu">library</span>(scales); <span class="fu">library</span>(googlesheets4)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: swap back to read_sheet() when Sheet link is fixed</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Data = read_sheet(sheet_id)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>Data <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/TennisClubFinancialData.xlsx"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Date =</span> <span class="fu">as.Date</span>(Date),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">YearMonth =</span> <span class="fu">format</span>(Date, <span class="st">"%Y-%m"</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>FinancialData <span class="ot">=</span> Data <span class="sc">%&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Date =</span> <span class="fu">as.Date</span>(Date),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Year =</span> <span class="fu">format</span>(Date, <span class="st">"%Y"</span>),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">YearMonth =</span> <span class="fu">format</span>(Date, <span class="st">"%Y-%m"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>ExpensesMonthly <span class="ot">=</span> FinancialData <span class="sc">%&gt;%</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Flow <span class="sc">==</span> <span class="st">"Expense"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(YearMonth, Category) <span class="sc">%&gt;%</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Spend =</span> <span class="sc">-</span><span class="fu">sum</span>(Amount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups=</span><span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">YearMonth =</span> <span class="fu">factor</span>(YearMonth, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(YearMonth))))</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>ColorPalette <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Travel"</span>                 <span class="ot">=</span> <span class="st">"#F77F00"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tournament Fees"</span>        <span class="ot">=</span> <span class="st">"#00B4D8"</span>,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Facility Rentals"</span>       <span class="ot">=</span> <span class="st">"#43AA8B"</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Equipment &amp; Supplies"</span>   <span class="ot">=</span> <span class="st">"#577590"</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Uniforms &amp; Merchandise"</span> <span class="ot">=</span> <span class="st">"#9D4EDD"</span>,</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Miscellaneous/Admin"</span>    <span class="ot">=</span> <span class="st">"#E5E5E5"</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>bg <span class="ot">=</span> <span class="st">"#861F41"</span>; fg <span class="ot">=</span> <span class="st">"#FFFFFF"</span>; grid <span class="ot">=</span> <span class="st">"#E0CFCF"</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ExpensesMonthly, <span class="fu">aes</span>(YearMonth, Spend, <span class="at">fill =</span> Category)) <span class="sc">+</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.85</span>) <span class="sc">+</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Expense by Category"</span>,</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Aug 2024 – Present"</span>,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Spend (USD)"</span>, <span class="at">fill =</span> <span class="st">""</span>,</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Source: VT Club Tennis"</span>) <span class="sc">+</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">dollar_format</span>(<span class="at">accuracy =</span> <span class="dv">1</span>),</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>                     <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">05</span>))) <span class="sc">+</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> ColorPalette) <span class="sc">+</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background  =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> bg, <span class="at">color =</span> bg),</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> bg, <span class="at">color =</span> bg),</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> grid, <span class="at">linewidth =</span> <span class="fl">0.25</span>),</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x      =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">60</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">color =</span> fg),</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y      =</span> <span class="fu">element_text</span>(<span class="at">color =</span> fg),</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x     =</span> <span class="fu">element_text</span>(<span class="at">color =</span> fg, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y     =</span> <span class="fu">element_text</span>(<span class="at">color =</span> fg, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title       =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">color =</span> fg, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle    =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">color =</span> fg),</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption     =</span> <span class="fu">element_text</span>(<span class="at">color =</span> fg),</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.background=</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> bg, <span class="at">color =</span> bg),</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.key       =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> bg, <span class="at">color =</span> bg),</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text      =</span> <span class="fu">element_text</span>(<span class="at">color =</span> fg)</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="historical_review_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
