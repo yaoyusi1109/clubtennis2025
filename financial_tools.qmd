@@ -1,0 +1,161 @@
+---
+title: "Budget Planning Tool"
+format: 
+    html:
+        toc: true
+        toc-depth: 2
+        code-fold: false
+author: Yusi
+filters:
+  - shinylive
+---
+
+This interactive budget planning tool helps you model different financial scenarios for VT Club Tennis. Adjust income assumptions, expense plans, and projection horizons to create customized budget forecasts.
+
+## Interactive Budget Tool
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 800
+
+# Load libraries
+library(shiny)
+library(bslib)
+library(dplyr)
+library(lubridate)
+
+# VT colors
+vt_maroon = "#861F41"
+vt_orange = "#E87722"
+
+# Shiny: parameter-driven budget tool (VT theme)
+vt_theme = bs_theme(
+  version = 5,
+  bootswatch = "flatly",
+  primary = vt_maroon,
+  secondary = vt_orange
+)
+
+month_choices = setNames(1:12, month.name)
+
+future_months = function(start_month, horizon = c("Month","Semester","Academic Year")) {
+  horizon = match.arg(horizon)
+  start = floor_date(start_month, "month")
+  if (horizon == "Month") return(start)
+  if (horizon == "Semester") {
+    m = month(start)
+    sem = if (m %in% 8:12) "Fall" else if (m %in% 1:5) "Spring" else "Summer"
+    span = if (sem == "Fall") 0:(12 - m) else if (sem == "Spring") 0:(5 - m) else 0:(7 - m)
+    return(start %m+% months(span))
+  }
+  y0 = year(start) - if (month(start) < 8) 1 else 0
+  seq(ymd(paste0(y0, "-08-01")), ymd(paste0(y0 + 1, "-07-01")), by = "1 month")
+}
+
+ui = fluidPage(
+  theme = vt_theme,
+  titlePanel("VT Club Tennis Budget What-If"),
+  sidebarLayout(
+    sidebarPanel(
+      h4("Income assumptions"),
+      numericInput("members", "Members", value = 30, min = 0, step = 1),
+      numericInput("dues", "Dues per member (each selected month) $", value = 150, min = 0, step = 10),
+      checkboxGroupInput("dues_months", "Months dues are collected", choices = month_choices, selected = c(9, 1)),
+      numericInput("other_income", "Other income per month $", value = 0, min = 0, step = 50),
+      hr(),
+      h4("Expense assumptions"),
+      checkboxInput("buy_uniforms", "Uniform purchase in start month", value = TRUE),
+      numericInput("uniform_per_member", "Uniform cost per member $", value = 75, min = 0, step = 5),
+      numericInput("n_trips", "Trips in horizon", value = 2, min = 0, step = 1),
+      numericInput("trip_cost", "Avg cost per trip $", value = 2500, min = 0, step = 100),
+      numericInput("court_hours", "Indoor court hours per month", value = 0, min = 0, step = 1),
+      numericInput("court_rate",  "Hourly court rate $", value = 50, min = 0, step = 5),
+      numericInput("n_tourneys", "Tournaments in horizon", value = 2, min = 0, step = 1),
+      numericInput("fee_per_tourney", "Tournament fee $", value = 300, min = 0, step = 10),
+      numericInput("admin_other", "Other fixed monthly expenses $", value = 0, min = 0, step = 25),
+      hr(),
+      h4("Projection settings"),
+      radioButtons("horizon", "Horizon", choices = c("Month","Semester","Academic Year"), inline = TRUE),
+      dateInput("start", "Start month", value = Sys.Date()),
+      radioButtons("spread_mode", "One-time costs", choices = c("Now","Evenly"), selected = "Evenly", inline = TRUE)
+    ),
+    mainPanel(
+      h4(textOutput("proj_label")),
+      verbatimTextOutput("proj_breakdown"),
+      plotOutput("barIE", height = 260)
+    )
+  )
+)
+
+server = function(input, output, session) {
+  months_vec = reactive(future_months(input$start, input$horizon))
+  
+  horizon_income = reactive({
+    mons = month(months_vec())
+    dues_mask = mons %in% as.integer(input$dues_months)
+    (input$members * input$dues) * as.numeric(dues_mask) + input$other_income
+  })
+  
+  horizon_expense = reactive({
+    H = length(months_vec())
+    exp_vec = rep(0, H)
+    
+    uniforms_total = if (isTRUE(input$buy_uniforms)) input$members * input$uniform_per_member else 0
+    if (input$spread_mode == "Now") exp_vec[1] = exp_vec[1] + uniforms_total
+    else exp_vec = exp_vec + uniforms_total / max(1, H)
+    
+    trips_total = input$n_trips * input$trip_cost
+    exp_vec = exp_vec + trips_total / max(1, if (input$spread_mode == "Now") 1 else H)
+    
+    exp_vec = exp_vec + input$court_hours * input$court_rate
+    
+    tour_total = input$n_tourneys * input$fee_per_tourney
+    exp_vec = exp_vec + tour_total / max(1, if (input$spread_mode == "Now") 1 else H)
+    
+    exp_vec = exp_vec + input$admin_other
+    
+    exp_vec
+  })
+  
+  output$proj_label = renderText({
+    paste0(input$horizon, " projection starting ", format(months_vec()[1], "%b %Y"))
+  })
+  
+  output$proj_breakdown = renderText({
+    inc = horizon_income()
+    exp = horizon_expense()
+    net = inc - exp
+    paste(
+      sprintf("Months: %s", paste(format(months_vec(), "%b"), collapse = " ")),
+      sprintf("Total income:  $%s", format(round(sum(inc)), big.mark = ",")),
+      sprintf("Total expense: $%s", format(round(sum(exp)), big.mark = ",")),
+      sprintf("Total net:     $%s", format(round(sum(net)), big.mark = ",")),
+      sep = "\n"
+    )
+  })
+  
+  output$barIE = renderPlot({
+    ie = data.frame(
+      Type = c("Income","Expense"),
+      Amount = c(sum(horizon_income()), sum(horizon_expense()))
+    )
+    par(mar = c(4,4,2,1))
+    barplot(ie$Amount, names.arg = ie$Type, ylab = "$", col = c(vt_orange, vt_maroon))
+  })
+}
+
+shinyApp(ui, server)
+```
+
+::: {.callout-tip}
+## How to Use
+
+The interactive tool allows you to:
+
+- **Income Parameters**: Set member counts, dues amounts, and specify which months dues are collected
+- **Expense Planning**: Model uniform purchases, tournament trips, court rentals, tournament fees, and other administrative costs
+- **Time Horizons**: Project budgets by month, semester, or full academic year
+- **Cost Allocation**: Choose to apply one-time costs immediately or spread them evenly across the horizon
+
+**Try different scenarios** to find the optimal budget plan for your season!
+:::

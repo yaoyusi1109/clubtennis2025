@@ -14,6 +14,8 @@ website:
             text: "Overview"
           - href: historical_review.qmd
             text: "Historical Review"
+          - href: financial_tools.qmd
+            text: "Budget Tool"
       - href: performance_analysis.qmd
         text: "Performance Analysis"
 
