@@ -8,7 +8,7 @@
 
 <meta name="author" content="Yusi">
 
-<title>Financial Analysis Tools – VT Club Tennis Analysis</title>
+<title>Budget Planning Tool – VT Club Tennis Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -76,6 +41,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-2d3a5f678c659c6d9658e8627949fb9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -144,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./financial_tools.html">
- <span class="dropdown-text">Analysis Tools</span></a>
+ <span class="dropdown-text">Budget Tool</span></a>
   </li>  
     </ul>
   </li>
@@ -167,35 +137,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
-  <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#setup-and-data-loading" id="toc-setup-and-data-loading" class="nav-link" data-scroll-target="#setup-and-data-loading">Setup and Data Loading</a></li>
-  <li><a href="#historical-analysis" id="toc-historical-analysis" class="nav-link" data-scroll-target="#historical-analysis">Historical Analysis</a>
   <ul class="collapse">
-  <li><a href="#monthly-aggregates" id="toc-monthly-aggregates" class="nav-link" data-scroll-target="#monthly-aggregates">Monthly Aggregates</a></li>
-  <li><a href="#top-expense-categories" id="toc-top-expense-categories" class="nav-link" data-scroll-target="#top-expense-categories">Top Expense Categories</a></li>
-  </ul></li>
-  <li><a href="#predictive-modeling" id="toc-predictive-modeling" class="nav-link" data-scroll-target="#predictive-modeling">Predictive Modeling</a>
-  <ul class="collapse">
-  <li><a href="#model-preparation" id="toc-model-preparation" class="nav-link" data-scroll-target="#model-preparation">Model Preparation</a></li>
-  <li><a href="#benchmark-models" id="toc-benchmark-models" class="nav-link" data-scroll-target="#benchmark-models">Benchmark Models</a></li>
-  </ul></li>
-  <li><a href="#visualizations" id="toc-visualizations" class="nav-link" data-scroll-target="#visualizations">Visualizations</a>
-  <ul class="collapse">
-  <li><a href="#income-vs-expense-trends" id="toc-income-vs-expense-trends" class="nav-link" data-scroll-target="#income-vs-expense-trends">Income vs Expense Trends</a></li>
-  <li><a href="#net-income-with-mean-baseline" id="toc-net-income-with-mean-baseline" class="nav-link" data-scroll-target="#net-income-with-mean-baseline">Net Income with Mean Baseline</a></li>
-  </ul></li>
-  <li><a href="#academic-year-summaries" id="toc-academic-year-summaries" class="nav-link" data-scroll-target="#academic-year-summaries">Academic Year Summaries</a>
-  <ul class="collapse">
-  <li><a href="#helper-functions" id="toc-helper-functions" class="nav-link" data-scroll-target="#helper-functions">Helper Functions</a></li>
-  <li><a href="#semester-and-academic-year-summaries" id="toc-semester-and-academic-year-summaries" class="nav-link" data-scroll-target="#semester-and-academic-year-summaries">Semester and Academic Year Summaries</a></li>
-  </ul></li>
-  <li><a href="#interactive-budget-planning-tool" id="toc-interactive-budget-planning-tool" class="nav-link" data-scroll-target="#interactive-budget-planning-tool">Interactive Budget Planning Tool</a>
-  <ul class="collapse">
-  <li><a href="#launch-budget-tool" id="toc-launch-budget-tool" class="nav-link" data-scroll-target="#launch-budget-tool">Launch Budget Tool</a></li>
-  </ul></li>
-  <li><a href="#key-insights" id="toc-key-insights" class="nav-link" data-scroll-target="#key-insights">Key Insights</a></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next Steps</a></li>
+  <li><a href="#interactive-budget-tool" id="toc-interactive-budget-tool" class="nav-link active" data-scroll-target="#interactive-budget-tool">Interactive Budget Tool</a></li>
   </ul>
 </nav>
     </div>
@@ -204,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Financial Analysis Tools</h1>
+<h1 class="title">Budget Planning Tool</h1>
 </div>
 
 
@@ -227,465 +170,162 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This page provides interactive financial analysis tools for VT Club Tennis, including predictive models, historical comparisons, and budget planning capabilities.</p>
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>The financial tools integrate historical data analysis with predictive modeling to help make informed budget decisions. The suite includes:</p>
-<ul>
-<li>Monthly financial summaries (Income vs.&nbsp;Expense)</li>
-<li>Predictive modeling benchmarks</li>
-<li>Academic year and semester summaries</li>
-<li>Interactive budget planning tool</li>
-</ul>
-</section>
-<section id="setup-and-data-loading" class="level2">
-<h2 class="anchored" data-anchor-id="setup-and-data-loading">Setup and Data Loading</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Needed libraries</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bslib)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Load &amp; clean</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>data_path <span class="ot">=</span> <span class="fu">file.path</span>(<span class="st">"data"</span>, <span class="st">"TennisClubFinancialData.xlsx"</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">file.exists</span>(data_path))</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>TennisFinData <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(data_path)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>TennisFinData <span class="ot">=</span> TennisFinData <span class="sc">%&gt;%</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Date =</span> <span class="fu">as.Date</span>(Date),</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Flow =</span> <span class="fu">str_to_title</span>(<span class="fu">trimws</span>(<span class="fu">as.character</span>(Flow))),</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">YearMonth =</span> <span class="fu">floor_date</span>(Date, <span class="st">"month"</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="historical-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="historical-analysis">Historical Analysis</h2>
-<section id="monthly-aggregates" class="level3">
-<h3 class="anchored" data-anchor-id="monthly-aggregates">Monthly Aggregates</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monthly aggregates (expense as positive)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>monthly <span class="ot">=</span> TennisFinData <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(YearMonth) <span class="sc">%&gt;%</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">income =</span> <span class="fu">sum</span>(Amount[Flow <span class="sc">==</span> <span class="st">"Income"</span>], <span class="at">na.rm =</span> T),</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">expense_mag =</span> <span class="fu">sum</span>(<span class="sc">-</span>Amount[Flow <span class="sc">==</span> <span class="st">"Expense"</span>], <span class="at">na.rm =</span> T),</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">net =</span> income <span class="sc">-</span> expense_mag,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_txn =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(YearMonth)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Category-by-month for expenses and income</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>category_by_month <span class="ot">=</span> TennisFinData <span class="sc">%&gt;%</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(YearMonth, Category) <span class="sc">%&gt;%</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">expense_mag =</span> <span class="fu">sum</span>(<span class="fu">ifelse</span>(Flow <span class="sc">==</span> <span class="st">"Expense"</span>, <span class="sc">-</span>Amount, <span class="dv">0</span>), <span class="at">na.rm =</span> T),</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">income_mag  =</span> <span class="fu">sum</span>(<span class="fu">ifelse</span>(Flow <span class="sc">==</span> <span class="st">"Income"</span>,   Amount,   <span class="dv">0</span>), <span class="at">na.rm =</span> T),</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="top-expense-categories" class="level3">
-<h3 class="anchored" data-anchor-id="top-expense-categories">Top Expense Categories</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Top-K expense categories, wide table</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>topK <span class="ot">=</span> category_by_month <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Category) <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_exp =</span> <span class="fu">sum</span>(expense_mag, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(total_exp, <span class="at">n =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Category)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>cat_wide <span class="ot">=</span> category_by_month <span class="sc">%&gt;%</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Category <span class="sc">%in%</span> topK) <span class="sc">%&gt;%</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(YearMonth, Category, expense_mag) <span class="sc">%&gt;%</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Category, <span class="at">values_from =</span> expense_mag, <span class="at">values_fill =</span> <span class="dv">0</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cat_wide) <span class="ot">=</span> <span class="fu">make.names</span>(<span class="fu">names</span>(cat_wide))</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>cat_cols <span class="ot">=</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(cat_wide), <span class="st">"YearMonth"</span>)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(topK)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Travel"                 "Uniforms &amp; Merchandise" "Tournament Fees"       </code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="predictive-modeling" class="level2">
-<h2 class="anchored" data-anchor-id="predictive-modeling">Predictive Modeling</h2>
-<section id="model-preparation" class="level3">
-<h3 class="anchored" data-anchor-id="model-preparation">Model Preparation</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Design matrix for simple benchmarks</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>design <span class="ot">=</span> monthly <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(cat_wide, <span class="at">by =</span> <span class="st">"YearMonth"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(YearMonth) <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lag1_net =</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(net, <span class="dv">1</span>),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">lag1_inc =</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(income, <span class="dv">1</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">lag1_exp =</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(expense_mag, <span class="dv">1</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(cat_cols), <span class="sc">~</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(.x, <span class="dv">1</span>), <span class="at">.names =</span> <span class="st">"lag1_{col}"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">t =</span> <span class="fu">row_number</span>(),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">sin12 =</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">/</span> <span class="dv">12</span>),</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">cos12 =</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t <span class="sc">/</span> <span class="dv">12</span>)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(YearMonth, net, lag1_net, lag1_inc, lag1_exp, sin12, cos12, <span class="fu">starts_with</span>(<span class="st">"lag1_"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="benchmark-models" class="level3">
-<h3 class="anchored" data-anchor-id="benchmark-models">Benchmark Models</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Benchmarks: naive, mean, small LM</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mae <span class="ot">=</span> <span class="cf">function</span>(a, b) <span class="fu">mean</span>(<span class="fu">abs</span>(a <span class="sc">-</span> b), <span class="at">na.rm =</span> T)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">=</span> <span class="cf">function</span>(a, b) <span class="fu">sqrt</span>(<span class="fu">mean</span>((a <span class="sc">-</span> b)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> T))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">nrow</span>(design)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>split <span class="ot">=</span> <span class="fu">max</span>(<span class="dv">1</span>, <span class="fu">floor</span>(<span class="fl">0.75</span> <span class="sc">*</span> n))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">=</span> design[<span class="dv">1</span><span class="sc">:</span>split, ]</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">=</span> design[(split <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n, ]</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">=</span> test<span class="sc">$</span>net</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>pred_naive <span class="ot">=</span> test<span class="sc">$</span>lag1_net</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>pred_mean  <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">mean</span>(train<span class="sc">$</span>net, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="fu">nrow</span>(test))</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>lag_pred <span class="ot">=</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(design)[<span class="fu">grepl</span>(<span class="st">"^lag1_"</span>, <span class="fu">names</span>(design))], <span class="fu">c</span>(<span class="st">"lag1_net"</span>,<span class="st">"lag1_inc"</span>,<span class="st">"lag1_exp"</span>))</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>keep2 <span class="ot">=</span> <span class="fu">head</span>(lag_pred, <span class="dv">2</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>form <span class="ot">=</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"net ~ lag1_net + lag1_exp + sin12 + cos12"</span>,</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(keep2)) <span class="fu">paste</span>(<span class="st">"+"</span>, <span class="fu">paste</span>(keep2, <span class="at">collapse =</span> <span class="st">" + "</span>)) <span class="cf">else</span> <span class="st">""</span>,</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">" "</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(form, <span class="at">data =</span> train)</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>pred_lm <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit, <span class="at">newdata =</span> test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predict.lm(fit, newdata = test): prediction from rank-deficient fit;
-attr(*, "non-estim") has doubtful cases</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Model =</span> <span class="fu">c</span>(<span class="st">"Naive"</span>,<span class="st">"Mean"</span>,<span class="st">"LM_small"</span>),</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">MAE   =</span> <span class="fu">c</span>(<span class="fu">mae</span>(y_test, pred_naive),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mae</span>(y_test, pred_mean),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mae</span>(y_test, pred_lm)),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">RMSE  =</span> <span class="fu">c</span>(<span class="fu">rmse</span>(y_test, pred_naive),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rmse</span>(y_test, pred_mean),</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rmse</span>(y_test, pred_lm))</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     Model        MAE      RMSE
-1    Naive  10517.570  12467.40
-2     Mean   5562.981   8262.83
-3 LM_small 112388.080 121965.91</code></pre>
-</div>
-</div>
-<p>The table above shows three baseline prediction models:</p>
-<ul>
-<li><strong>Naive</strong>: Uses the previous month’s net income as prediction</li>
-<li><strong>Mean</strong>: Uses the historical mean as prediction</li>
-<li><strong>LM_small</strong>: Linear model with lagged values and seasonal components</li>
-</ul>
-</section>
-</section>
-<section id="visualizations" class="level2">
-<h2 class="anchored" data-anchor-id="visualizations">Visualizations</h2>
-<section id="income-vs-expense-trends" class="level3">
-<h3 class="anchored" data-anchor-id="income-vs-expense-trends">Income vs Expense Trends</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># VT-colored plots for report</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>vt_maroon <span class="ot">=</span> <span class="st">"#861F41"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>vt_orange <span class="ot">=</span> <span class="st">"#E87722"</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>monthly_long <span class="ot">=</span> monthly <span class="sc">%&gt;%</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(YearMonth, income, expense_mag) <span class="sc">%&gt;%</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>YearMonth, <span class="at">names_to =</span> <span class="st">"Type"</span>, <span class="at">values_to =</span> <span class="st">"Amount"</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">=</span> <span class="fu">ggplot</span>(monthly_long, <span class="fu">aes</span>(YearMonth, Amount, <span class="at">fill =</span> Type)) <span class="sc">+</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">income =</span> vt_orange, <span class="at">expense_mag =</span> vt_maroon),</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"income"</span>,<span class="st">"expense_mag"</span>),</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Income"</span>,<span class="st">"Expense"</span>)) <span class="sc">+</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"$"</span>, <span class="at">title =</span> <span class="st">"Income vs Expense"</span>) <span class="sc">+</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="financial_tools_files/figure-html/viz-income-expense-1.png" class="img-fluid figure-img" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="net-income-with-mean-baseline" class="level3">
-<h3 class="anchored" data-anchor-id="net-income-with-mean-baseline">Net Income with Mean Baseline</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mean_hat <span class="ot">=</span> <span class="fu">mean</span>(train<span class="sc">$</span>net, <span class="at">na.rm =</span> T)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>net_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">YearMonth =</span> monthly<span class="sc">$</span>YearMonth, <span class="at">Net =</span> monthly<span class="sc">$</span>net)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">=</span> <span class="fu">ggplot</span>(net_df, <span class="fu">aes</span>(YearMonth, Net)) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> vt_maroon) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> vt_orange) <span class="sc">+</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> mean_hat, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Month"</span>, <span class="at">y =</span> <span class="st">"Net ($)"</span>, <span class="at">title =</span> <span class="st">"Monthly Net with Mean Baseline"</span>) <span class="sc">+</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="financial_tools_files/figure-html/viz-net-income-1.png" class="img-fluid figure-img" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="academic-year-summaries" class="level2">
-<h2 class="anchored" data-anchor-id="academic-year-summaries">Academic Year Summaries</h2>
-<section id="helper-functions" class="level3">
-<h3 class="anchored" data-anchor-id="helper-functions">Helper Functions</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Academic group summaries</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>acad_year <span class="ot">=</span> <span class="cf">function</span>(d) {</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">year</span>(d); m <span class="ot">=</span> <span class="fu">month</span>(d)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (m <span class="sc">&gt;=</span> <span class="dv">8</span>) <span class="fu">paste0</span>(y, <span class="st">"-"</span>, y <span class="sc">+</span> <span class="dv">1</span>) <span class="cf">else</span> <span class="fu">paste0</span>(y <span class="sc">-</span> <span class="dv">1</span>, <span class="st">"-"</span>, y)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>semester <span class="ot">=</span> <span class="cf">function</span>(d) {</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">=</span> <span class="fu">month</span>(d)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (m <span class="sc">%in%</span> <span class="dv">8</span><span class="sc">:</span><span class="dv">12</span>) <span class="st">"Fall"</span> <span class="cf">else</span> <span class="cf">if</span>(m <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="st">"Spring"</span> <span class="cf">else</span> <span class="st">"Summer"</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="semester-and-academic-year-summaries" class="level3">
-<h3 class="anchored" data-anchor-id="semester-and-academic-year-summaries">Semester and Academic Year Summaries</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>monthly_aug <span class="ot">=</span> monthly <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">AcadYear =</span> <span class="fu">vapply</span>(YearMonth, acad_year, <span class="fu">character</span>(<span class="dv">1</span>)),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Semester =</span> <span class="fu">vapply</span>(YearMonth, semester,  <span class="fu">character</span>(<span class="dv">1</span>))</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>sem_summary <span class="ot">=</span> monthly_aug <span class="sc">%&gt;%</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AcadYear, Semester) <span class="sc">%&gt;%</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">income =</span> <span class="fu">sum</span>(income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">expense_mag =</span> <span class="fu">sum</span>(expense_mag, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">net =</span> <span class="fu">sum</span>(net, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>year_summary <span class="ot">=</span> monthly_aug <span class="sc">%&gt;%</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(AcadYear) <span class="sc">%&gt;%</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">income =</span> <span class="fu">sum</span>(income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">expense_mag =</span> <span class="fu">sum</span>(expense_mag, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">net =</span> <span class="fu">sum</span>(net, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(sem_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  AcadYear  Semester income expense_mag     net
-  &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;
-1 2023-2024 Summer     8510          0    8510 
-2 2024-2025 Fall      21491      16833.   4658.
-3 2024-2025 Spring    15590      23746.  -8156.
-4 2024-2025 Summer      760          0     760 
-5 2025-2026 Fall        360      16744. -16384.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(year_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 4
-  AcadYear  income expense_mag     net
-  &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;
-1 2023-2024   8510          0    8510 
-2 2024-2025  37841      40579.  -2738.
-3 2025-2026    360      16744. -16384.</code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="interactive-budget-planning-tool" class="level2">
-<h2 class="anchored" data-anchor-id="interactive-budget-planning-tool">Interactive Budget Planning Tool</h2>
-<section id="launch-budget-tool" class="level3">
-<h3 class="anchored" data-anchor-id="launch-budget-tool">Launch Budget Tool</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shiny: parameter-driven budget tool (VT theme)</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>vt_theme <span class="ot">=</span> <span class="fu">bs_theme</span>(</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="dv">5</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">bootswatch =</span> <span class="st">"flatly"</span>,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">primary =</span> vt_maroon,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">secondary =</span> vt_orange,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_font =</span> <span class="fu">font_google</span>(<span class="st">"Inter"</span>),</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">heading_font =</span> <span class="fu">font_google</span>(<span class="st">"Inter"</span>)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>month_choices <span class="ot">=</span> <span class="fu">setNames</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, month.name)</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>future_months <span class="ot">=</span> <span class="cf">function</span>(start_month, <span class="at">horizon =</span> <span class="fu">c</span>(<span class="st">"Month"</span>,<span class="st">"Semester"</span>,<span class="st">"Academic Year"</span>)) {</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  horizon <span class="ot">=</span> <span class="fu">match.arg</span>(horizon)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  start <span class="ot">=</span> <span class="fu">floor_date</span>(start_month, <span class="st">"month"</span>)</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (horizon <span class="sc">==</span> <span class="st">"Month"</span>) <span class="fu">return</span>(start)</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (horizon <span class="sc">==</span> <span class="st">"Semester"</span>) {</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    m <span class="ot">=</span> <span class="fu">month</span>(start)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    sem <span class="ot">=</span> <span class="cf">if</span> (m <span class="sc">%in%</span> <span class="dv">8</span><span class="sc">:</span><span class="dv">12</span>) <span class="st">"Fall"</span> <span class="cf">else</span> <span class="cf">if</span> (m <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) <span class="st">"Spring"</span> <span class="cf">else</span> <span class="st">"Summer"</span></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    span <span class="ot">=</span> <span class="cf">if</span> (sem <span class="sc">==</span> <span class="st">"Fall"</span>) <span class="dv">0</span><span class="sc">:</span>(<span class="dv">12</span> <span class="sc">-</span> m) <span class="cf">else</span> <span class="cf">if</span> (sem <span class="sc">==</span> <span class="st">"Spring"</span>) <span class="dv">0</span><span class="sc">:</span>(<span class="dv">5</span> <span class="sc">-</span> m) <span class="cf">else</span> <span class="dv">0</span><span class="sc">:</span>(<span class="dv">7</span> <span class="sc">-</span> m)</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(start <span class="sc">%m+%</span> <span class="fu">months</span>(span))</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  y0 <span class="ot">=</span> <span class="fu">year</span>(start) <span class="sc">-</span> <span class="cf">if</span> (<span class="fu">month</span>(start) <span class="sc">&lt;</span> <span class="dv">8</span>) <span class="dv">1</span> <span class="cf">else</span> <span class="dv">0</span></span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">seq</span>(<span class="fu">ymd</span>(<span class="fu">paste0</span>(y0, <span class="st">"-08-01"</span>)), <span class="fu">ymd</span>(<span class="fu">paste0</span>(y0 <span class="sc">+</span> <span class="dv">1</span>, <span class="st">"-07-01"</span>)), <span class="at">by =</span> <span class="st">"1 month"</span>)</span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">=</span> <span class="fu">fluidPage</span>(</span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">theme =</span> vt_theme,</span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">titlePanel</span>(<span class="st">"VT Club Tennis Budget What-If"</span>),</span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sidebarPanel</span>(</span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">h4</span>(<span class="st">"Income assumptions"</span>),</span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"members"</span>, <span class="st">"Members"</span>, <span class="at">value =</span> <span class="dv">30</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">1</span>),</span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"dues"</span>, <span class="st">"Dues per member (each selected month) $"</span>, <span class="at">value =</span> <span class="dv">150</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">10</span>),</span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">checkboxGroupInput</span>(<span class="st">"dues_months"</span>, <span class="st">"Months dues are collected"</span>, <span class="at">choices =</span> month_choices, <span class="at">selected =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">1</span>)),</span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"other_income"</span>, <span class="st">"Other income per month $"</span>, <span class="at">value =</span> <span class="dv">0</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">50</span>),</span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">hr</span>(),</span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">h4</span>(<span class="st">"Expense assumptions"</span>),</span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">checkboxInput</span>(<span class="st">"buy_uniforms"</span>, <span class="st">"Uniform purchase in start month"</span>, <span class="at">value =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"uniform_per_member"</span>, <span class="st">"Uniform cost per member $"</span>, <span class="at">value =</span> <span class="dv">75</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">5</span>),</span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"n_trips"</span>, <span class="st">"Trips in horizon"</span>, <span class="at">value =</span> <span class="dv">2</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">1</span>),</span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"trip_cost"</span>, <span class="st">"Avg cost per trip $"</span>, <span class="at">value =</span> <span class="dv">2500</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">100</span>),</span>
-<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"court_hours"</span>, <span class="st">"Indoor court hours per month"</span>, <span class="at">value =</span> <span class="dv">0</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">1</span>),</span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"court_rate"</span>,  <span class="st">"Hourly court rate $"</span>, <span class="at">value =</span> <span class="dv">50</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">5</span>),</span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"n_tourneys"</span>, <span class="st">"Tournaments in horizon"</span>, <span class="at">value =</span> <span class="dv">2</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">1</span>),</span>
-<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"fee_per_tourney"</span>, <span class="st">"Tournament fee $"</span>, <span class="at">value =</span> <span class="dv">300</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">10</span>),</span>
-<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">numericInput</span>(<span class="st">"admin_other"</span>, <span class="st">"Other fixed monthly expenses $"</span>, <span class="at">value =</span> <span class="dv">0</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">25</span>),</span>
-<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">hr</span>(),</span>
-<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>      <span class="fu">h4</span>(<span class="st">"Projection settings"</span>),</span>
-<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">radioButtons</span>(<span class="st">"horizon"</span>, <span class="st">"Horizon"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Month"</span>,<span class="st">"Semester"</span>,<span class="st">"Academic Year"</span>), <span class="at">inline =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">dateInput</span>(<span class="st">"start"</span>, <span class="st">"Start month"</span>, <span class="at">value =</span> <span class="fu">max</span>(monthly<span class="sc">$</span>YearMonth)),</span>
-<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">radioButtons</span>(<span class="st">"spread_mode"</span>, <span class="st">"One-time costs"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Now"</span>,<span class="st">"Evenly"</span>), <span class="at">selected =</span> <span class="st">"Evenly"</span>, <span class="at">inline =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mainPanel</span>(</span>
-<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">h4</span>(<span class="fu">textOutput</span>(<span class="st">"proj_label"</span>)),</span>
-<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">verbatimTextOutput</span>(<span class="st">"proj_breakdown"</span>),</span>
-<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">plotOutput</span>(<span class="st">"barIE"</span>, <span class="at">height =</span> <span class="dv">260</span>)</span>
-<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>server <span class="ot">=</span> <span class="cf">function</span>(input, output, session) {</span>
-<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>  months_vec <span class="ot">=</span> <span class="fu">reactive</span>(<span class="fu">future_months</span>(input<span class="sc">$</span>start, input<span class="sc">$</span>horizon))</span>
-<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>  horizon_income <span class="ot">=</span> <span class="fu">reactive</span>({</span>
-<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>    mons <span class="ot">=</span> <span class="fu">month</span>(<span class="fu">months_vec</span>())</span>
-<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>    dues_mask <span class="ot">=</span> mons <span class="sc">%in%</span> <span class="fu">as.integer</span>(input<span class="sc">$</span>dues_months)</span>
-<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>    (input<span class="sc">$</span>members <span class="sc">*</span> input<span class="sc">$</span>dues) <span class="sc">*</span> <span class="fu">as.numeric</span>(dues_mask) <span class="sc">+</span> input<span class="sc">$</span>other_income</span>
-<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a>  horizon_expense <span class="ot">=</span> <span class="fu">reactive</span>({</span>
-<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a>    H <span class="ot">=</span> <span class="fu">length</span>(<span class="fu">months_vec</span>())</span>
-<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>    exp_vec <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, H)</span>
-<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a>    uniforms_total <span class="ot">=</span> <span class="cf">if</span> (<span class="fu">isTRUE</span>(input<span class="sc">$</span>buy_uniforms)) input<span class="sc">$</span>members <span class="sc">*</span> input<span class="sc">$</span>uniform_per_member <span class="cf">else</span> <span class="dv">0</span></span>
-<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (input<span class="sc">$</span>spread_mode <span class="sc">==</span> <span class="st">"Now"</span>) exp_vec[<span class="dv">1</span>] <span class="ot">=</span> exp_vec[<span class="dv">1</span>] <span class="sc">+</span> uniforms_total</span>
-<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> exp_vec <span class="ot">=</span> exp_vec <span class="sc">+</span> uniforms_total <span class="sc">/</span> <span class="fu">max</span>(<span class="dv">1</span>, H)</span>
-<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a>    trips_total <span class="ot">=</span> input<span class="sc">$</span>n_trips <span class="sc">*</span> input<span class="sc">$</span>trip_cost</span>
-<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a>    exp_vec <span class="ot">=</span> exp_vec <span class="sc">+</span> trips_total <span class="sc">/</span> <span class="fu">max</span>(<span class="dv">1</span>, <span class="cf">if</span> (input<span class="sc">$</span>spread_mode <span class="sc">==</span> <span class="st">"Now"</span>) <span class="dv">1</span> <span class="cf">else</span> H)</span>
-<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a>    exp_vec <span class="ot">=</span> exp_vec <span class="sc">+</span> input<span class="sc">$</span>court_hours <span class="sc">*</span> input<span class="sc">$</span>court_rate</span>
-<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a>    tour_total <span class="ot">=</span> input<span class="sc">$</span>n_tourneys <span class="sc">*</span> input<span class="sc">$</span>fee_per_tourney</span>
-<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a>    exp_vec <span class="ot">=</span> exp_vec <span class="sc">+</span> tour_total <span class="sc">/</span> <span class="fu">max</span>(<span class="dv">1</span>, <span class="cf">if</span> (input<span class="sc">$</span>spread_mode <span class="sc">==</span> <span class="st">"Now"</span>) <span class="dv">1</span> <span class="cf">else</span> H)</span>
-<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a>    exp_vec <span class="ot">=</span> exp_vec <span class="sc">+</span> input<span class="sc">$</span>admin_other</span>
-<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a>    exp_vec</span>
-<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>proj_label <span class="ot">=</span> <span class="fu">renderText</span>({</span>
-<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(input<span class="sc">$</span>horizon, <span class="st">" projection starting "</span>, <span class="fu">format</span>(<span class="fu">months_vec</span>()[<span class="dv">1</span>], <span class="st">"%b %Y"</span>))</span>
-<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>proj_breakdown <span class="ot">=</span> <span class="fu">renderText</span>({</span>
-<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a>    inc <span class="ot">=</span> <span class="fu">horizon_income</span>()</span>
-<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a>    exp <span class="ot">=</span> <span class="fu">horizon_expense</span>()</span>
-<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a>    net <span class="ot">=</span> inc <span class="sc">-</span> exp</span>
-<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(</span>
-<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sprintf</span>(<span class="st">"Months: %s"</span>, <span class="fu">paste</span>(<span class="fu">format</span>(<span class="fu">months_vec</span>(), <span class="st">"%b"</span>), <span class="at">collapse =</span> <span class="st">" "</span>)),</span>
-<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sprintf</span>(<span class="st">"Total income:  $%s"</span>, <span class="fu">format</span>(<span class="fu">round</span>(<span class="fu">sum</span>(inc)), <span class="at">big.mark =</span> <span class="st">","</span>)),</span>
-<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sprintf</span>(<span class="st">"Total expense: $%s"</span>, <span class="fu">format</span>(<span class="fu">round</span>(<span class="fu">sum</span>(exp)), <span class="at">big.mark =</span> <span class="st">","</span>)),</span>
-<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sprintf</span>(<span class="st">"Total net:     $%s"</span>, <span class="fu">format</span>(<span class="fu">round</span>(<span class="fu">sum</span>(net)), <span class="at">big.mark =</span> <span class="st">","</span>)),</span>
-<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a>      <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
-<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>barIE <span class="ot">=</span> <span class="fu">renderPlot</span>({</span>
-<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a>    ie <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
-<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a>      <span class="at">Type =</span> <span class="fu">c</span>(<span class="st">"Income"</span>,<span class="st">"Expense"</span>),</span>
-<span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a>      <span class="at">Amount =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">horizon_income</span>()), <span class="fu">sum</span>(<span class="fu">horizon_expense</span>()))</span>
-<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">1</span>))</span>
-<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a>    <span class="fu">barplot</span>(ie<span class="sc">$</span>Amount, <span class="at">names.arg =</span> ie<span class="sc">$</span>Type, <span class="at">ylab =</span> <span class="st">"$"</span>, <span class="at">col =</span> <span class="fu">c</span>(vt_orange, vt_maroon))</span>
-<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
+<p>This interactive budget planning tool helps you model different financial scenarios for VT Club Tennis. Adjust income assumptions, expense plans, and projection horizons to create customized budget forecasts.</p>
+<section id="interactive-budget-tool" class="level2">
+<h2 class="anchored" data-anchor-id="interactive-budget-tool">Interactive Budget Tool</h2>
+<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
+#|   shinylive does not work in self-contained HTML documents.
+#|   Please set `embed-resources: false` in your metadata.
+#| standalone: true
+#| viewerHeight: 800
+
+# Load libraries
+library(shiny)
+library(bslib)
+library(dplyr)
+library(lubridate)
+
+# VT colors
+vt_maroon = "#861F41"
+vt_orange = "#E87722"
+
+# Shiny: parameter-driven budget tool (VT theme)
+vt_theme = bs_theme(
+  version = 5,
+  bootswatch = "flatly",
+  primary = vt_maroon,
+  secondary = vt_orange
+)
+
+month_choices = setNames(1:12, month.name)
+
+future_months = function(start_month, horizon = c("Month","Semester","Academic Year")) {
+  horizon = match.arg(horizon)
+  start = floor_date(start_month, "month")
+  if (horizon == "Month") return(start)
+  if (horizon == "Semester") {
+    m = month(start)
+    sem = if (m %in% 8:12) "Fall" else if (m %in% 1:5) "Spring" else "Summer"
+    span = if (sem == "Fall") 0:(12 - m) else if (sem == "Spring") 0:(5 - m) else 0:(7 - m)
+    return(start %m+% months(span))
+  }
+  y0 = year(start) - if (month(start) &lt; 8) 1 else 0
+  seq(ymd(paste0(y0, "-08-01")), ymd(paste0(y0 + 1, "-07-01")), by = "1 month")
+}
+
+ui = fluidPage(
+  theme = vt_theme,
+  titlePanel("VT Club Tennis Budget What-If"),
+  sidebarLayout(
+    sidebarPanel(
+      h4("Income assumptions"),
+      numericInput("members", "Members", value = 30, min = 0, step = 1),
+      numericInput("dues", "Dues per member (each selected month) $", value = 150, min = 0, step = 10),
+      checkboxGroupInput("dues_months", "Months dues are collected", choices = month_choices, selected = c(9, 1)),
+      numericInput("other_income", "Other income per month $", value = 0, min = 0, step = 50),
+      hr(),
+      h4("Expense assumptions"),
+      checkboxInput("buy_uniforms", "Uniform purchase in start month", value = TRUE),
+      numericInput("uniform_per_member", "Uniform cost per member $", value = 75, min = 0, step = 5),
+      numericInput("n_trips", "Trips in horizon", value = 2, min = 0, step = 1),
+      numericInput("trip_cost", "Avg cost per trip $", value = 2500, min = 0, step = 100),
+      numericInput("court_hours", "Indoor court hours per month", value = 0, min = 0, step = 1),
+      numericInput("court_rate",  "Hourly court rate $", value = 50, min = 0, step = 5),
+      numericInput("n_tourneys", "Tournaments in horizon", value = 2, min = 0, step = 1),
+      numericInput("fee_per_tourney", "Tournament fee $", value = 300, min = 0, step = 10),
+      numericInput("admin_other", "Other fixed monthly expenses $", value = 0, min = 0, step = 25),
+      hr(),
+      h4("Projection settings"),
+      radioButtons("horizon", "Horizon", choices = c("Month","Semester","Academic Year"), inline = TRUE),
+      dateInput("start", "Start month", value = Sys.Date()),
+      radioButtons("spread_mode", "One-time costs", choices = c("Now","Evenly"), selected = "Evenly", inline = TRUE)
+    ),
+    mainPanel(
+      h4(textOutput("proj_label")),
+      verbatimTextOutput("proj_breakdown"),
+      plotOutput("barIE", height = 260)
+    )
+  )
+)
+
+server = function(input, output, session) {
+  months_vec = reactive(future_months(input$start, input$horizon))
+  
+  horizon_income = reactive({
+    mons = month(months_vec())
+    dues_mask = mons %in% as.integer(input$dues_months)
+    (input$members * input$dues) * as.numeric(dues_mask) + input$other_income
+  })
+  
+  horizon_expense = reactive({
+    H = length(months_vec())
+    exp_vec = rep(0, H)
+    
+    uniforms_total = if (isTRUE(input$buy_uniforms)) input$members * input$uniform_per_member else 0
+    if (input$spread_mode == "Now") exp_vec[1] = exp_vec[1] + uniforms_total
+    else exp_vec = exp_vec + uniforms_total / max(1, H)
+    
+    trips_total = input$n_trips * input$trip_cost
+    exp_vec = exp_vec + trips_total / max(1, if (input$spread_mode == "Now") 1 else H)
+    
+    exp_vec = exp_vec + input$court_hours * input$court_rate
+    
+    tour_total = input$n_tourneys * input$fee_per_tourney
+    exp_vec = exp_vec + tour_total / max(1, if (input$spread_mode == "Now") 1 else H)
+    
+    exp_vec = exp_vec + input$admin_other
+    
+    exp_vec
+  })
+  
+  output$proj_label = renderText({
+    paste0(input$horizon, " projection starting ", format(months_vec()[1], "%b %Y"))
+  })
+  
+  output$proj_breakdown = renderText({
+    inc = horizon_income()
+    exp = horizon_expense()
+    net = inc - exp
+    paste(
+      sprintf("Months: %s", paste(format(months_vec(), "%b"), collapse = " ")),
+      sprintf("Total income:  $%s", format(round(sum(inc)), big.mark = ",")),
+      sprintf("Total expense: $%s", format(round(sum(exp)), big.mark = ",")),
+      sprintf("Total net:     $%s", format(round(sum(net)), big.mark = ",")),
+      sep = "\n"
+    )
+  })
+  
+  output$barIE = renderPlot({
+    ie = data.frame(
+      Type = c("Income","Expense"),
+      Amount = c(sum(horizon_income()), sum(horizon_expense()))
+    )
+    par(mar = c(4,4,2,1))
+    barplot(ie$Amount, names.arg = ie$Type, ylab = "$", col = c(vt_orange, vt_maroon))
+  })
+}
+
+shinyApp(ui, server)</code></pre>
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Running the Budget Tool
+How to Use
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>To run the interactive budget tool locally:</p>
-<ol type="1">
-<li>Open RStudio or R console</li>
-<li>Copy the code above or run <code>source("FinancialToolBuilding.R")</code></li>
-<li>The Shiny app will launch in your browser</li>
-</ol>
-<p>The tool allows you to:</p>
+<p>The interactive tool allows you to:</p>
 <ul>
-<li>Adjust member counts and dues collection schedules</li>
-<li>Plan for uniform purchases and tournament trips</li>
-<li>Model different expense scenarios (one-time vs.&nbsp;spread costs)</li>
-<li>Project budgets by month, semester, or academic year</li>
+<li><strong>Income Parameters</strong>: Set member counts, dues amounts, and specify which months dues are collected</li>
+<li><strong>Expense Planning</strong>: Model uniform purchases, tournament trips, court rentals, tournament fees, and other administrative costs</li>
+<li><strong>Time Horizons</strong>: Project budgets by month, semester, or full academic year</li>
+<li><strong>Cost Allocation</strong>: Choose to apply one-time costs immediately or spread them evenly across the horizon</li>
 </ul>
+<p><strong>Try different scenarios</strong> to find the optimal budget plan for your season!</p>
 </div>
 </div>
-</section>
-</section>
-<section id="key-insights" class="level2">
-<h2 class="anchored" data-anchor-id="key-insights">Key Insights</h2>
-<p>Based on the historical data and predictive models:</p>
-<ol type="1">
-<li><strong>Seasonal Patterns</strong>: Financial activity shows clear seasonal patterns aligned with the academic calendar</li>
-<li><strong>Top Expense Categories</strong>: The three largest expense categories account for the majority of spending</li>
-<li><strong>Prediction Accuracy</strong>: The linear model with seasonal components outperforms naive and mean-based predictions</li>
-<li><strong>Budget Planning</strong>: The interactive tool enables scenario-based planning for different activity levels</li>
-</ol>
-</section>
-<section id="next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps">Next Steps</h2>
-<ul>
-<li>Integrate real-time data updates</li>
-<li>Add more sophisticated forecasting models (ARIMA, Prophet)</li>
-<li>Develop fundraising impact simulations</li>
-<li>Create mobile-friendly dashboard version</li>
-</ul>
 
 
 </section>
