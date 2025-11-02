@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Yusi">
 
-<title>Budget Planning Tool – VT Club Tennis Analysis</title>
+<title>VT Club Tennis Elo Ranking System – VT Club Tennis Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -41,11 +40,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-2d3a5f678c659c6d9658e8627949fb9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<meta name="shinylive:serviceworker_dir" content=".">
-<script src="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/load-shinylive-sw.js" type="module"></script>
-<script src="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/run-python-blocks.js" type="module"></script>
-<link href="site_libs/quarto-contrib/shinylive-0.9.1/shinylive/shinylive.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -148,8 +142,27 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
+  <ul>
+  <li><a href="#what-is-the-elo-rating-system" id="toc-what-is-the-elo-rating-system" class="nav-link active" data-scroll-target="#what-is-the-elo-rating-system"><span class="header-section-number">1</span> 1. What is the Elo Rating System?</a>
   <ul class="collapse">
-  <li><a href="#interactive-budget-tool" id="toc-interactive-budget-tool" class="nav-link active" data-scroll-target="#interactive-budget-tool">Interactive Budget Tool</a></li>
+  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts"><span class="header-section-number">1.1</span> Key Concepts:</a></li>
+  </ul></li>
+  <li><a href="#how-does-it-work-simple-explanation" id="toc-how-does-it-work-simple-explanation" class="nav-link" data-scroll-target="#how-does-it-work-simple-explanation"><span class="header-section-number">2</span> 2. How Does It Work? (Simple Explanation)</a>
+  <ul class="collapse">
+  <li><a href="#step-1-predict-the-outcome" id="toc-step-1-predict-the-outcome" class="nav-link" data-scroll-target="#step-1-predict-the-outcome"><span class="header-section-number">2.1</span> Step 1: Predict the outcome</a></li>
+  <li><a href="#step-2-compare-prediction-to-reality" id="toc-step-2-compare-prediction-to-reality" class="nav-link" data-scroll-target="#step-2-compare-prediction-to-reality"><span class="header-section-number">2.2</span> Step 2: Compare prediction to reality</a></li>
+  <li><a href="#step-3-adjust-ratings" id="toc-step-3-adjust-ratings" class="nav-link" data-scroll-target="#step-3-adjust-ratings"><span class="header-section-number">2.3</span> Step 3: Adjust ratings</a></li>
+  </ul></li>
+  <li><a href="#lets-see-it-in-action-a-mini-example" id="toc-lets-see-it-in-action-a-mini-example" class="nav-link" data-scroll-target="#lets-see-it-in-action-a-mini-example"><span class="header-section-number">3</span> 3. Let’s See It In Action: A Mini Example</a>
+  <ul class="collapse">
+  <li><a href="#match-1-alice-vs-bob-both-start-at-1300" id="toc-match-1-alice-vs-bob-both-start-at-1300" class="nav-link" data-scroll-target="#match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.1</span> Match 1: Alice vs Bob (Both start at 1300)</a></li>
+  <li><a href="#match-2-alice-vs-charlie-alice-now-favored" id="toc-match-2-alice-vs-charlie-alice-now-favored" class="nav-link" data-scroll-target="#match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.2</span> Match 2: Alice vs Charlie (Alice now favored)</a></li>
+  <li><a href="#match-3-bob-vs-charlie-bob-is-underdog" id="toc-match-3-bob-vs-charlie-bob-is-underdog" class="nav-link" data-scroll-target="#match-3-bob-vs-charlie-bob-is-underdog"><span class="header-section-number">3.3</span> Match 3: Bob vs Charlie (Bob is underdog)</a></li>
+  <li><a href="#match-4-alice-vs-bob-rematch" id="toc-match-4-alice-vs-bob-rematch" class="nav-link" data-scroll-target="#match-4-alice-vs-bob-rematch"><span class="header-section-number">3.4</span> Match 4: Alice vs Bob (Rematch!)</a></li>
+  <li><a href="#match-5-charlie-vs-bob-battle-for-last-place" id="toc-match-5-charlie-vs-bob-battle-for-last-place" class="nav-link" data-scroll-target="#match-5-charlie-vs-bob-battle-for-last-place"><span class="header-section-number">3.5</span> Match 5: Charlie vs Bob (Battle for Last Place)</a></li>
+  <li><a href="#key-insights-from-these-examples" id="toc-key-insights-from-these-examples" class="nav-link" data-scroll-target="#key-insights-from-these-examples"><span class="header-section-number">3.6</span> Key Insights from These Examples:</a></li>
+  </ul></li>
+  <li><a href="#how-to-use-this-system" id="toc-how-to-use-this-system" class="nav-link" data-scroll-target="#how-to-use-this-system"><span class="header-section-number">4</span> 4. How to Use This System</a></li>
   </ul>
 </nav>
     </div>
@@ -158,19 +171,13 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Budget Planning Tool</h1>
+<h1 class="title">VT Club Tennis Elo Ranking System</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Yusi </p>
-          </div>
-  </div>
     
   
     
@@ -181,162 +188,465 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This interactive budget planning tool helps you model different financial scenarios for VT Club Tennis. Adjust income assumptions, expense plans, and projection horizons to create customized budget forecasts.</p>
-<section id="interactive-budget-tool" class="level2">
-<h2 class="anchored" data-anchor-id="interactive-budget-tool">Interactive Budget Tool</h2>
-<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
-#|   shinylive does not work in self-contained HTML documents.
-#|   Please set `embed-resources: false` in your metadata.
-#| standalone: true
-#| viewerHeight: 800
-
-# Load libraries
-library(shiny)
-library(bslib)
-library(dplyr)
-library(lubridate)
-
-# VT colors
-vt_maroon = "#861F41"
-vt_orange = "#E87722"
-
-# Shiny: parameter-driven budget tool (VT theme)
-vt_theme = bs_theme(
-  version = 5,
-  bootswatch = "flatly",
-  primary = vt_maroon,
-  secondary = vt_orange
-)
-
-month_choices = setNames(1:12, month.name)
-
-future_months = function(start_month, horizon = c("Month","Semester","Academic Year")) {
-  horizon = match.arg(horizon)
-  start = floor_date(start_month, "month")
-  if (horizon == "Month") return(start)
-  if (horizon == "Semester") {
-    m = month(start)
-    sem = if (m %in% 8:12) "Fall" else if (m %in% 1:5) "Spring" else "Summer"
-    span = if (sem == "Fall") 0:(12 - m) else if (sem == "Spring") 0:(5 - m) else 0:(7 - m)
-    return(start %m+% months(span))
-  }
-  y0 = year(start) - if (month(start) &lt; 8) 1 else 0
-  seq(ymd(paste0(y0, "-08-01")), ymd(paste0(y0 + 1, "-07-01")), by = "1 month")
-}
-
-ui = fluidPage(
-  theme = vt_theme,
-  titlePanel("VT Club Tennis Budget What-If"),
-  sidebarLayout(
-    sidebarPanel(
-      h4("Income assumptions"),
-      numericInput("members", "Members", value = 30, min = 0, step = 1),
-      numericInput("dues", "Dues per member (each selected month) $", value = 150, min = 0, step = 10),
-      checkboxGroupInput("dues_months", "Months dues are collected", choices = month_choices, selected = c(9, 1)),
-      numericInput("other_income", "Other income per month $", value = 0, min = 0, step = 50),
-      hr(),
-      h4("Expense assumptions"),
-      checkboxInput("buy_uniforms", "Uniform purchase in start month", value = TRUE),
-      numericInput("uniform_per_member", "Uniform cost per member $", value = 75, min = 0, step = 5),
-      numericInput("n_trips", "Trips in horizon", value = 2, min = 0, step = 1),
-      numericInput("trip_cost", "Avg cost per trip $", value = 2500, min = 0, step = 100),
-      numericInput("court_hours", "Indoor court hours per month", value = 0, min = 0, step = 1),
-      numericInput("court_rate",  "Hourly court rate $", value = 50, min = 0, step = 5),
-      numericInput("n_tourneys", "Tournaments in horizon", value = 2, min = 0, step = 1),
-      numericInput("fee_per_tourney", "Tournament fee $", value = 300, min = 0, step = 10),
-      numericInput("admin_other", "Other fixed monthly expenses $", value = 0, min = 0, step = 25),
-      hr(),
-      h4("Projection settings"),
-      radioButtons("horizon", "Horizon", choices = c("Month","Semester","Academic Year"), inline = TRUE),
-      dateInput("start", "Start month", value = Sys.Date()),
-      radioButtons("spread_mode", "One-time costs", choices = c("Now","Evenly"), selected = "Evenly", inline = TRUE)
-    ),
-    mainPanel(
-      h4(textOutput("proj_label")),
-      verbatimTextOutput("proj_breakdown"),
-      plotOutput("barIE", height = 260)
-    )
-  )
-)
-
-server = function(input, output, session) {
-  months_vec = reactive(future_months(input$start, input$horizon))
-  
-  horizon_income = reactive({
-    mons = month(months_vec())
-    dues_mask = mons %in% as.integer(input$dues_months)
-    (input$members * input$dues) * as.numeric(dues_mask) + input$other_income
-  })
-  
-  horizon_expense = reactive({
-    H = length(months_vec())
-    exp_vec = rep(0, H)
-    
-    uniforms_total = if (isTRUE(input$buy_uniforms)) input$members * input$uniform_per_member else 0
-    if (input$spread_mode == "Now") exp_vec[1] = exp_vec[1] + uniforms_total
-    else exp_vec = exp_vec + uniforms_total / max(1, H)
-    
-    trips_total = input$n_trips * input$trip_cost
-    exp_vec = exp_vec + trips_total / max(1, if (input$spread_mode == "Now") 1 else H)
-    
-    exp_vec = exp_vec + input$court_hours * input$court_rate
-    
-    tour_total = input$n_tourneys * input$fee_per_tourney
-    exp_vec = exp_vec + tour_total / max(1, if (input$spread_mode == "Now") 1 else H)
-    
-    exp_vec = exp_vec + input$admin_other
-    
-    exp_vec
-  })
-  
-  output$proj_label = renderText({
-    paste0(input$horizon, " projection starting ", format(months_vec()[1], "%b %Y"))
-  })
-  
-  output$proj_breakdown = renderText({
-    inc = horizon_income()
-    exp = horizon_expense()
-    net = inc - exp
-    paste(
-      sprintf("Months: %s", paste(format(months_vec(), "%b"), collapse = " ")),
-      sprintf("Total income:  $%s", format(round(sum(inc)), big.mark = ",")),
-      sprintf("Total expense: $%s", format(round(sum(exp)), big.mark = ",")),
-      sprintf("Total net:     $%s", format(round(sum(net)), big.mark = ",")),
-      sep = "\n"
-    )
-  })
-  
-  output$barIE = renderPlot({
-    ie = data.frame(
-      Type = c("Income","Expense"),
-      Amount = c(sum(horizon_income()), sum(horizon_expense()))
-    )
-    par(mar = c(4,4,2,1))
-    barplot(ie$Amount, names.arg = ie$Type, ylab = "$", col = c(vt_orange, vt_maroon))
-  })
-}
-
-shinyApp(ui, server)</code></pre>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-How to Use
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The interactive tool allows you to:</p>
+<section id="what-is-the-elo-rating-system" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-the-elo-rating-system"><span class="header-section-number">1</span> 1. What is the Elo Rating System?</h2>
+<p>Think of Elo like a video game ranking system where everyone starts at the same level. When you win matches, you gain points; when you lose, you lose points. The cool part? <strong>Beating stronger players earns you more points than beating weaker ones.</strong></p>
+<section id="key-concepts" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="key-concepts"><span class="header-section-number">1.1</span> Key Concepts:</h3>
 <ul>
-<li><strong>Income Parameters</strong>: Set member counts, dues amounts, and specify which months dues are collected</li>
-<li><strong>Expense Planning</strong>: Model uniform purchases, tournament trips, court rentals, tournament fees, and other administrative costs</li>
-<li><strong>Time Horizons</strong>: Project budgets by month, semester, or full academic year</li>
-<li><strong>Cost Allocation</strong>: Choose to apply one-time costs immediately or spread them evenly across the horizon</li>
+<li><strong>Everyone starts at 1300 points</strong></li>
+<li><strong>Win = gain points, Lose = lose points</strong></li>
+<li><strong>Bigger upset = bigger point swing</strong></li>
+<li><strong>The system balances itself</strong> - total points stay constant</li>
 </ul>
-<p><strong>Try different scenarios</strong> to find the optimal budget plan for your season!</p>
+</section>
+</section>
+<section id="how-does-it-work-simple-explanation" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="how-does-it-work-simple-explanation"><span class="header-section-number">2</span> 2. How Does It Work? (Simple Explanation)</h2>
+<section id="step-1-predict-the-outcome" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="step-1-predict-the-outcome"><span class="header-section-number">2.1</span> Step 1: Predict the outcome</h3>
+<p>Before each match, we calculate who <em>should</em> win based on current ratings.</p>
+<p><strong>Example:</strong> Player A (1400 rating) vs Player B (1300 rating) - Player A is expected to win about 64% of the time - Player B is expected to win about 36% of the time</p>
+</section>
+<section id="step-2-compare-prediction-to-reality" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="step-2-compare-prediction-to-reality"><span class="header-section-number">2.2</span> Step 2: Compare prediction to reality</h3>
+<p>After the match, we see what actually happened and compare it to the prediction.</p>
+</section>
+<section id="step-3-adjust-ratings" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="step-3-adjust-ratings"><span class="header-section-number">2.3</span> Step 3: Adjust ratings</h3>
+<ul>
+<li><strong>If the favorite wins</strong>: Small point change (expected result)</li>
+<li><strong>If the underdog wins</strong>: Large point change (upset!)</li>
+</ul>
+<p>The formula is simple:</p>
+<pre><code>New Rating = Old Rating + K × (Actual Result - Expected Result)</code></pre>
+<p>Where: - <strong>K</strong> = How many points are at stake (32 for new players, 12-24 for experienced players) - <strong>Actual Result</strong> = 1 if you won, 0 if you lost - <strong>Expected Result</strong> = Probability you were supposed to win (0 to 1)</p>
+</section>
+</section>
+<section id="lets-see-it-in-action-a-mini-example" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="lets-see-it-in-action-a-mini-example"><span class="header-section-number">3</span> 3. Let’s See It In Action: A Mini Example</h2>
+<p>We’ll watch <strong>3 players</strong> play <strong>5 matches</strong> and see exactly how their ratings change.</p>
+<section id="match-1-alice-vs-bob-both-start-at-1300" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.1</span> Match 1: Alice vs Bob (Both start at 1300)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Starting Ratings - Everyone at 1300</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1300</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1300</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1300</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+<p><strong>Before Match:</strong> - Alice: 1300 rating - Bob: 1300 rating - Expected Result: 50-50 (both equal)</p>
+<p><strong>Alice wins!</strong></p>
+<p><strong>Calculation:</strong> - K-factor: 32 (both are new players) - Alice expected to win: 0.50 (50%) - Alice actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.50) = <strong>+16 points</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 1 Results</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1300</td>
+<td style="text-align: left;">50%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+16</td>
+<td style="text-align: right;">1316</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1300</td>
+<td style="text-align: left;">50%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-16</td>
+<td style="text-align: right;">1284</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>After Match 1:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Current Standings After Match 1</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rank</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1316</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1300</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1284</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="match-2-alice-vs-charlie-alice-now-favored" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.2</span> Match 2: Alice vs Charlie (Alice now favored)</h3>
+<p><strong>Before Match:</strong> - Alice: 1316 rating (favorite) - Charlie: 1300 rating (underdog) - Expected: Alice should win 52% of the time</p>
+<p><strong>Charlie wins! (UPSET)</strong></p>
+<p><strong>Calculation:</strong> - K-factor: 32 (both still new) - Charlie expected to win: 0.48 (48%) - Charlie actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.48) = <strong>+17 points</strong> (more than Match 1 because of the upset!)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 2 Results - Upset!</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1300</td>
+<td style="text-align: left;">48%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+16.7</td>
+<td style="text-align: right;">1316.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1316</td>
+<td style="text-align: left;">52%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-16.7</td>
+<td style="text-align: right;">1299.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>After Match 2:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Current Standings After Match 2</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rank</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1316.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1299.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1284.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="match-3-bob-vs-charlie-bob-is-underdog" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="match-3-bob-vs-charlie-bob-is-underdog"><span class="header-section-number">3.3</span> Match 3: Bob vs Charlie (Bob is underdog)</h3>
+<p><strong>Before Match:</strong> - Charlie: 1317 rating (favorite, just beat Alice!) - Bob: 1284 rating (underdog, lost to Alice) - Expected: Charlie should win 55% of the time</p>
+<p><strong>Bob wins!</strong> (Another upset!)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 3 Results - Another Upset!</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1284.0</td>
+<td style="text-align: left;">45%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+17.5</td>
+<td style="text-align: right;">1301.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1316.7</td>
+<td style="text-align: left;">55%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-17.5</td>
+<td style="text-align: right;">1299.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>After Match 3:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Current Standings After Match 3</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rank</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1301.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1299.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1299.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="match-4-alice-vs-bob-rematch" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="match-4-alice-vs-bob-rematch"><span class="header-section-number">3.4</span> Match 4: Alice vs Bob (Rematch!)</h3>
+<p><strong>Before Match:</strong> - Alice: 1299 rating - Bob: 1301 rating (Bob barely ahead now!) - Expected: Nearly 50-50 (Bob 50.3% to win)</p>
+<p><strong>Alice wins!</strong> (Redemption!)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 4 Results - Close Match!</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1299.3</td>
+<td style="text-align: left;">49.7%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+16.1</td>
+<td style="text-align: right;">1315.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1301.5</td>
+<td style="text-align: left;">50.3%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-16.1</td>
+<td style="text-align: right;">1285.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>After Match 4:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Current Standings After Match 4</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rank</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1315.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1299.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1285.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="match-5-charlie-vs-bob-battle-for-last-place" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="match-5-charlie-vs-bob-battle-for-last-place"><span class="header-section-number">3.5</span> Match 5: Charlie vs Bob (Battle for Last Place)</h3>
+<p><strong>Before Match:</strong> - Bob: 1285 rating - Charlie: 1300 rating - Expected: Charlie should win 52% of the time</p>
+<p><strong>Charlie wins</strong> (as expected)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 5 Results - Expected Outcome</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1299.2</td>
+<td style="text-align: left;">52%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+15.4</td>
+<td style="text-align: right;">1314.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1285.4</td>
+<td style="text-align: left;">48%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-15.4</td>
+<td style="text-align: right;">1270.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Final Standings:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Final Standings After 5 Matches</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Rank</th>
+<th style="text-align: left;">Player</th>
+<th style="text-align: right;">Rating</th>
+<th style="text-align: right;">Change from Start</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1315.4</td>
+<td style="text-align: right;">15.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1314.6</td>
+<td style="text-align: right;">14.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1270.0</td>
+<td style="text-align: right;">-30.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="key-insights-from-these-examples" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="key-insights-from-these-examples"><span class="header-section-number">3.6</span> Key Insights from These Examples:</h3>
+<ol type="1">
+<li><strong>Equal players (Match 1)</strong>: 50-50 expected, winner gets +16, loser gets -16</li>
+<li><strong>Upsets reward more points</strong>: Charlie and Bob gained 17+ points from their upsets</li>
+<li><strong>Close matches</strong>: When ratings are nearly equal, point swings are around 16</li>
+<li><strong>Expected wins</strong>: When the favorite wins, they gain fewer points (Match 5: +15)</li>
+<li><strong>System stays balanced</strong>: Total points = 3900 (1300 × 3 players) throughout all matches</li>
+<li><strong>Win-loss records don’t tell the whole story</strong>: Alice is 2-1 but ranked 1st, Bob is 1-3 but close to Charlie (2-1)</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="how-to-use-this-system" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="how-to-use-this-system"><span class="header-section-number">4</span> 4. How to Use This System</h2>
+<ol type="1">
+<li><strong>Record match results</strong> - Log who played, when, and who won</li>
+<li><strong>System automatically updates</strong> - Ratings adjust after each match</li>
+<li><strong>View current rankings</strong> - Check the leaderboard anytime</li>
+<li><strong>Track progress</strong> - See how your rating evolves over time</li>
+<li><strong>Fair competition</strong> - Beating stronger opponents = bigger rewards!</li>
+</ol>
+<p>The system is designed to be fair, transparent, and encourage players to challenge themselves by playing opponents of all skill levels.</p>
 
 
 </section>
@@ -443,7 +753,7 @@ How to Use
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/yaoyusi1109\.github\.io\/clubtennis2025\/");
+        var filterRegex = new RegExp('/' + window.location.host + '/');
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

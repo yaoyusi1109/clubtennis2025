@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.22">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>VT Club Tennis Elo Ranking System – VT Club Tennis Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b4406b7675125bc2ba204020e191172.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-2d3a5f678c659c6d9658e8627949fb9f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="chat-widget.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">VT Club Tennis Analysis</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./main.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-financial-analysis" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Financial Analysis</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-financial-analysis">    
+        <li>
+    <a class="dropdown-item" href="./financial_analysis.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./historical_review.html">
+ <span class="dropdown-text">Historical Review</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./financial_tools.html">
+ <span class="dropdown-text">Budget Tool</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-performance-analysis" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Performance Analysis</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-performance-analysis">    
+        <li>
+    <a class="dropdown-item" href="./performance_analysis.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./rank_ladder.html">
+ <span class="dropdown-text">Ranking System</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-the-elo-rating-system" id="toc-what-is-the-elo-rating-system" class="nav-link active" data-scroll-target="#what-is-the-elo-rating-system"><span class="header-section-number">1</span> 1. What is the Elo Rating System?</a>
+  <ul class="collapse">
+  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts"><span class="header-section-number">1.1</span> Key Concepts:</a></li>
+  </ul></li>
+  <li><a href="#how-does-it-work-simple-explanation" id="toc-how-does-it-work-simple-explanation" class="nav-link" data-scroll-target="#how-does-it-work-simple-explanation"><span class="header-section-number">2</span> 2. How Does It Work? (Simple Explanation)</a>
+  <ul class="collapse">
+  <li><a href="#step-1-predict-the-outcome" id="toc-step-1-predict-the-outcome" class="nav-link" data-scroll-target="#step-1-predict-the-outcome"><span class="header-section-number">2.1</span> Step 1: Predict the outcome</a></li>
+  <li><a href="#step-2-compare-prediction-to-reality" id="toc-step-2-compare-prediction-to-reality" class="nav-link" data-scroll-target="#step-2-compare-prediction-to-reality"><span class="header-section-number">2.2</span> Step 2: Compare prediction to reality</a></li>
+  <li><a href="#step-3-adjust-ratings" id="toc-step-3-adjust-ratings" class="nav-link" data-scroll-target="#step-3-adjust-ratings"><span class="header-section-number">2.3</span> Step 3: Adjust ratings</a></li>
+  </ul></li>
+  <li><a href="#lets-see-it-in-action-a-mini-example" id="toc-lets-see-it-in-action-a-mini-example" class="nav-link" data-scroll-target="#lets-see-it-in-action-a-mini-example"><span class="header-section-number">3</span> 3. Let’s See It In Action: A Mini Example</a>
+  <ul class="collapse">
+  <li><a href="#match-1-alice-vs-bob-both-start-at-1300" id="toc-match-1-alice-vs-bob-both-start-at-1300" class="nav-link" data-scroll-target="#match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.1</span> Match 1: Alice vs Bob (Both start at 1300)</a></li>
+  <li><a href="#match-2-alice-vs-charlie-alice-now-favored" id="toc-match-2-alice-vs-charlie-alice-now-favored" class="nav-link" data-scroll-target="#match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.2</span> Match 2: Alice vs Charlie (Alice now favored)</a></li>
+  <li><a href="#match-3-bob-vs-charlie-bob-is-underdog" id="toc-match-3-bob-vs-charlie-bob-is-underdog" class="nav-link" data-scroll-target="#match-3-bob-vs-charlie-bob-is-underdog"><span class="header-section-number">3.3</span> Match 3: Bob vs Charlie (Bob is underdog)</a></li>
+  <li><a href="#match-4-alice-vs-bob-rematch" id="toc-match-4-alice-vs-bob-rematch" class="nav-link" data-scroll-target="#match-4-alice-vs-bob-rematch"><span class="header-section-number">3.4</span> Match 4: Alice vs Bob (Rematch!)</a></li>
+  <li><a href="#match-5-charlie-vs-bob-battle-for-last-place" id="toc-match-5-charlie-vs-bob-battle-for-last-place" class="nav-link" data-scroll-target="#match-5-charlie-vs-bob-battle-for-last-place"><span class="header-section-number">3.5</span> Match 5: Charlie vs Bob (Battle for Last Place)</a></li>
+  <li><a href="#visual-rating-journey-across-all-5-matches" id="toc-visual-rating-journey-across-all-5-matches" class="nav-link" data-scroll-target="#visual-rating-journey-across-all-5-matches"><span class="header-section-number">3.6</span> Visual: Rating Journey Across All 5 Matches</a></li>
+  <li><a href="#visual-final-win-loss-records" id="toc-visual-final-win-loss-records" class="nav-link" data-scroll-target="#visual-final-win-loss-records"><span class="header-section-number">3.7</span> Visual: Final Win-Loss Records</a></li>
+  <li><a href="#key-insights-from-these-examples" id="toc-key-insights-from-these-examples" class="nav-link" data-scroll-target="#key-insights-from-these-examples"><span class="header-section-number">3.8</span> Key Insights from These Examples:</a></li>
+  </ul></li>
+  <li><a href="#how-to-use-this-system" id="toc-how-to-use-this-system" class="nav-link" data-scroll-target="#how-to-use-this-system"><span class="header-section-number">4</span> 4. How to Use This System</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">VT Club Tennis Elo Ranking System</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="what-is-the-elo-rating-system" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-the-elo-rating-system"><span class="header-section-number">1</span> 1. What is the Elo Rating System?</h2>
+<p>Think of Elo like a video game ranking system where everyone starts at the same level. When you win matches, you gain points; when you lose, you lose points. The cool part? <strong>Beating stronger players earns you more points than beating weaker ones.</strong></p>
+<section id="key-concepts" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="key-concepts"><span class="header-section-number">1.1</span> Key Concepts:</h3>
+<ul>
+<li><strong>Everyone starts at 1300 points</strong></li>
+<li><strong>Win = gain points, Lose = lose points</strong></li>
+<li><strong>Bigger upset = bigger point swing</strong></li>
+<li><strong>The system balances itself</strong> - total points stay constant</li>
+</ul>
+</section>
+</section>
+<section id="how-does-it-work-simple-explanation" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="how-does-it-work-simple-explanation"><span class="header-section-number">2</span> 2. How Does It Work? (Simple Explanation)</h2>
+<section id="step-1-predict-the-outcome" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="step-1-predict-the-outcome"><span class="header-section-number">2.1</span> Step 1: Predict the outcome</h3>
+<p>Before each match, we calculate who <em>should</em> win based on current ratings.</p>
+<p><strong>Example:</strong> Player A (1400 rating) vs Player B (1300 rating) - Player A is expected to win about 64% of the time - Player B is expected to win about 36% of the time</p>
+</section>
+<section id="step-2-compare-prediction-to-reality" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="step-2-compare-prediction-to-reality"><span class="header-section-number">2.2</span> Step 2: Compare prediction to reality</h3>
+<p>After the match, we see what actually happened and compare it to the prediction.</p>
+</section>
+<section id="step-3-adjust-ratings" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="step-3-adjust-ratings"><span class="header-section-number">2.3</span> Step 3: Adjust ratings</h3>
+<ul>
+<li><strong>If the favorite wins</strong>: Small point change (expected result)</li>
+<li><strong>If the underdog wins</strong>: Large point change (upset!)</li>
+</ul>
+<p>The formula is simple:</p>
+<pre><code>New Rating = Old Rating + K × (Actual Result - Expected Result)</code></pre>
+<p>Where: - <strong>K</strong> = How many points are at stake (32 for new players, 12-24 for experienced players) - <strong>Actual Result</strong> = 1 if you won, 0 if you lost - <strong>Expected Result</strong> = Probability you were supposed to win (0 to 1)</p>
+</section>
+</section>
+<section id="lets-see-it-in-action-a-mini-example" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="lets-see-it-in-action-a-mini-example"><span class="header-section-number">3</span> 3. Let’s See It In Action: A Mini Example</h2>
+<p>We’ll watch <strong>3 players</strong> play <strong>5 matches</strong> and see exactly how their ratings change.</p>
+<section id="match-1-alice-vs-bob-both-start-at-1300" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.1</span> Match 1: Alice vs Bob (Both start at 1300)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Starting Ratings - Everyone at 1300</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1300</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1300</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1300</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Before Match:</strong> - Alice: 1300 rating - Bob: 1300 rating - Expected Result: 50-50 (both equal)</p>
+<p><strong>Alice wins!</strong></p>
+<p><strong>Calculation:</strong> - K-factor: 32 (both are new players) - Alice expected to win: 0.50 (50%) - Alice actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.50) = <strong>+16 points</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 1 Results</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1300</td>
+<td style="text-align: left;">50%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+16</td>
+<td style="text-align: right;">1316</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1300</td>
+<td style="text-align: left;">50%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-16</td>
+<td style="text-align: right;">1284</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>After Match 1:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Current Standings After Match 1</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rank</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1316</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1300</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1284</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="match-2-alice-vs-charlie-alice-now-favored" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.2</span> Match 2: Alice vs Charlie (Alice now favored)</h3>
+<p><strong>Before Match:</strong> - Alice: 1316 rating (favorite) - Charlie: 1300 rating (underdog) - Expected: Alice should win 52% of the time</p>
+<p><strong>Charlie wins! (UPSET)</strong></p>
+<p><strong>Calculation:</strong> - K-factor: 32 (both still new) - Charlie expected to win: 0.48 (48%) - Charlie actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.48) = <strong>+17 points</strong> (more than Match 1 because of the upset!)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 2 Results - Upset!</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1300</td>
+<td style="text-align: left;">48%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+16.7</td>
+<td style="text-align: right;">1316.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1316</td>
+<td style="text-align: left;">52%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-16.7</td>
+<td style="text-align: right;">1299.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>After Match 2:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Current Standings After Match 2</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rank</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1316.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1299.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1284.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="match-3-bob-vs-charlie-bob-is-underdog" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="match-3-bob-vs-charlie-bob-is-underdog"><span class="header-section-number">3.3</span> Match 3: Bob vs Charlie (Bob is underdog)</h3>
+<p><strong>Before Match:</strong> - Charlie: 1317 rating (favorite, just beat Alice!) - Bob: 1284 rating (underdog, lost to Alice) - Expected: Charlie should win 55% of the time</p>
+<p><strong>Bob wins!</strong> (Another upset!)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 3 Results - Another Upset!</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1284.0</td>
+<td style="text-align: left;">45%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+17.5</td>
+<td style="text-align: right;">1301.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1316.7</td>
+<td style="text-align: left;">55%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-17.5</td>
+<td style="text-align: right;">1299.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>After Match 3:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Current Standings After Match 3</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rank</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1301.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1299.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1299.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="match-4-alice-vs-bob-rematch" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="match-4-alice-vs-bob-rematch"><span class="header-section-number">3.4</span> Match 4: Alice vs Bob (Rematch!)</h3>
+<p><strong>Before Match:</strong> - Alice: 1299 rating - Bob: 1301 rating (Bob barely ahead now!) - Expected: Nearly 50-50 (Bob 50.3% to win)</p>
+<p><strong>Alice wins!</strong> (Redemption!)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 4 Results - Close Match!</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1299.3</td>
+<td style="text-align: left;">49.7%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+16.1</td>
+<td style="text-align: right;">1315.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1301.5</td>
+<td style="text-align: left;">50.3%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-16.1</td>
+<td style="text-align: right;">1285.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>After Match 4:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Current Standings After Match 4</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">rank</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1315.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1299.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1285.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="match-5-charlie-vs-bob-battle-for-last-place" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="match-5-charlie-vs-bob-battle-for-last-place"><span class="header-section-number">3.5</span> Match 5: Charlie vs Bob (Battle for Last Place)</h3>
+<p><strong>Before Match:</strong> - Bob: 1285 rating - Charlie: 1300 rating - Expected: Charlie should win 52% of the time</p>
+<p><strong>Charlie wins</strong> (as expected)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Match 5 Results - Expected Outcome</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">old_rating</th>
+<th style="text-align: left;">expected</th>
+<th style="text-align: left;">actual</th>
+<th style="text-align: left;">change</th>
+<th style="text-align: right;">new_rating</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1299.2</td>
+<td style="text-align: left;">52%</td>
+<td style="text-align: left;">Won</td>
+<td style="text-align: left;">+15.4</td>
+<td style="text-align: right;">1314.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1285.4</td>
+<td style="text-align: left;">48%</td>
+<td style="text-align: left;">Lost</td>
+<td style="text-align: left;">-15.4</td>
+<td style="text-align: right;">1270.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Final Standings:</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Final Standings After 5 Matches</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Rank</th>
+<th style="text-align: left;">Player</th>
+<th style="text-align: right;">Rating</th>
+<th style="text-align: right;">Change from Start</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Alice</td>
+<td style="text-align: right;">1315.4</td>
+<td style="text-align: right;">15.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Charlie</td>
+<td style="text-align: right;">1314.6</td>
+<td style="text-align: right;">14.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bob</td>
+<td style="text-align: right;">1270.0</td>
+<td style="text-align: right;">-30.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="visual-rating-journey-across-all-5-matches" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="visual-rating-journey-across-all-5-matches"><span class="header-section-number">3.6</span> Visual: Rating Journey Across All 5 Matches</h3>
+<p><strong>Watch the ratings change!</strong> This chart shows how each player’s rating evolved through all 5 matches. The dashed line at 1300 is where everyone started.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rank_ladder_files/figure-html/example-visual-evolution-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>What This Shows:</strong> - <strong>Alice (Maroon)</strong>: Started strong (won Match 1), dropped after upset loss to Charlie, recovered by winning rematch against Bob - <strong>Bob (Orange)</strong>: Lost first match to Alice, upset Charlie, then lost to Alice again and Charlie - most volatile journey! - <strong>Charlie (Green)</strong>: Stayed at 1300 for 2 matches, then upset Alice to jump up, lost to Bob, recovered by beating Bob again - <strong>Notice</strong>: The system rewards upsets with big point jumps (see Charlie’s jump in Match 2, Bob’s in Match 3)</p>
+<hr>
+</section>
+<section id="visual-final-win-loss-records" class="level3" data-number="3.7">
+<h3 data-number="3.7" class="anchored" data-anchor-id="visual-final-win-loss-records"><span class="header-section-number">3.7</span> Visual: Final Win-Loss Records</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rank_ladder_files/figure-html/example-visual-winloss-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Key Observation:</strong> Alice and Charlie both ended at 1315 rating with 2-1 records, while Bob ended at 1269 with 1-3 record. This shows that <strong>who you beat matters more than just win count</strong> - Charlie’s upset of Alice earned big points!</p>
+<hr>
+</section>
+<section id="key-insights-from-these-examples" class="level3" data-number="3.8">
+<h3 data-number="3.8" class="anchored" data-anchor-id="key-insights-from-these-examples"><span class="header-section-number">3.8</span> Key Insights from These Examples:</h3>
+<ol type="1">
+<li><strong>Equal players (Match 1)</strong>: 50-50 expected, winner gets +16, loser gets -16</li>
+<li><strong>Upsets reward more points</strong>: Charlie and Bob gained 17+ points from their upsets</li>
+<li><strong>Close matches</strong>: When ratings are nearly equal, point swings are around 16</li>
+<li><strong>Expected wins</strong>: When the favorite wins, they gain fewer points (Match 5: +15)</li>
+<li><strong>System stays balanced</strong>: Total points = 3900 (1300 × 3 players) throughout all matches</li>
+<li><strong>Win-loss records don’t tell the whole story</strong>: Alice is 2-1 but ranked 1st, Bob is 1-3 but close to Charlie (2-1)</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="how-to-use-this-system" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="how-to-use-this-system"><span class="header-section-number">4</span> 4. How to Use This System</h2>
+<ol type="1">
+<li><strong>Record match results</strong> - Log who played, when, and who won</li>
+<li><strong>System automatically updates</strong> - Ratings adjust after each match</li>
+<li><strong>View current rankings</strong> - Check the leaderboard anytime</li>
+<li><strong>Track progress</strong> - See how your rating evolves over time</li>
+<li><strong>Fair competition</strong> - Beating stronger opponents = bigger rewards!</li>
+</ol>
+<p>The system is designed to be fair, transparent, and encourage players to challenge themselves by playing opponents of all skill levels.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- chat-widget.html -->
+<div id="chat-widget-container">
+  <!-- The chat window (initially hidden) -->
+  <div id="chat-window" class="hidden">
+    <div id="chat-header">
+      <span>Contact VT Club Tennis</span>
+      <span id="close-chat">×</span>
+    </div>
+    <div id="chat-body">
+      <div class="message received">
+        Send us a note and your email app will open a draft to yusiyao@vt.edu. We’ll get back to you soon.
+      </div>
+    </div>
+    <div id="chat-footer">
+      <input type="text" id="chat-input" placeholder="Type your message...">
+      <button id="send-message">Email</button>
+    </div>
+  </div>
+
+  <!-- The floating chat bubble -->
+  <div id="chat-bubble">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" class="bi bi-chat-dots-fill" viewbox="0 0 16 16">
+      <path d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path>
+    </svg>
+  </div>
+</div>
+
+<!-- Load widget behavior -->
+<script src="chat-widget.js"></script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/yaoyusi1109\.github\.io\/clubtennis2025\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
