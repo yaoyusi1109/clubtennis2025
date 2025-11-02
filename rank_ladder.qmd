@@ -1,0 +1,489 @@
+---
+title: "VT Club Tennis Elo Ranking System"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: show
+---
+
+## 1. What is the Elo Rating System?
+
+Think of Elo like a video game ranking system where everyone starts at the same level. When you win matches, you gain points; when you lose, you lose points. The cool part? **Beating stronger players earns you more points than beating weaker ones.**
+
+### Key Concepts:
+
+- **Everyone starts at 1300 points**
+- **Win = gain points, Lose = lose points**
+- **Bigger upset = bigger point swing**
+- **The system balances itself** - total points stay constant
+
+## 2. How Does It Work? (Simple Explanation)
+
+### Step 1: Predict the outcome
+Before each match, we calculate who *should* win based on current ratings.
+
+**Example:** Player A (1400 rating) vs Player B (1300 rating)
+- Player A is expected to win about 64% of the time
+- Player B is expected to win about 36% of the time
+
+### Step 2: Compare prediction to reality
+After the match, we see what actually happened and compare it to the prediction.
+
+### Step 3: Adjust ratings
+- **If the favorite wins**: Small point change (expected result)
+- **If the underdog wins**: Large point change (upset!)
+
+The formula is simple:
+```
+New Rating = Old Rating + K × (Actual Result - Expected Result)
+```
+
+Where:
+- **K** = How many points are at stake (32 for new players, 12-24 for experienced players)
+- **Actual Result** = 1 if you won, 0 if you lost
+- **Expected Result** = Probability you were supposed to win (0 to 1)
+
+## 3. Let's See It In Action: A Mini Example
+
+We'll watch **3 players** play **5 matches** and see exactly how their ratings change.
+
+```{r setup}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(knitr)
+library(tidyr)
+
+# VT color palette
+vt_maroon <- "#861F41"
+vt_orange <- "#E87722"
+```
+
+### Match 1: Alice vs Bob (Both start at 1300)
+
+```{r example-match1}
+#| echo: false
+
+# Create 3 example players
+example_players <- data.frame(
+  name = c("Alice", "Bob", "Charlie"),
+  rating = c(1300, 1300, 1300),
+  stringsAsFactors = FALSE
+)
+
+# Helper function for expected score
+calc_expected <- function(rating_a, rating_b) {
+  1 / (1 + 10^((rating_b - rating_a) / 400))
+}
+
+kable(example_players, caption = "Starting Ratings - Everyone at 1300")
+```
+
+**Before Match:**
+- Alice: 1300 rating
+- Bob: 1300 rating
+- Expected Result: 50-50 (both equal)
+
+**Alice wins!**
+
+**Calculation:**
+- K-factor: 32 (both are new players)
+- Alice expected to win: 0.50 (50%)
+- Alice actually won: 1.0 (100%)
+- Point change: 32 × (1.0 - 0.50) = **+16 points**
+
+```{r example-match1-result}
+#| echo: false
+
+# Alice wins
+K <- 32
+expected_alice <- calc_expected(1300, 1300)
+change <- K * (1 - expected_alice)
+
+example_players$rating[1] <- 1300 + change  # Alice
+example_players$rating[2] <- 1300 - change  # Bob
+
+result1 <- data.frame(
+  name = c("Alice", "Bob"),
+  old_rating = c(1300, 1300),
+  expected = c("50%", "50%"),
+  actual = c("Won", "Lost"),
+  change = c(paste0("+", round(change, 1)), paste0("-", round(change, 1))),
+  new_rating = c(round(1300 + change, 1), round(1300 - change, 1))
+)
+
+kable(result1, caption = "Match 1 Results")
+```
+
+**After Match 1:**
+
+```{r example-standings1}
+#| echo: false
+
+standings1 <- example_players %>%
+  arrange(desc(rating)) %>%
+  mutate(
+    rank = row_number(),
+    rating = round(rating, 1)
+  ) %>%
+  select(rank, name, rating)
+
+kable(standings1, caption = "Current Standings After Match 1")
+```
+
+---
+
+### Match 2: Alice vs Charlie (Alice now favored)
+
+**Before Match:**
+- Alice: 1316 rating (favorite)
+- Charlie: 1300 rating (underdog)
+- Expected: Alice should win 52% of the time
+
+**Charlie wins! (UPSET)**
+
+**Calculation:**
+- K-factor: 32 (both still new)
+- Charlie expected to win: 0.48 (48%)
+- Charlie actually won: 1.0 (100%)
+- Point change: 32 × (1.0 - 0.48) = **+17 points** (more than Match 1 because of the upset!)
+
+```{r example-match2-result}
+#| echo: false
+
+expected_charlie <- calc_expected(1300, example_players$rating[1])
+change <- K * (1 - expected_charlie)
+
+example_players$rating[3] <- example_players$rating[3] + change  # Charlie
+example_players$rating[1] <- example_players$rating[1] - change  # Alice
+
+result2 <- data.frame(
+  name = c("Charlie", "Alice"),
+  old_rating = c(1300, 1316),
+  expected = c("48%", "52%"),
+  actual = c("Won", "Lost"),
+  change = c(paste0("+", round(change, 1)), paste0("-", round(change, 1))),
+  new_rating = c(round(1300 + change, 1), round(1316 - change, 1))
+)
+
+kable(result2, caption = "Match 2 Results - Upset!")
+```
+
+**After Match 2:**
+
+```{r example-standings2}
+#| echo: false
+
+standings2 <- example_players %>%
+  arrange(desc(rating)) %>%
+  mutate(
+    rank = row_number(),
+    rating = round(rating, 1)
+  ) %>%
+  select(rank, name, rating)
+
+kable(standings2, caption = "Current Standings After Match 2")
+```
+
+---
+
+### Match 3: Bob vs Charlie (Bob is underdog)
+
+**Before Match:**
+- Charlie: 1317 rating (favorite, just beat Alice!)
+- Bob: 1284 rating (underdog, lost to Alice)
+- Expected: Charlie should win 55% of the time
+
+**Bob wins!** (Another upset!)
+
+```{r example-match3-result}
+#| echo: false
+
+bob_rating <- example_players$rating[2]
+charlie_rating <- example_players$rating[3]
+
+expected_bob <- calc_expected(bob_rating, charlie_rating)
+change <- K * (1 - expected_bob)
+
+example_players$rating[2] <- bob_rating + change  # Bob
+example_players$rating[3] <- charlie_rating - change  # Charlie
+
+result3 <- data.frame(
+  name = c("Bob", "Charlie"),
+  old_rating = c(round(bob_rating, 1), round(charlie_rating, 1)),
+  expected = c("45%", "55%"),
+  actual = c("Won", "Lost"),
+  change = c(paste0("+", round(change, 1)), paste0("-", round(change, 1))),
+  new_rating = c(round(bob_rating + change, 1), round(charlie_rating - change, 1))
+)
+
+kable(result3, caption = "Match 3 Results - Another Upset!")
+```
+
+**After Match 3:**
+
+```{r example-standings3}
+#| echo: false
+
+standings3 <- example_players %>%
+  arrange(desc(rating)) %>%
+  mutate(
+    rank = row_number(),
+    rating = round(rating, 1)
+  ) %>%
+  select(rank, name, rating)
+
+kable(standings3, caption = "Current Standings After Match 3")
+```
+
+---
+
+### Match 4: Alice vs Bob (Rematch!)
+
+**Before Match:**
+- Alice: 1299 rating
+- Bob: 1301 rating (Bob barely ahead now!)
+- Expected: Nearly 50-50 (Bob 50.3% to win)
+
+**Alice wins!** (Redemption!)
+
+```{r example-match4-result}
+#| echo: false
+
+alice_rating <- example_players$rating[1]
+bob_rating <- example_players$rating[2]
+
+expected_alice <- calc_expected(alice_rating, bob_rating)
+change <- K * (1 - expected_alice)
+
+example_players$rating[1] <- alice_rating + change  # Alice
+example_players$rating[2] <- bob_rating - change  # Bob
+
+result4 <- data.frame(
+  name = c("Alice", "Bob"),
+  old_rating = c(round(alice_rating, 1), round(bob_rating, 1)),
+  expected = c("49.7%", "50.3%"),
+  actual = c("Won", "Lost"),
+  change = c(paste0("+", round(change, 1)), paste0("-", round(change, 1))),
+  new_rating = c(round(alice_rating + change, 1), round(bob_rating - change, 1))
+)
+
+kable(result4, caption = "Match 4 Results - Close Match!")
+```
+
+**After Match 4:**
+
+```{r example-standings4}
+#| echo: false
+
+standings4 <- example_players %>%
+  arrange(desc(rating)) %>%
+  mutate(
+    rank = row_number(),
+    rating = round(rating, 1)
+  ) %>%
+  select(rank, name, rating)
+
+kable(standings4, caption = "Current Standings After Match 4")
+```
+
+---
+
+### Match 5: Charlie vs Bob (Battle for Last Place)
+
+**Before Match:**
+- Bob: 1285 rating
+- Charlie: 1300 rating
+- Expected: Charlie should win 52% of the time
+
+**Charlie wins** (as expected)
+
+```{r example-match5-result}
+#| echo: false
+
+bob_rating <- example_players$rating[2]
+charlie_rating <- example_players$rating[3]
+
+expected_charlie <- calc_expected(charlie_rating, bob_rating)
+change <- K * (1 - expected_charlie)
+
+example_players$rating[3] <- charlie_rating + change  # Charlie
+example_players$rating[2] <- bob_rating - change  # Bob
+
+result5 <- data.frame(
+  name = c("Charlie", "Bob"),
+  old_rating = c(round(charlie_rating, 1), round(bob_rating, 1)),
+  expected = c("52%", "48%"),
+  actual = c("Won", "Lost"),
+  change = c(paste0("+", round(change, 1)), paste0("-", round(change, 1))),
+  new_rating = c(round(charlie_rating + change, 1), round(bob_rating - change, 1))
+)
+
+kable(result5, caption = "Match 5 Results - Expected Outcome")
+```
+
+**Final Standings:**
+
+```{r example-final-standings}
+#| echo: false
+
+final_standings <- example_players %>%
+  arrange(desc(rating)) %>%
+  mutate(
+    rank = row_number(),
+    rating = round(rating, 1),
+    change_from_start = round(rating - 1300, 1)
+  ) %>%
+  select(rank, name, rating, change_from_start)
+
+kable(final_standings, caption = "Final Standings After 5 Matches", 
+      col.names = c("Rank", "Player", "Rating", "Change from Start"))
+```
+
+---
+
+### Visual: Rating Journey Across All 5 Matches
+
+**Watch the ratings change!** This chart shows how each player's rating evolved through all 5 matches. The dashed line at 1300 is where everyone started.
+
+```{r example-visual-evolution}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 6
+
+# Create a history of all rating changes
+rating_evolution <- data.frame(
+  match = c(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5),
+  player = c(
+    "Alice", "Alice", "Bob", "Alice", "Charlie", "Bob", "Charlie", 
+    "Alice", "Bob", "Bob", "Charlie"
+  ),
+  rating = c(
+    1300,  # Start
+    1316, 1284,  # After match 1
+    1299, 1317,  # After match 2
+    1301, 1300,  # After match 3
+    1315, 1285,  # After match 4
+    1269, 1315   # After match 5
+  )
+)
+
+# Fill in all points for smooth lines
+all_points <- data.frame(
+  match = rep(0:5, each = 3),
+  player = rep(c("Alice", "Bob", "Charlie"), 6),
+  rating = c(
+    1300, 1300, 1300,  # Match 0: Start
+    1316, 1284, 1300,  # Match 1: Alice beats Bob
+    1299, 1284, 1317,  # Match 2: Charlie beats Alice
+    1299, 1301, 1300,  # Match 3: Bob beats Charlie
+    1315, 1285, 1300,  # Match 4: Alice beats Bob
+    1315, 1269, 1315   # Match 5: Charlie beats Bob
+  )
+)
+
+ggplot(all_points, aes(x = match, y = rating, color = player, group = player)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 3) +
+  geom_hline(yintercept = 1300, linetype = "dashed", color = "gray50", linewidth = 0.8) +
+  annotate("text", x = 0.3, y = 1305, label = "Starting Point (1300)", 
+           color = "gray40", size = 3.5) +
+  scale_color_manual(values = c("Alice" = vt_maroon, "Bob" = vt_orange, "Charlie" = "#2E8B57")) +
+  scale_x_continuous(breaks = 0:5, labels = c("Start", "Match 1", "Match 2", "Match 3", "Match 4", "Match 5")) +
+  labs(
+    title = "Rating Evolution: 3 Players, 5 Matches",
+    subtitle = "See how upsets create big swings while expected results create small changes",
+    x = NULL,
+    y = "Elo Rating",
+    color = "Player"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 11, color = "gray30"),
+    legend.position = "top",
+    panel.grid.minor = element_blank(),
+    axis.text.x = element_text(angle = 0, hjust = 0.5)
+  )
+```
+
+**What This Shows:**
+- **Alice (Maroon)**: Started strong (won Match 1), dropped after upset loss to Charlie, recovered by winning rematch against Bob
+- **Bob (Orange)**: Lost first match to Alice, upset Charlie, then lost to Alice again and Charlie - most volatile journey!
+- **Charlie (Green)**: Stayed at 1300 for 2 matches, then upset Alice to jump up, lost to Bob, recovered by beating Bob again
+- **Notice**: The system rewards upsets with big point jumps (see Charlie's jump in Match 2, Bob's in Match 3)
+
+---
+
+### Visual: Final Win-Loss Records
+
+```{r example-visual-winloss}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 5
+
+wl_summary <- data.frame(
+  player = c("Alice", "Bob", "Charlie"),
+  wins = c(2, 1, 2),
+  losses = c(1, 3, 1),
+  final_rating = c(1315, 1269, 1315)
+) %>%
+  arrange(desc(final_rating))
+
+wl_long <- wl_summary %>%
+  select(player, wins, losses) %>%
+  pivot_longer(cols = c(wins, losses), names_to = "result", values_to = "count")
+
+ggplot(wl_long, aes(x = reorder(player, -count), y = count, fill = result)) +
+  geom_col(position = "dodge", width = 0.7) +
+  geom_text(aes(label = count), position = position_dodge(width = 0.7), 
+            vjust = -0.5, size = 4) +
+  scale_fill_manual(values = c("wins" = vt_orange, "losses" = vt_maroon),
+                    labels = c("Losses", "Wins")) +
+  labs(
+    title = "Final Match Records",
+    subtitle = "Alice and Charlie tied in rating (1315) despite different paths",
+    x = NULL,
+    y = "Number of Matches",
+    fill = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 11, color = "gray30"),
+    legend.position = "top",
+    panel.grid.major.x = element_blank()
+  ) +
+  ylim(0, 3.5)
+```
+
+**Key Observation:** Alice and Charlie both ended at 1315 rating with 2-1 records, while Bob ended at 1269 with 1-3 record. This shows that **who you beat matters more than just win count** - Charlie's upset of Alice earned big points!
+
+---
+
+### Key Insights from These Examples:
+
+1. **Equal players (Match 1)**: 50-50 expected, winner gets +16, loser gets -16
+2. **Upsets reward more points**: Charlie and Bob gained 17+ points from their upsets
+3. **Close matches**: When ratings are nearly equal, point swings are around 16
+4. **Expected wins**: When the favorite wins, they gain fewer points (Match 5: +15)
+5. **System stays balanced**: Total points = 3900 (1300 × 3 players) throughout all matches
+6. **Win-loss records don't tell the whole story**: Alice is 2-1 but ranked 1st, Bob is 1-3 but close to Charlie (2-1)
+
+---
+
+## 4. How to Use This System
+
+1. **Record match results** - Log who played, when, and who won
+2. **System automatically updates** - Ratings adjust after each match
+3. **View current rankings** - Check the leaderboard anytime
+4. **Track progress** - See how your rating evolves over time
+5. **Fair competition** - Beating stronger opponents = bigger rewards!
+
+The system is designed to be fair, transparent, and encourage players to challenge themselves by playing opponents of all skill levels.

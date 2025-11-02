@@ -16,8 +16,12 @@ website:
             text: "Historical Review"
           - href: financial_tools.qmd
             text: "Budget Tool"
-      - href: performance_analysis.qmd
-        text: "Performance Analysis"
+      - text: "Performance Analysis"
+        menu:
+          - href: performance_analysis.qmd
+            text: "Overview"
+          - href: rank_ladder.qmd
+            text: "Ranking System"
 
 format:
   html:
