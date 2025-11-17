@@ -45,9 +45,9 @@ Where:
 - **Actual Result** = 1 if you won, 0 if you lost
 - **Expected Result** = Probability you were supposed to win (0 to 1)
 
-## 3. Let's See It In Action: A Mini Example
+## 3. Let's See It In Action: VT Club Tennis Roster Simulation
 
-We'll watch **3 players** play **5 matches** and see exactly how their ratings change.
+We'll apply the Elo rating system to the **actual VT Club Tennis men's roster** and simulate a season of matches to see how rankings evolve.
 
 ```{r setup}
 #| echo: false
@@ -59,10 +59,65 @@ library(ggplot2)
 library(lubridate)
 library(knitr)
 library(tidyr)
+library(DT)
 
 # VT color palette
 vt_maroon <- "#861F41"
 vt_orange <- "#E87722"
+
+# Set seed for reproducibility
+set.seed(42)
+```
+
+### Initial Roster
+
+Here are the 40 members of the VT Club Tennis men's team, starting with their current ladder rankings:
+
+```{r initial-roster}
+#| echo: false
+
+# Initialize players with real roster data
+players <- tibble(
+  Name = c("Mitchell Freeman", "Carson Le", "Diego Beltfort", "Austin Victory", 
+           "Luke Howell", "Vaughn Harrington", "Nico Bermudez", "Reed Kelly", 
+           "David Cho", "Rodrigo Lopez", "Sarthak Vishwakarma", "Eric Yoo", 
+           "Andrew Kim", "Aden Bashir", "Lucas Balcells", "Nicola Cattaneo", 
+           "Gus Mitchell", "Harisharan Baskaran", "Alvaro Garcia", "Henry Goings-Perrot", 
+           "Cole Frumin", "Hieu Do", "Joshua Padgett", "Sanjay Karikal", 
+           "Sage Lin", "Alex Brandon", "Nicolas Goossens", "Gautam Iyer", 
+           "Parthiv Ketha", "Pedro Wenzel", "Connor Nicol", "Nam Duong", 
+           "Carter Nelson", "Larry Wang", "Sean Stark", "Enrique Rodriguez", 
+           "Rohit Pradhan", "Surya Ramvinayak", "Yash Pawnarkar", "Alejandro Lerma"),
+  Initial_Rank = 1:40,
+  Year = c("Senior", "Junior", "Senior", "Sophomore", "Sophomore", "Sophomore", 
+           "Senior", "Senior", "Junior", "Sophomore", "Sophomore", "Grad Student", 
+           "Sophomore", "Senior", "Senior", "Freshmen", "Junior", "Freshmen", 
+           "Grad Student", "Freshman", "Freshmen", "Senior", "Senior", "Junior", 
+           "Junior", "Senior", "Junior", "Senior", "Sophomore", "Junior", 
+           "Junior", "Junior", "Freshmen", "Freshmen", "Freshmen", "Freshmen", 
+           "Senior", "Freshmen", "Freshmen", "Sophomore"),
+  Email = c("mitchellf22@vt.edu", "carsonl31@vt.edu", "dbelfort@vt.edu", "victorya3@vt.edu",
+            "lukeh06@vt.edu", "vaughnh24@vt.edu", "nbermudez03@vt.edu", "reedk22@vt.edu",
+            "dcho112004@vt.edu", "rodrigojlpz@vt.edu", "sarthakv53@vt.edu", "ericy@vt.edu",
+            "andrewk05@vt.edu", "adenbashir2003@vt.edu", "lbalcells@vt.edu", "ncd@vt.edu",
+            "gusm5@vt.edu", "harisharanb@vt.edu", "alvarogd25@vt.edu", "henrygp@vt.edu",
+            "cfru07@vt.edu", "hieud@vt.edu", "joshuapadgett26@vt.edu", "sanjayk@vt.edu",
+            "sagelin27@vt.edu", "alexb04@vt.edu", "nicolas04@vt.edu", "guatamiyer01@vt.edu",
+            "kparthiv24@vt.edu", "pedrowenzel@vt.edu", "nconnor04@vt.edu", "namd23@vt.edu",
+            "cartern29@vt.edu", "larryw06@vt.edu", "seans06@vt.edu", "nicolasr@vt.edu",
+            "rohitp@vt.edu", "suryarv@vt.edu", "yashpaw@vt.edu", "alejandrolerma@vt.edu"),
+  # Assign initial Elo ratings based on ladder position
+  # Top players get higher starting ratings
+  Rating = 1600 - (1:40 - 1) * 10,
+  Wins = 0,
+  Losses = 0
+)
+
+datatable(
+  players %>% select(Initial_Rank, Name, Year, Rating),
+  options = list(pageLength = 10, scrollX = TRUE),
+  caption = "Initial VT Club Tennis Roster with Starting Elo Ratings"
+)
 ```
 
 ### Match 1: Alice vs Bob (Both start at 1300)
@@ -193,213 +248,176 @@ kable(standings2, caption = "Current Standings After Match 2")
 
 ---
 
-### Match 3: Bob vs Charlie (Bob is underdog)
+### Simulating a Season of Matches
 
-**Before Match:**
-- Charlie: 1317 rating (favorite, just beat Alice!)
-- Bob: 1284 rating (underdog, lost to Alice)
-- Expected: Charlie should win 55% of the time
+Now let's simulate **200 random matches** to see how the rankings evolve over time. The simulation assumes:
 
-**Bob wins!** (Another upset!)
+- Players closer in the ladder are more likely to play each other
+- Higher-ranked players win more often, but upsets happen
+- Every match updates both players' ratings using the Elo formula
 
-```{r example-match3-result}
+```{r simulation}
 #| echo: false
 
-bob_rating <- example_players$rating[2]
-charlie_rating <- example_players$rating[3]
+# Elo calculation functions
+calc_expected <- function(rating_a, rating_b) {
+  1 / (1 + 10^((rating_b - rating_a) / 400))
+}
 
-expected_bob <- calc_expected(bob_rating, charlie_rating)
-change <- K * (1 - expected_bob)
+update_elo <- function(rating, expected, actual, k = 32) {
+  rating + k * (actual - expected)
+}
 
-example_players$rating[2] <- bob_rating + change  # Bob
-example_players$rating[3] <- charlie_rating - change  # Charlie
+# Initialize match history
+match_history <- tibble()
+rating_history <- tibble()
 
-result3 <- data.frame(
-  name = c("Bob", "Charlie"),
-  old_rating = c(round(bob_rating, 1), round(charlie_rating, 1)),
-  expected = c("45%", "55%"),
-  actual = c("Won", "Lost"),
-  change = c(paste0("+", round(change, 1)), paste0("-", round(change, 1))),
-  new_rating = c(round(bob_rating + change, 1), round(charlie_rating - change, 1))
+# Store initial state
+rating_history <- bind_rows(
+  rating_history,
+  players %>% 
+    select(Name, Rating) %>%
+    mutate(Match = 0)
 )
 
-kable(result3, caption = "Match 3 Results - Another Upset!")
-```
+# Simulate 200 matches
+num_matches <- 200
+K_FACTOR <- 32
 
-**After Match 3:**
-
-```{r example-standings3}
-#| echo: false
-
-standings3 <- example_players %>%
-  arrange(desc(rating)) %>%
-  mutate(
-    rank = row_number(),
-    rating = round(rating, 1)
-  ) %>%
-  select(rank, name, rating)
-
-kable(standings3, caption = "Current Standings After Match 3")
-```
-
----
-
-### Match 4: Alice vs Bob (Rematch!)
-
-**Before Match:**
-- Alice: 1299 rating
-- Bob: 1301 rating (Bob barely ahead now!)
-- Expected: Nearly 50-50 (Bob 50.3% to win)
-
-**Alice wins!** (Redemption!)
-
-```{r example-match4-result}
-#| echo: false
-
-alice_rating <- example_players$rating[1]
-bob_rating <- example_players$rating[2]
-
-expected_alice <- calc_expected(alice_rating, bob_rating)
-change <- K * (1 - expected_alice)
-
-example_players$rating[1] <- alice_rating + change  # Alice
-example_players$rating[2] <- bob_rating - change  # Bob
-
-result4 <- data.frame(
-  name = c("Alice", "Bob"),
-  old_rating = c(round(alice_rating, 1), round(bob_rating, 1)),
-  expected = c("49.7%", "50.3%"),
-  actual = c("Won", "Lost"),
-  change = c(paste0("+", round(change, 1)), paste0("-", round(change, 1))),
-  new_rating = c(round(alice_rating + change, 1), round(bob_rating - change, 1))
-)
-
-kable(result4, caption = "Match 4 Results - Close Match!")
-```
-
-**After Match 4:**
-
-```{r example-standings4}
-#| echo: false
-
-standings4 <- example_players %>%
-  arrange(desc(rating)) %>%
-  mutate(
-    rank = row_number(),
-    rating = round(rating, 1)
-  ) %>%
-  select(rank, name, rating)
-
-kable(standings4, caption = "Current Standings After Match 4")
-```
-
----
-
-### Match 5: Charlie vs Bob (Battle for Last Place)
-
-**Before Match:**
-- Bob: 1285 rating
-- Charlie: 1300 rating
-- Expected: Charlie should win 52% of the time
-
-**Charlie wins** (as expected)
-
-```{r example-match5-result}
-#| echo: false
-
-bob_rating <- example_players$rating[2]
-charlie_rating <- example_players$rating[3]
-
-expected_charlie <- calc_expected(charlie_rating, bob_rating)
-change <- K * (1 - expected_charlie)
-
-example_players$rating[3] <- charlie_rating + change  # Charlie
-example_players$rating[2] <- bob_rating - change  # Bob
-
-result5 <- data.frame(
-  name = c("Charlie", "Bob"),
-  old_rating = c(round(charlie_rating, 1), round(bob_rating, 1)),
-  expected = c("52%", "48%"),
-  actual = c("Won", "Lost"),
-  change = c(paste0("+", round(change, 1)), paste0("-", round(change, 1))),
-  new_rating = c(round(charlie_rating + change, 1), round(bob_rating - change, 1))
-)
-
-kable(result5, caption = "Match 5 Results - Expected Outcome")
-```
-
-**Final Standings:**
-
-```{r example-final-standings}
-#| echo: false
-
-final_standings <- example_players %>%
-  arrange(desc(rating)) %>%
-  mutate(
-    rank = row_number(),
-    rating = round(rating, 1),
-    change_from_start = round(rating - 1300, 1)
-  ) %>%
-  select(rank, name, rating, change_from_start)
-
-kable(final_standings, caption = "Final Standings After 5 Matches", 
-      col.names = c("Rank", "Player", "Rating", "Change from Start"))
-```
-
----
-
-### Visual: Rating Journey Across All 5 Matches
-
-**Watch the ratings change!** This chart shows how each player's rating evolved through all 5 matches. The dashed line at 1300 is where everyone started.
-
-```{r example-visual-evolution}
-#| echo: false
-#| fig-width: 10
-#| fig-height: 6
-
-# Create a history of all rating changes
-rating_evolution <- data.frame(
-  match = c(0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5),
-  player = c(
-    "Alice", "Alice", "Bob", "Alice", "Charlie", "Bob", "Charlie", 
-    "Alice", "Bob", "Bob", "Charlie"
-  ),
-  rating = c(
-    1300,  # Start
-    1316, 1284,  # After match 1
-    1299, 1317,  # After match 2
-    1301, 1300,  # After match 3
-    1315, 1285,  # After match 4
-    1269, 1315   # After match 5
+for (i in 1:num_matches) {
+  # Select two random players with bias towards closer rankings
+  # Higher ranked players have slightly higher chance to play
+  player1_idx <- sample(1:40, 1, prob = exp(-((1:40)/10)))
+  
+  # Player 2 is more likely to be close in ranking to player 1
+  distance_weight <- exp(-abs((1:40) - player1_idx) / 8)
+  distance_weight[player1_idx] <- 0  # Can't play yourself
+  player2_idx <- sample(1:40, 1, prob = distance_weight)
+  
+  # Get current ratings
+  p1_rating <- players$Rating[player1_idx]
+  p2_rating <- players$Rating[player2_idx]
+  
+  # Calculate expected scores
+  p1_expected <- calc_expected(p1_rating, p2_rating)
+  p2_expected <- calc_expected(p2_rating, p1_rating)
+  
+  # Determine winner (higher rated player wins more often, but not always)
+  p1_wins <- runif(1) < p1_expected
+  
+  # Update ratings
+  p1_actual <- if (p1_wins) 1 else 0
+  p2_actual <- if (p1_wins) 0 else 1
+  
+  old_p1_rating <- p1_rating
+  old_p2_rating <- p2_rating
+  
+  players$Rating[player1_idx] <- update_elo(p1_rating, p1_expected, p1_actual, K_FACTOR)
+  players$Rating[player2_idx] <- update_elo(p2_rating, p2_expected, p2_actual, K_FACTOR)
+  
+  # Update win/loss records
+  if (p1_wins) {
+    players$Wins[player1_idx] <- players$Wins[player1_idx] + 1
+    players$Losses[player2_idx] <- players$Losses[player2_idx] + 1
+  } else {
+    players$Wins[player2_idx] <- players$Wins[player2_idx] + 1
+    players$Losses[player1_idx] <- players$Losses[player1_idx] + 1
+  }
+  
+  # Record match
+  match_history <- bind_rows(
+    match_history,
+    tibble(
+      Match = i,
+      Player1 = players$Name[player1_idx],
+      Player2 = players$Name[player2_idx],
+      Winner = if (p1_wins) players$Name[player1_idx] else players$Name[player2_idx],
+      P1_Rating_Change = round(players$Rating[player1_idx] - old_p1_rating, 1),
+      P2_Rating_Change = round(players$Rating[player2_idx] - old_p2_rating, 1)
+    )
   )
-)
+  
+  # Record ratings every 10 matches for the top 10 players
+  if (i %% 10 == 0) {
+    rating_history <- bind_rows(
+      rating_history,
+      players %>% 
+        select(Name, Rating) %>%
+        mutate(Match = i)
+    )
+  }
+}
 
-# Fill in all points for smooth lines
-all_points <- data.frame(
-  match = rep(0:5, each = 3),
-  player = rep(c("Alice", "Bob", "Charlie"), 6),
-  rating = c(
-    1300, 1300, 1300,  # Match 0: Start
-    1316, 1284, 1300,  # Match 1: Alice beats Bob
-    1299, 1284, 1317,  # Match 2: Charlie beats Alice
-    1299, 1301, 1300,  # Match 3: Bob beats Charlie
-    1315, 1285, 1300,  # Match 4: Alice beats Bob
-    1315, 1269, 1315   # Match 5: Charlie beats Bob
+# Add final ratings
+rating_history <- bind_rows(
+  rating_history,
+  players %>% 
+    select(Name, Rating) %>%
+    mutate(Match = num_matches)
+)
+```
+
+### Final Rankings After 200 Matches
+
+Here's how the ladder looks after the simulation. Notice how some players have moved significantly from their initial positions!
+
+```{r final-rankings}
+#| echo: false
+
+final_rankings <- players %>%
+  arrange(desc(Rating)) %>%
+  mutate(
+    Final_Rank = row_number(),
+    Rating = round(Rating, 1),
+    Change = Final_Rank - Initial_Rank,
+    Direction = case_when(
+      Change < 0 ~ "▲",
+      Change > 0 ~ "▼",
+      TRUE ~ "−"
+    )
+  ) %>%
+  select(Final_Rank, Name, Year, Rating, Wins, Losses, Initial_Rank, Change, Direction)
+
+datatable(
+  final_rankings,
+  options = list(pageLength = 15, scrollX = TRUE),
+  caption = "Final Rankings After 200 Simulated Matches"
+) %>%
+  DT::formatStyle(
+    'Change',
+    backgroundColor = styleInterval(c(-0.5, 0.5), c('#90EE90', 'white', '#FFB6C6'))
   )
-)
+```
 
-ggplot(all_points, aes(x = match, y = rating, color = player, group = player)) +
-  geom_line(linewidth = 1.2) +
-  geom_point(size = 3) +
-  geom_hline(yintercept = 1300, linetype = "dashed", color = "gray50", linewidth = 0.8) +
-  annotate("text", x = 0.3, y = 1305, label = "Starting Point (1300)", 
-           color = "gray40", size = 3.5) +
-  scale_color_manual(values = c("Alice" = vt_maroon, "Bob" = vt_orange, "Charlie" = "#2E8B57")) +
-  scale_x_continuous(breaks = 0:5, labels = c("Start", "Match 1", "Match 2", "Match 3", "Match 4", "Match 5")) +
+### Rating Evolution for Top 10 Players
+
+This chart shows how the ratings of the top 10 players evolved throughout the 200-match season:
+
+```{r rating-evolution}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 7
+
+# Get final top 10 players
+top_10_names <- players %>%
+  arrange(desc(Rating)) %>%
+  slice(1:10) %>%
+  pull(Name)
+
+# Filter rating history for top 10
+top_10_history <- rating_history %>%
+  filter(Name %in% top_10_names)
+
+ggplot(top_10_history, aes(x = Match, y = Rating, color = Name, group = Name)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2, alpha = 0.6) +
+  scale_color_manual(values = c(
+    rep(c(vt_maroon, vt_orange, "#2E8B57", "#4169E1", "#DC143C"), 2)
+  )) +
   labs(
-    title = "Rating Evolution: 3 Players, 5 Matches",
-    subtitle = "See how upsets create big swings while expected results create small changes",
-    x = NULL,
+    title = "Rating Evolution of Top 10 Players",
+    subtitle = "Tracking Elo ratings across 200 matches",
+    x = "Match Number",
     y = "Elo Rating",
     color = "Player"
   ) +
@@ -407,83 +425,35 @@ ggplot(all_points, aes(x = match, y = rating, color = player, group = player)) +
   theme(
     plot.title = element_text(face = "bold", size = 14),
     plot.subtitle = element_text(size = 11, color = "gray30"),
-    legend.position = "top",
-    panel.grid.minor = element_blank(),
-    axis.text.x = element_text(angle = 0, hjust = 0.5)
+    legend.position = "right",
+    panel.grid.minor = element_blank()
   )
 ```
 
-**What This Shows:**
-- **Alice (Maroon)**: Started strong (won Match 1), dropped after upset loss to Charlie, recovered by winning rematch against Bob
-- **Bob (Orange)**: Lost first match to Alice, upset Charlie, then lost to Alice again and Charlie - most volatile journey!
-- **Charlie (Green)**: Stayed at 1300 for 2 matches, then upset Alice to jump up, lost to Bob, recovered by beating Bob again
-- **Notice**: The system rewards upsets with big point jumps (see Charlie's jump in Match 2, Bob's in Match 3)
+### Match Activity Summary
 
----
-
-### Visual: Final Win-Loss Records
-
-```{r example-visual-winloss}
+```{r activity-summary}
 #| echo: false
-#| fig-width: 8
-#| fig-height: 5
 
-wl_summary <- data.frame(
-  player = c("Alice", "Bob", "Charlie"),
-  wins = c(2, 1, 2),
-  losses = c(1, 3, 1),
-  final_rating = c(1315, 1269, 1315)
-) %>%
-  arrange(desc(final_rating))
+activity_summary <- players %>%
+  mutate(
+    Total_Matches = Wins + Losses,
+    Win_Rate = round(Wins / Total_Matches * 100, 1)
+  ) %>%
+  arrange(desc(Total_Matches)) %>%
+  select(Name, Total_Matches, Wins, Losses, Win_Rate) %>%
+  slice(1:15)
 
-wl_long <- wl_summary %>%
-  select(player, wins, losses) %>%
-  pivot_longer(cols = c(wins, losses), names_to = "result", values_to = "count")
-
-ggplot(wl_long, aes(x = reorder(player, -count), y = count, fill = result)) +
-  geom_col(position = "dodge", width = 0.7) +
-  geom_text(aes(label = count), position = position_dodge(width = 0.7), 
-            vjust = -0.5, size = 4) +
-  scale_fill_manual(values = c("wins" = vt_orange, "losses" = vt_maroon),
-                    labels = c("Losses", "Wins")) +
-  labs(
-    title = "Final Match Records",
-    subtitle = "Alice and Charlie tied in rating (1315) despite different paths",
-    x = NULL,
-    y = "Number of Matches",
-    fill = NULL
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14),
-    plot.subtitle = element_text(size = 11, color = "gray30"),
-    legend.position = "top",
-    panel.grid.major.x = element_blank()
-  ) +
-  ylim(0, 3.5)
+kable(
+  activity_summary,
+  caption = "Top 15 Most Active Players (by total matches played)",
+  col.names = c("Player", "Total Matches", "Wins", "Losses", "Win Rate (%)")
+)
 ```
 
-**Key Observation:** Alice and Charlie both ended at 1315 rating with 2-1 records, while Bob ended at 1269 with 1-3 record. This shows that **who you beat matters more than just win count** - Charlie's upset of Alice earned big points!
+### Key Insights from the Simulation
 
----
-
-### Key Insights from These Examples:
-
-1. **Equal players (Match 1)**: 50-50 expected, winner gets +16, loser gets -16
-2. **Upsets reward more points**: Charlie and Bob gained 17+ points from their upsets
-3. **Close matches**: When ratings are nearly equal, point swings are around 16
-4. **Expected wins**: When the favorite wins, they gain fewer points (Match 5: +15)
-5. **System stays balanced**: Total points = 3900 (1300 × 3 players) throughout all matches
-6. **Win-loss records don't tell the whole story**: Alice is 2-1 but ranked 1st, Bob is 1-3 but close to Charlie (2-1)
-
----
-
-## 4. How to Use This System
-
-1. **Record match results** - Log who played, when, and who won
-2. **System automatically updates** - Ratings adjust after each match
-3. **View current rankings** - Check the leaderboard anytime
-4. **Track progress** - See how your rating evolves over time
-5. **Fair competition** - Beating stronger opponents = bigger rewards!
-
-The system is designed to be fair, transparent, and encourage players to challenge themselves by playing opponents of all skill levels.
+1. **Rankings Changed**: The simulation shows natural movement in the ladder as players compete
+2. **Higher-Rated Players Win More**: But upsets still happen, making the system dynamic
+3. **Activity Matters**: Players who played more matches had more opportunities to climb or fall
+4. **Elo is Self-Correcting**: Over time, ratings stabilize to reflect true skill levels

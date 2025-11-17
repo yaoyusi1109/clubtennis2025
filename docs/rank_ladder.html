@@ -67,6 +67,16 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="site_libs/datatables-binding-0.33/datatables.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 
 
 <link rel="stylesheet" href="chat-widget.css">
@@ -153,18 +163,17 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#step-2-compare-prediction-to-reality" id="toc-step-2-compare-prediction-to-reality" class="nav-link" data-scroll-target="#step-2-compare-prediction-to-reality"><span class="header-section-number">2.2</span> Step 2: Compare prediction to reality</a></li>
   <li><a href="#step-3-adjust-ratings" id="toc-step-3-adjust-ratings" class="nav-link" data-scroll-target="#step-3-adjust-ratings"><span class="header-section-number">2.3</span> Step 3: Adjust ratings</a></li>
   </ul></li>
-  <li><a href="#lets-see-it-in-action-a-mini-example" id="toc-lets-see-it-in-action-a-mini-example" class="nav-link" data-scroll-target="#lets-see-it-in-action-a-mini-example"><span class="header-section-number">3</span> 3. Let’s See It In Action: A Mini Example</a>
+  <li><a href="#lets-see-it-in-action-vt-club-tennis-roster-simulation" id="toc-lets-see-it-in-action-vt-club-tennis-roster-simulation" class="nav-link" data-scroll-target="#lets-see-it-in-action-vt-club-tennis-roster-simulation"><span class="header-section-number">3</span> 3. Let’s See It In Action: VT Club Tennis Roster Simulation</a>
   <ul class="collapse">
-  <li><a href="#match-1-alice-vs-bob-both-start-at-1300" id="toc-match-1-alice-vs-bob-both-start-at-1300" class="nav-link" data-scroll-target="#match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.1</span> Match 1: Alice vs Bob (Both start at 1300)</a></li>
-  <li><a href="#match-2-alice-vs-charlie-alice-now-favored" id="toc-match-2-alice-vs-charlie-alice-now-favored" class="nav-link" data-scroll-target="#match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.2</span> Match 2: Alice vs Charlie (Alice now favored)</a></li>
-  <li><a href="#match-3-bob-vs-charlie-bob-is-underdog" id="toc-match-3-bob-vs-charlie-bob-is-underdog" class="nav-link" data-scroll-target="#match-3-bob-vs-charlie-bob-is-underdog"><span class="header-section-number">3.3</span> Match 3: Bob vs Charlie (Bob is underdog)</a></li>
-  <li><a href="#match-4-alice-vs-bob-rematch" id="toc-match-4-alice-vs-bob-rematch" class="nav-link" data-scroll-target="#match-4-alice-vs-bob-rematch"><span class="header-section-number">3.4</span> Match 4: Alice vs Bob (Rematch!)</a></li>
-  <li><a href="#match-5-charlie-vs-bob-battle-for-last-place" id="toc-match-5-charlie-vs-bob-battle-for-last-place" class="nav-link" data-scroll-target="#match-5-charlie-vs-bob-battle-for-last-place"><span class="header-section-number">3.5</span> Match 5: Charlie vs Bob (Battle for Last Place)</a></li>
-  <li><a href="#visual-rating-journey-across-all-5-matches" id="toc-visual-rating-journey-across-all-5-matches" class="nav-link" data-scroll-target="#visual-rating-journey-across-all-5-matches"><span class="header-section-number">3.6</span> Visual: Rating Journey Across All 5 Matches</a></li>
-  <li><a href="#visual-final-win-loss-records" id="toc-visual-final-win-loss-records" class="nav-link" data-scroll-target="#visual-final-win-loss-records"><span class="header-section-number">3.7</span> Visual: Final Win-Loss Records</a></li>
-  <li><a href="#key-insights-from-these-examples" id="toc-key-insights-from-these-examples" class="nav-link" data-scroll-target="#key-insights-from-these-examples"><span class="header-section-number">3.8</span> Key Insights from These Examples:</a></li>
+  <li><a href="#initial-roster" id="toc-initial-roster" class="nav-link" data-scroll-target="#initial-roster"><span class="header-section-number">3.1</span> Initial Roster</a></li>
+  <li><a href="#match-1-alice-vs-bob-both-start-at-1300" id="toc-match-1-alice-vs-bob-both-start-at-1300" class="nav-link" data-scroll-target="#match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.2</span> Match 1: Alice vs Bob (Both start at 1300)</a></li>
+  <li><a href="#match-2-alice-vs-charlie-alice-now-favored" id="toc-match-2-alice-vs-charlie-alice-now-favored" class="nav-link" data-scroll-target="#match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.3</span> Match 2: Alice vs Charlie (Alice now favored)</a></li>
+  <li><a href="#simulating-a-season-of-matches" id="toc-simulating-a-season-of-matches" class="nav-link" data-scroll-target="#simulating-a-season-of-matches"><span class="header-section-number">3.4</span> Simulating a Season of Matches</a></li>
+  <li><a href="#final-rankings-after-200-matches" id="toc-final-rankings-after-200-matches" class="nav-link" data-scroll-target="#final-rankings-after-200-matches"><span class="header-section-number">3.5</span> Final Rankings After 200 Matches</a></li>
+  <li><a href="#rating-evolution-for-top-10-players" id="toc-rating-evolution-for-top-10-players" class="nav-link" data-scroll-target="#rating-evolution-for-top-10-players"><span class="header-section-number">3.6</span> Rating Evolution for Top 10 Players</a></li>
+  <li><a href="#match-activity-summary" id="toc-match-activity-summary" class="nav-link" data-scroll-target="#match-activity-summary"><span class="header-section-number">3.7</span> Match Activity Summary</a></li>
+  <li><a href="#key-insights-from-the-simulation" id="toc-key-insights-from-the-simulation" class="nav-link" data-scroll-target="#key-insights-from-the-simulation"><span class="header-section-number">3.8</span> Key Insights from the Simulation</a></li>
   </ul></li>
-  <li><a href="#how-to-use-this-system" id="toc-how-to-use-this-system" class="nav-link" data-scroll-target="#how-to-use-this-system"><span class="header-section-number">4</span> 4. How to Use This System</a></li>
   </ul>
 </nav>
     </div>
@@ -225,11 +234,21 @@ ul.task-list li input[type="checkbox"] {
 <p>Where: - <strong>K</strong> = How many points are at stake (32 for new players, 12-24 for experienced players) - <strong>Actual Result</strong> = 1 if you won, 0 if you lost - <strong>Expected Result</strong> = Probability you were supposed to win (0 to 1)</p>
 </section>
 </section>
-<section id="lets-see-it-in-action-a-mini-example" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="lets-see-it-in-action-a-mini-example"><span class="header-section-number">3</span> 3. Let’s See It In Action: A Mini Example</h2>
-<p>We’ll watch <strong>3 players</strong> play <strong>5 matches</strong> and see exactly how their ratings change.</p>
-<section id="match-1-alice-vs-bob-both-start-at-1300" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.1</span> Match 1: Alice vs Bob (Both start at 1300)</h3>
+<section id="lets-see-it-in-action-vt-club-tennis-roster-simulation" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="lets-see-it-in-action-vt-club-tennis-roster-simulation"><span class="header-section-number">3</span> 3. Let’s See It In Action: VT Club Tennis Roster Simulation</h2>
+<p>We’ll apply the Elo rating system to the <strong>actual VT Club Tennis men’s roster</strong> and simulate a season of matches to see how rankings evolve.</p>
+<section id="initial-roster" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="initial-roster"><span class="header-section-number">3.1</span> Initial Roster</h3>
+<p>Here are the 40 members of the VT Club Tennis men’s team, starting with their current ladder rankings:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-30e4409849e39179307f" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-30e4409849e39179307f">{"x":{"filter":"none","vertical":false,"caption":"<caption>Initial VT Club Tennis Roster with Starting Elo Ratings<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40],["Mitchell Freeman","Carson Le","Diego Beltfort","Austin Victory","Luke Howell","Vaughn Harrington","Nico Bermudez","Reed Kelly","David Cho","Rodrigo Lopez","Sarthak Vishwakarma","Eric Yoo","Andrew Kim","Aden Bashir","Lucas Balcells","Nicola Cattaneo","Gus Mitchell","Harisharan Baskaran","Alvaro Garcia","Henry Goings-Perrot","Cole Frumin","Hieu Do","Joshua Padgett","Sanjay Karikal","Sage Lin","Alex Brandon","Nicolas Goossens","Gautam Iyer","Parthiv Ketha","Pedro Wenzel","Connor Nicol","Nam Duong","Carter Nelson","Larry Wang","Sean Stark","Enrique Rodriguez","Rohit Pradhan","Surya Ramvinayak","Yash Pawnarkar","Alejandro Lerma"],["Senior","Junior","Senior","Sophomore","Sophomore","Sophomore","Senior","Senior","Junior","Sophomore","Sophomore","Grad Student","Sophomore","Senior","Senior","Freshmen","Junior","Freshmen","Grad Student","Freshman","Freshmen","Senior","Senior","Junior","Junior","Senior","Junior","Senior","Sophomore","Junior","Junior","Junior","Freshmen","Freshmen","Freshmen","Freshmen","Senior","Freshmen","Freshmen","Sophomore"],[1600,1590,1580,1570,1560,1550,1540,1530,1520,1510,1500,1490,1480,1470,1460,1450,1440,1430,1420,1410,1400,1390,1380,1370,1360,1350,1340,1330,1320,1310,1300,1290,1280,1270,1260,1250,1240,1230,1220,1210]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Initial_Rank<\/th>\n      <th>Name<\/th>\n      <th>Year<\/th>\n      <th>Rating<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Initial_Rank","targets":1},{"name":"Name","targets":2},{"name":"Year","targets":3},{"name":"Rating","targets":4}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="match-1-alice-vs-bob-both-start-at-1300" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.2</span> Match 1: Alice vs Bob (Both start at 1300)</h3>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -329,8 +348,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <hr>
 </section>
-<section id="match-2-alice-vs-charlie-alice-now-favored" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.2</span> Match 2: Alice vs Charlie (Alice now favored)</h3>
+<section id="match-2-alice-vs-charlie-alice-now-favored" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.3</span> Match 2: Alice vs Charlie (Alice now favored)</h3>
 <p><strong>Before Match:</strong> - Alice: 1316 rating (favorite) - Charlie: 1300 rating (underdog) - Expected: Alice should win 52% of the time</p>
 <p><strong>Charlie wins! (UPSET)</strong></p>
 <p><strong>Calculation:</strong> - K-factor: 32 (both still new) - Charlie expected to win: 0.48 (48%) - Charlie actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.48) = <strong>+17 points</strong> (more than Match 1 because of the upset!)</p>
@@ -403,283 +422,175 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <hr>
 </section>
-<section id="match-3-bob-vs-charlie-bob-is-underdog" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="match-3-bob-vs-charlie-bob-is-underdog"><span class="header-section-number">3.3</span> Match 3: Bob vs Charlie (Bob is underdog)</h3>
-<p><strong>Before Match:</strong> - Charlie: 1317 rating (favorite, just beat Alice!) - Bob: 1284 rating (underdog, lost to Alice) - Expected: Charlie should win 55% of the time</p>
-<p><strong>Bob wins!</strong> (Another upset!)</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Match 3 Results - Another Upset!</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">name</th>
-<th style="text-align: right;">old_rating</th>
-<th style="text-align: left;">expected</th>
-<th style="text-align: left;">actual</th>
-<th style="text-align: left;">change</th>
-<th style="text-align: right;">new_rating</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">1284.0</td>
-<td style="text-align: left;">45%</td>
-<td style="text-align: left;">Won</td>
-<td style="text-align: left;">+17.5</td>
-<td style="text-align: right;">1301.5</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Charlie</td>
-<td style="text-align: right;">1316.7</td>
-<td style="text-align: left;">55%</td>
-<td style="text-align: left;">Lost</td>
-<td style="text-align: left;">-17.5</td>
-<td style="text-align: right;">1299.2</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>After Match 3:</strong></p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Current Standings After Match 3</caption>
-<thead>
-<tr class="header">
-<th style="text-align: right;">rank</th>
-<th style="text-align: left;">name</th>
-<th style="text-align: right;">rating</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">1301.5</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">Alice</td>
-<td style="text-align: right;">1299.3</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">Charlie</td>
-<td style="text-align: right;">1299.2</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<hr>
+<section id="simulating-a-season-of-matches" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="simulating-a-season-of-matches"><span class="header-section-number">3.4</span> Simulating a Season of Matches</h3>
+<p>Now let’s simulate <strong>200 random matches</strong> to see how the rankings evolve over time. The simulation assumes:</p>
+<ul>
+<li>Players closer in the ladder are more likely to play each other</li>
+<li>Higher-ranked players win more often, but upsets happen</li>
+<li>Every match updates both players’ ratings using the Elo formula</li>
+</ul>
 </section>
-<section id="match-4-alice-vs-bob-rematch" class="level3" data-number="3.4">
-<h3 data-number="3.4" class="anchored" data-anchor-id="match-4-alice-vs-bob-rematch"><span class="header-section-number">3.4</span> Match 4: Alice vs Bob (Rematch!)</h3>
-<p><strong>Before Match:</strong> - Alice: 1299 rating - Bob: 1301 rating (Bob barely ahead now!) - Expected: Nearly 50-50 (Bob 50.3% to win)</p>
-<p><strong>Alice wins!</strong> (Redemption!)</p>
+<section id="final-rankings-after-200-matches" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="final-rankings-after-200-matches"><span class="header-section-number">3.5</span> Final Rankings After 200 Matches</h3>
+<p>Here’s how the ladder looks after the simulation. Notice how some players have moved significantly from their initial positions!</p>
 <div class="cell">
 <div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Match 4 Results - Close Match!</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">name</th>
-<th style="text-align: right;">old_rating</th>
-<th style="text-align: left;">expected</th>
-<th style="text-align: left;">actual</th>
-<th style="text-align: left;">change</th>
-<th style="text-align: right;">new_rating</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Alice</td>
-<td style="text-align: right;">1299.3</td>
-<td style="text-align: left;">49.7%</td>
-<td style="text-align: left;">Won</td>
-<td style="text-align: left;">+16.1</td>
-<td style="text-align: right;">1315.4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">1301.5</td>
-<td style="text-align: left;">50.3%</td>
-<td style="text-align: left;">Lost</td>
-<td style="text-align: left;">-16.1</td>
-<td style="text-align: right;">1285.4</td>
-</tr>
-</tbody>
-</table>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-2e17466358a46d139971" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-2e17466358a46d139971">{"x":{"filter":"none","vertical":false,"caption":"<caption>Final Rankings After 200 Simulated Matches<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40],["Sarthak Vishwakarma","Luke Howell","Reed Kelly","Diego Beltfort","David Cho","Vaughn Harrington","Mitchell Freeman","Carson Le","Nicola Cattaneo","Lucas Balcells","Austin Victory","Nico Bermudez","Rodrigo Lopez","Eric Yoo","Harisharan Baskaran","Gus Mitchell","Hieu Do","Andrew Kim","Alvaro Garcia","Aden Bashir","Cole Frumin","Henry Goings-Perrot","Nicolas Goossens","Sanjay Karikal","Joshua Padgett","Alex Brandon","Gautam Iyer","Pedro Wenzel","Connor Nicol","Parthiv Ketha","Larry Wang","Sage Lin","Carter Nelson","Nam Duong","Yash Pawnarkar","Sean Stark","Enrique Rodriguez","Alejandro Lerma","Surya Ramvinayak","Rohit Pradhan"],["Sophomore","Sophomore","Senior","Senior","Junior","Sophomore","Senior","Junior","Freshmen","Senior","Sophomore","Senior","Sophomore","Grad Student","Freshmen","Junior","Senior","Sophomore","Grad Student","Senior","Freshmen","Freshman","Junior","Junior","Senior","Senior","Senior","Junior","Junior","Sophomore","Freshmen","Junior","Freshmen","Junior","Freshmen","Freshmen","Freshmen","Sophomore","Freshmen","Senior"],[1671.7,1599.4,1578.2,1564.1,1558.9,1548.7,1548,1543.8,1531.4,1513.8,1506.9,1483.6,1481.8,1471.8,1455.4,1450,1422.7,1416.3,1413.7,1403.6,1388,1387.4,1376,1375.4,1357.4,1347.9,1308.7,1307.7,1307.7,1299.4,1295.6,1291.7,1273.3,1265.3,1261.8,1254,1250,1231.9,1230,1226.7],[14,12,14,14,13,9,13,17,9,4,9,11,7,5,6,2,5,7,3,3,1,2,3,3,2,2,1,2,1,0,1,1,1,0,2,0,0,1,0,0],[0,8,9,10,7,9,10,20,2,1,14,15,8,7,5,2,3,11,5,7,3,6,1,4,5,4,3,4,1,3,0,7,2,2,0,1,0,0,0,1],[11,5,8,3,9,6,1,2,16,15,4,7,10,12,18,17,22,13,19,14,21,20,27,24,23,26,28,30,31,29,34,25,33,32,39,35,36,40,38,37],[-10,-3,-5,1,-4,0,6,6,-7,-5,7,5,3,2,-3,-1,-5,5,0,6,0,2,-4,0,2,0,-1,-2,-2,1,-3,7,0,2,-4,1,1,-2,1,3],["▲","▲","▲","▼","▲","−","▼","▼","▲","▲","▼","▼","▼","▼","▲","▲","▲","▼","−","▼","−","▼","▲","−","▼","−","▲","▲","▲","▼","▲","▼","−","▼","▲","▼","▼","▲","▼","▼"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Final_Rank<\/th>\n      <th>Name<\/th>\n      <th>Year<\/th>\n      <th>Rating<\/th>\n      <th>Wins<\/th>\n      <th>Losses<\/th>\n      <th>Initial_Rank<\/th>\n      <th>Change<\/th>\n      <th>Direction<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":15,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6,7,8]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Final_Rank","targets":1},{"name":"Name","targets":2},{"name":"Year","targets":3},{"name":"Rating","targets":4},{"name":"Wins","targets":5},{"name":"Losses","targets":6},{"name":"Initial_Rank","targets":7},{"name":"Change","targets":8},{"name":"Direction","targets":9}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,15,25,50,100],"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[8]; $(this.api().cell(row, 8).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= -0.5 ? \"#90EE90\" : value <= 0.5 ? \"white\" : \"#FFB6C6\"});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 </div>
 </div>
-<p><strong>After Match 4:</strong></p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Current Standings After Match 4</caption>
-<thead>
-<tr class="header">
-<th style="text-align: right;">rank</th>
-<th style="text-align: left;">name</th>
-<th style="text-align: right;">rating</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Alice</td>
-<td style="text-align: right;">1315.4</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">Charlie</td>
-<td style="text-align: right;">1299.2</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">1285.4</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<hr>
 </section>
-<section id="match-5-charlie-vs-bob-battle-for-last-place" class="level3" data-number="3.5">
-<h3 data-number="3.5" class="anchored" data-anchor-id="match-5-charlie-vs-bob-battle-for-last-place"><span class="header-section-number">3.5</span> Match 5: Charlie vs Bob (Battle for Last Place)</h3>
-<p><strong>Before Match:</strong> - Bob: 1285 rating - Charlie: 1300 rating - Expected: Charlie should win 52% of the time</p>
-<p><strong>Charlie wins</strong> (as expected)</p>
+<section id="rating-evolution-for-top-10-players" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="rating-evolution-for-top-10-players"><span class="header-section-number">3.6</span> Rating Evolution for Top 10 Players</h3>
+<p>This chart shows how the ratings of the top 10 players evolved throughout the 200-match season:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="rank_ladder_files/figure-html/rating-evolution-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="match-activity-summary" class="level3" data-number="3.7">
+<h3 data-number="3.7" class="anchored" data-anchor-id="match-activity-summary"><span class="header-section-number">3.7</span> Match Activity Summary</h3>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Match 5 Results - Expected Outcome</caption>
+<caption>Top 15 Most Active Players (by total matches played)</caption>
 <thead>
 <tr class="header">
-<th style="text-align: left;">name</th>
-<th style="text-align: right;">old_rating</th>
-<th style="text-align: left;">expected</th>
-<th style="text-align: left;">actual</th>
-<th style="text-align: left;">change</th>
-<th style="text-align: right;">new_rating</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Charlie</td>
-<td style="text-align: right;">1299.2</td>
-<td style="text-align: left;">52%</td>
-<td style="text-align: left;">Won</td>
-<td style="text-align: left;">+15.4</td>
-<td style="text-align: right;">1314.6</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">1285.4</td>
-<td style="text-align: left;">48%</td>
-<td style="text-align: left;">Lost</td>
-<td style="text-align: left;">-15.4</td>
-<td style="text-align: right;">1270.0</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>Final Standings:</strong></p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Final Standings After 5 Matches</caption>
-<thead>
-<tr class="header">
-<th style="text-align: right;">Rank</th>
 <th style="text-align: left;">Player</th>
-<th style="text-align: right;">Rating</th>
-<th style="text-align: right;">Change from Start</th>
+<th style="text-align: right;">Total Matches</th>
+<th style="text-align: right;">Wins</th>
+<th style="text-align: right;">Losses</th>
+<th style="text-align: right;">Win Rate (%)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">Alice</td>
-<td style="text-align: right;">1315.4</td>
-<td style="text-align: right;">15.4</td>
+<td style="text-align: left;">Carson Le</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">45.9</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">Charlie</td>
-<td style="text-align: right;">1314.6</td>
-<td style="text-align: right;">14.6</td>
+<td style="text-align: left;">Nico Bermudez</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">42.3</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">Bob</td>
-<td style="text-align: right;">1270.0</td>
-<td style="text-align: right;">-30.0</td>
+<td style="text-align: left;">Diego Beltfort</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">58.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mitchell Freeman</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">56.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Austin Victory</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">39.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Reed Kelly</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">60.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Luke Howell</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">60.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">David Cho</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">65.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Vaughn Harrington</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">50.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Andrew Kim</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">38.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rodrigo Lopez</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">46.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sarthak Vishwakarma</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">100.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Eric Yoo</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">41.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Nicola Cattaneo</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">81.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Harisharan Baskaran</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">54.5</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<hr>
 </section>
-<section id="visual-rating-journey-across-all-5-matches" class="level3" data-number="3.6">
-<h3 data-number="3.6" class="anchored" data-anchor-id="visual-rating-journey-across-all-5-matches"><span class="header-section-number">3.6</span> Visual: Rating Journey Across All 5 Matches</h3>
-<p><strong>Watch the ratings change!</strong> This chart shows how each player’s rating evolved through all 5 matches. The dashed line at 1300 is where everyone started.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="rank_ladder_files/figure-html/example-visual-evolution-1.png" class="img-fluid figure-img" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>What This Shows:</strong> - <strong>Alice (Maroon)</strong>: Started strong (won Match 1), dropped after upset loss to Charlie, recovered by winning rematch against Bob - <strong>Bob (Orange)</strong>: Lost first match to Alice, upset Charlie, then lost to Alice again and Charlie - most volatile journey! - <strong>Charlie (Green)</strong>: Stayed at 1300 for 2 matches, then upset Alice to jump up, lost to Bob, recovered by beating Bob again - <strong>Notice</strong>: The system rewards upsets with big point jumps (see Charlie’s jump in Match 2, Bob’s in Match 3)</p>
-<hr>
-</section>
-<section id="visual-final-win-loss-records" class="level3" data-number="3.7">
-<h3 data-number="3.7" class="anchored" data-anchor-id="visual-final-win-loss-records"><span class="header-section-number">3.7</span> Visual: Final Win-Loss Records</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="rank_ladder_files/figure-html/example-visual-winloss-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>Key Observation:</strong> Alice and Charlie both ended at 1315 rating with 2-1 records, while Bob ended at 1269 with 1-3 record. This shows that <strong>who you beat matters more than just win count</strong> - Charlie’s upset of Alice earned big points!</p>
-<hr>
-</section>
-<section id="key-insights-from-these-examples" class="level3" data-number="3.8">
-<h3 data-number="3.8" class="anchored" data-anchor-id="key-insights-from-these-examples"><span class="header-section-number">3.8</span> Key Insights from These Examples:</h3>
+<section id="key-insights-from-the-simulation" class="level3" data-number="3.8">
+<h3 data-number="3.8" class="anchored" data-anchor-id="key-insights-from-the-simulation"><span class="header-section-number">3.8</span> Key Insights from the Simulation</h3>
 <ol type="1">
-<li><strong>Equal players (Match 1)</strong>: 50-50 expected, winner gets +16, loser gets -16</li>
-<li><strong>Upsets reward more points</strong>: Charlie and Bob gained 17+ points from their upsets</li>
-<li><strong>Close matches</strong>: When ratings are nearly equal, point swings are around 16</li>
-<li><strong>Expected wins</strong>: When the favorite wins, they gain fewer points (Match 5: +15)</li>
-<li><strong>System stays balanced</strong>: Total points = 3900 (1300 × 3 players) throughout all matches</li>
-<li><strong>Win-loss records don’t tell the whole story</strong>: Alice is 2-1 but ranked 1st, Bob is 1-3 but close to Charlie (2-1)</li>
+<li><strong>Rankings Changed</strong>: The simulation shows natural movement in the ladder as players compete</li>
+<li><strong>Higher-Rated Players Win More</strong>: But upsets still happen, making the system dynamic</li>
+<li><strong>Activity Matters</strong>: Players who played more matches had more opportunities to climb or fall</li>
+<li><strong>Elo is Self-Correcting</strong>: Over time, ratings stabilize to reflect true skill levels</li>
 </ol>
-<hr>
-</section>
-</section>
-<section id="how-to-use-this-system" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="how-to-use-this-system"><span class="header-section-number">4</span> 4. How to Use This System</h2>
-<ol type="1">
-<li><strong>Record match results</strong> - Log who played, when, and who won</li>
-<li><strong>System automatically updates</strong> - Ratings adjust after each match</li>
-<li><strong>View current rankings</strong> - Check the leaderboard anytime</li>
-<li><strong>Track progress</strong> - See how your rating evolves over time</li>
-<li><strong>Fair competition</strong> - Beating stronger opponents = bigger rewards!</li>
-</ol>
-<p>The system is designed to be fair, transparent, and encourage players to challenge themselves by playing opponents of all skill levels.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
