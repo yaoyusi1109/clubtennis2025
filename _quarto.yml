@@ -11,7 +11,7 @@ website:
       - href: about.qmd
         text: "About Us"
       - href: project_log.qmd
-        text: "Project Log"
+        text: "Communication Log"
       - text: "Financial Analysis"
         menu:
           - href: financial_analysis.qmd

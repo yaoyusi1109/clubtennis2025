@@ -1,8 +1,3 @@
----
-title: "Historical Review"
-format: html
----
-
 # Financial Transaction Ledger
 
 View and interact with the live financial data directly from our Google Sheets ledger:

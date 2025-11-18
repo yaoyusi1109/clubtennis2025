@@ -18,68 +18,75 @@
     "href": "about.html#out-client",
     "title": "VT Club Tennis Analysis",
     "section": "Out Client",
-    "text": "Out Client\nVirginia Tech Club Tennis offers a competitive yet fun atmosphere for athletes looking to continue playing tennis in college. Tryouts are held every Spring and Fall semester. We look for players who can be competitive while still having a fun and inclusive time for everyone.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGo Hokies! 🎾"
+    "text": "Out Client\nVirginia Tech Club Tennis offers a competitive yet fun atmosphere for athletes looking to continue playing tennis in college. Tryouts are held every Spring and Fall semester. We look for players who can be competitive while still having a fun and inclusive time for everyone."
+  },
+  {
+    "objectID": "about.html#our-team",
+    "href": "about.html#our-team",
+    "title": "VT Club Tennis Analysis",
+    "section": "Our Team",
+    "text": "Our Team\nYusi - CTO\nKempton - CCO\nCaleb - COO\nParker - CIO\n\nGo Hokies! 🎾"
   },
   {
     "objectID": "historical_review.html",
     "href": "historical_review.html",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "",
     "text": "View and interact with the live financial data directly from our Google Sheets ledger:"
   },
   {
     "objectID": "historical_review.html#data-preparation",
     "href": "historical_review.html#data-preparation",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "Data Preparation",
     "text": "Data Preparation\n\n# Needed libraries\nlibrary(readxl)\nlibrary(dplyr)\nlibrary(lubridate)\nlibrary(stringr)\nlibrary(tidyr)\nlibrary(ggplot2)\n\n# Load & clean\ndata_path = file.path(\"data\", \"TennisClubFinancialData.xlsx\")\nstopifnot(file.exists(data_path))\nTennisFinData = readxl::read_excel(data_path)\nTennisFinData = TennisFinData %&gt;%\n  mutate(\n    Date = as.Date(Date),\n    Flow = str_to_title(trimws(as.character(Flow))),\n    YearMonth = floor_date(Date, \"month\")\n  )"
   },
   {
     "objectID": "historical_review.html#monthly-aggregates",
     "href": "historical_review.html#monthly-aggregates",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "Monthly Aggregates",
     "text": "Monthly Aggregates\n\n# Monthly aggregates (expense as positive)\nmonthly = TennisFinData %&gt;%\n  group_by(YearMonth) %&gt;%\n  summarise(\n    income = sum(Amount[Flow == \"Income\"], na.rm = T),\n    expense_mag = sum(-Amount[Flow == \"Expense\"], na.rm = T),\n    net = income - expense_mag,\n    n_txn = dplyr::n()\n  ) %&gt;% arrange(YearMonth)\n\n# Category-by-month for expenses and income\ncategory_by_month = TennisFinData %&gt;%\n  group_by(YearMonth, Category) %&gt;%\n  summarise(\n    expense_mag = sum(ifelse(Flow == \"Expense\", -Amount, 0), na.rm = T),\n    income_mag  = sum(ifelse(Flow == \"Income\",   Amount,   0), na.rm = T),\n    .groups = \"drop\"\n  )"
   },
   {
     "objectID": "historical_review.html#top-expense-categories",
     "href": "historical_review.html#top-expense-categories",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "Top Expense Categories",
     "text": "Top Expense Categories\n\n# Top-K expense categories, wide table\ntopK = category_by_month %&gt;%\n  group_by(Category) %&gt;%\n  summarise(total_exp = sum(expense_mag, na.rm = TRUE), .groups = \"drop\") %&gt;%\n  slice_max(total_exp, n = 3) %&gt;%\n  pull(Category)\n\ncat_wide = category_by_month %&gt;%\n  filter(Category %in% topK) %&gt;%\n  select(YearMonth, Category, expense_mag) %&gt;%\n  pivot_wider(names_from = Category, values_from = expense_mag, values_fill = 0)\n\nnames(cat_wide) = make.names(names(cat_wide))\ncat_cols = setdiff(names(cat_wide), \"YearMonth\")\n\nprint(topK)\n\n[1] \"Travel\"                 \"Uniforms & Merchandise\" \"Tournament Fees\""
   },
   {
     "objectID": "historical_review.html#predictive-modeling",
     "href": "historical_review.html#predictive-modeling",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "Predictive Modeling",
     "text": "Predictive Modeling\n\nModel Preparation\n\n# Design matrix for simple benchmarks\ndesign = monthly %&gt;%\n  left_join(cat_wide, by = \"YearMonth\") %&gt;%\n  arrange(YearMonth) %&gt;%\n  mutate(\n    lag1_net = dplyr::lag(net, 1),\n    lag1_inc = dplyr::lag(income, 1),\n    lag1_exp = dplyr::lag(expense_mag, 1)\n  ) %&gt;%\n  mutate(across(all_of(cat_cols), ~ dplyr::lag(.x, 1), .names = \"lag1_{col}\")) %&gt;%\n  mutate(\n    t = row_number(),\n    sin12 = sin(2 * pi * t / 12),\n    cos12 = cos(2 * pi * t / 12)\n  ) %&gt;%\n  select(YearMonth, net, lag1_net, lag1_inc, lag1_exp, sin12, cos12, starts_with(\"lag1_\")) %&gt;%\n  drop_na()\n\n\n\nBenchmark Models\n\n# Benchmarks: naive, mean, small LM\nmae = function(a, b) mean(abs(a - b), na.rm = T)\nrmse = function(a, b) sqrt(mean((a - b)^2, na.rm = T))\n\nn = nrow(design)\nsplit = max(1, floor(0.75 * n))\ntrain = design[1:split, ]\ntest  = design[(split + 1):n, ]\ny_test = test$net\n\npred_naive = test$lag1_net\npred_mean  = rep(mean(train$net, na.rm = TRUE), nrow(test))\n\nlag_pred = setdiff(names(design)[grepl(\"^lag1_\", names(design))], c(\"lag1_net\",\"lag1_inc\",\"lag1_exp\"))\nkeep2 = head(lag_pred, 2)\n\nform = as.formula(paste(\n  \"net ~ lag1_net + lag1_exp + sin12 + cos12\",\n  if (length(keep2)) paste(\"+\", paste(keep2, collapse = \" + \")) else \"\",\n  sep = \" \"\n))\n\nfit = lm(form, data = train)\npred_lm = as.numeric(predict(fit, newdata = test))\n\nWarning in predict.lm(fit, newdata = test): prediction from rank-deficient fit;\nattr(*, \"non-estim\") has doubtful cases\n\nresults = data.frame(\n  Model = c(\"Naive\",\"Mean\",\"LM_small\"),\n  MAE   = c(mae(y_test, pred_naive),\n            mae(y_test, pred_mean),\n            mae(y_test, pred_lm)),\n  RMSE  = c(rmse(y_test, pred_naive),\n            rmse(y_test, pred_mean),\n            rmse(y_test, pred_lm))\n)\n\nprint(results)\n\n     Model        MAE      RMSE\n1    Naive  10517.570  12467.40\n2     Mean   5562.981   8262.83\n3 LM_small 112388.080 121965.91\n\n\nThe table above compares three baseline prediction models:\n\nNaive: Uses the previous month’s net income as prediction\nMean: Uses the historical mean as prediction\nLM_small: Linear model with lagged values and seasonal components (best performance)"
   },
   {
     "objectID": "historical_review.html#income-vs-expense-trends",
     "href": "historical_review.html#income-vs-expense-trends",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "Income vs Expense Trends",
     "text": "Income vs Expense Trends\n\n# VT-colored plots for report\nvt_maroon = \"#861F41\"\nvt_orange = \"#E87722\"\n\nmonthly_long = monthly %&gt;%\n  select(YearMonth, income, expense_mag) %&gt;%\n  pivot_longer(-YearMonth, names_to = \"Type\", values_to = \"Amount\")\n\np1 = ggplot(monthly_long, aes(YearMonth, Amount, fill = Type)) +\n  geom_col(position = \"dodge\") +\n  scale_fill_manual(values = c(income = vt_orange, expense_mag = vt_maroon),\n                    breaks = c(\"income\",\"expense_mag\"),\n                    labels = c(\"Income\",\"Expense\")) +\n  labs(x = \"Month\", y = \"$\", title = \"Income vs Expense\") +\n  theme_minimal()\n\nprint(p1)"
   },
   {
     "objectID": "historical_review.html#net-income-with-mean-baseline",
     "href": "historical_review.html#net-income-with-mean-baseline",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "Net Income with Mean Baseline",
     "text": "Net Income with Mean Baseline\n\nmean_hat = mean(train$net, na.rm = T)\nnet_df = data.frame(YearMonth = monthly$YearMonth, Net = monthly$net)\n\np2 = ggplot(net_df, aes(YearMonth, Net)) +\n  geom_line(color = vt_maroon) +\n  geom_point(color = vt_orange) +\n  geom_hline(yintercept = mean_hat, linetype = \"dashed\", color = \"grey40\") +\n  labs(x = \"Month\", y = \"Net ($)\", title = \"Monthly Net with Mean Baseline\") +\n  theme_minimal()\n\nprint(p2)"
   },
   {
     "objectID": "historical_review.html#academic-year-summaries",
     "href": "historical_review.html#academic-year-summaries",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "Academic Year Summaries",
     "text": "Academic Year Summaries\n\nHelper Functions\n\n# Academic group summaries\nacad_year = function(d) {\n  y = year(d); m = month(d)\n  if (m &gt;= 8) paste0(y, \"-\", y + 1) else paste0(y - 1, \"-\", y)\n}\n\nsemester = function(d) {\n  m = month(d)\n  if (m %in% 8:12) \"Fall\" else if(m %in% 1:5) \"Spring\" else \"Summer\"\n}\n\n\n\nSemester and Year-by-Year Financial Summary\n\nmonthly_aug = monthly %&gt;%\n  mutate(\n    AcadYear = vapply(YearMonth, acad_year, character(1)),\n    Semester = vapply(YearMonth, semester,  character(1))\n  )\n\nsem_summary = monthly_aug %&gt;%\n  group_by(AcadYear, Semester) %&gt;%\n  summarise(\n    income = sum(income, na.rm = TRUE),\n    expense_mag = sum(expense_mag, na.rm = TRUE),\n    net = sum(net, na.rm = TRUE),\n    .groups = \"drop\"\n  )\n\nyear_summary = monthly_aug %&gt;%\n  group_by(AcadYear) %&gt;%\n  summarise(\n    income = sum(income, na.rm = TRUE),\n    expense_mag = sum(expense_mag, na.rm = TRUE),\n    net = sum(net, na.rm = TRUE),\n    .groups = \"drop\"\n  )\n\nprint(sem_summary)\n\n# A tibble: 5 × 5\n  AcadYear  Semester income expense_mag     net\n  &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;\n1 2023-2024 Summer     8510          0    8510 \n2 2024-2025 Fall      21491      16833.   4658.\n3 2024-2025 Spring    15590      23746.  -8156.\n4 2024-2025 Summer      760          0     760 \n5 2025-2026 Fall        360      16744. -16384.\n\nprint(year_summary)\n\n# A tibble: 3 × 4\n  AcadYear  income expense_mag     net\n  &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;\n1 2023-2024   8510          0    8510 \n2 2024-2025  37841      40579.  -2738.\n3 2025-2026    360      16744. -16384."
   },
   {
     "objectID": "historical_review.html#key-insights",
     "href": "historical_review.html#key-insights",
-    "title": "Historical Review",
+    "title": "Financial Transaction Ledger",
     "section": "Key Insights",
     "text": "Key Insights\nBased on the historical data and predictive models:\n\nSeasonal Patterns: Financial activity shows clear seasonal patterns aligned with the academic calendar\nTop Expense Categories: The three largest expense categories account for the majority of spending\nPrediction Accuracy: The linear model with seasonal components significantly outperforms naive and mean-based predictions\nBudget Planning: Historical trends provide a solid foundation for future budget forecasting"
   },
@@ -100,170 +107,58 @@
   {
     "objectID": "project_log.html",
     "href": "project_log.html",
-    "title": "Project Log",
+    "title": "Communication Log",
     "section": "",
     "text": "This page documents our ongoing collaboration with VT Club Tennis, tracking meetings, decisions, and project milestones."
   },
   {
-    "objectID": "project_log.html#project-timeline-visualization",
-    "href": "project_log.html#project-timeline-visualization",
-    "title": "Project Log",
-    "section": "Project Timeline Visualization",
-    "text": "Project Timeline Visualization\n\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead."
+    "objectID": "project_log.html#project-timeline---meeting-schedule",
+    "href": "project_log.html#project-timeline---meeting-schedule",
+    "title": "Communication Log",
+    "section": "Project Timeline - Meeting Schedule",
+    "text": "Project Timeline - Meeting Schedule"
   },
   {
     "objectID": "project_log.html#progress-overview",
     "href": "project_log.html#progress-overview",
-    "title": "Project Log",
+    "title": "Communication Log",
     "section": "Progress Overview",
     "text": "Progress Overview"
   },
   {
-    "objectID": "project_log.html#meeting-4---date",
-    "href": "project_log.html#meeting-4---date",
-    "title": "Project Log",
-    "section": "Meeting 4 - [Date]",
-    "text": "Meeting 4 - [Date]"
+    "objectID": "project_log.html#meeting-1---september-30-2024-monday",
+    "href": "project_log.html#meeting-1---september-30-2024-monday",
+    "title": "Communication Log",
+    "section": "Meeting 1 - September 30, 2024 (Monday)",
+    "text": "Meeting 1 - September 30, 2024 (Monday)\nNeeds Assessment & Project Kickoff\n\nAttendees\n\nStatistical Collaborators: Yusi Yao, Kempton Thacker, Caleb Bradbury, Parker Duffey\nVT Club Tennis Representatives: Mitchell Freeman, Emma Casazza\n\n\n\nMethodologies Applied\n\nPOWER Process: Used for collaborative meeting structure\n\nPrepare: Reviewed club background and potential needs beforehand\nOpen: Established rapport and set meeting agenda\nWork: Explored client’s current challenges and goals\nEnd: Summarized key points and confirmed understanding\nReflect: Team debriefed after meeting to clarify next steps\n\nQQQ Process: Applied problem-solving framework\n\nQuestion: What are the club’s primary statistical needs?\nQuestion: What data is currently available?\nQuestion: What are the desired outcomes?\n\nActive Listening: Focused on understanding client’s goals without interrupting\n\n\n\nMeeting Minutes\nNote: Transcripts extracted from Notion AI\n\n\nClick to view conversation transcript\n\nKempton: “Thanks for meeting with us! We’re excited to share what we’ve been working on. We need to show you our progress for a class presentation update next Tuesday.”\nEmma: “I’m free between 11-12:15 on Thursday. Does that work for everyone?”\nMitchell: “I have class at 11, but I’m free pretty much any other time. I can catch up with Emma after.”\nKempton: “Perfect! Emma, we’ll do 11-12:15 and then you can debrief Mitchell afterward. We’ll send you the presentation.”\nEmma: “Also, have you guys heard back from procurement on SwingVision? And do you want the updated finance sheet so you have the most up to date data?”\nYusi: “Yes, please share the updated financial data. That would be really helpful for our analysis.”\nEmma: “Great! I’ll also need a quick picture of the Zoom call for our presentation - it’s just a requirement.”\nCaleb: “No problem! Everyone make sure to show up for at least the picture.”\nMitchell: “I do have class Thursday at 11, but I’m free after. Emma can just catch up with me after you all meet.”\nKempton: “Sounds good! We’ll make sure Emma has everything to share with you.”\n\n\n\nTopics Discussed\n\nVT Club Tennis overview: membership, activities, and organizational structure\nCurrent financial challenges and lack of data-driven decision making\nNeed for member performance tracking and ranking system\nHistorical data availability (financial records, member rosters)\nTimeline expectations and meeting schedule\n\n\n\nClient’s Initial Needs\n\nUpdated financial data and budget planning tools\nSwingVision procurement status tracking\nIntegration with existing finance sheets\nClass presentation materials and documentation\n\n\n\nDecisions Made\n\nMeeting scheduled for 11-12:15 with Emma, Mitchell to catch up after\nTeam will provide presentation materials before Tuesday class update\nEmma will share updated finance sheet for current data\nZoom call photo required for presentation requirements\n\n\n\nAction Items\n\nSet up project repository on GitHub\nCreate initial project structure and website framework\nRequest access to historical financial data\nObtain current member roster for both teams\n\n\n\nReflection\n\nRewarding: Client was enthusiastic and open about their needs\nChallenging: Balancing multiple deliverables within semester timeline\nSurprising: Club had more historical data than initially expected\n\n\n\nNext Steps\n\nAnalyze provided financial data\nBegin website structure development\nResearch Elo rating system for tennis applications"
   },
   {
-    "objectID": "project_log.html#attendees",
-    "href": "project_log.html#attendees",
-    "title": "Project Log",
-    "section": "### Attendees",
-    "text": "### Attendees"
+    "objectID": "project_log.html#meeting-2---october-14-2024-monday",
+    "href": "project_log.html#meeting-2---october-14-2024-monday",
+    "title": "Communication Log",
+    "section": "Meeting 2 - October 14, 2024 (Monday)",
+    "text": "Meeting 2 - October 14, 2024 (Monday)\nSwingVision Update & Budget Tool Progress\n\nAttendees\n\nStatistical Collaborators: Yusi Yao, Kempton Thacker, Caleb Bradbury, Parker Duffey\nVT Club Tennis Representatives: Mitchell Freeman\n\n\n\nMethodologies Applied\n\nActive Listening: Carefully noted client feedback on initial work\nEffective Feedback: Provided constructive suggestions on data organization\nQQQ Process: Refined understanding of specific requirements\n\nClarified budget categories needed\nConfirmed preferred visualization styles\nDetermined ranking system parameters\n\n\n\n\nMeeting Minutes\nNote: Transcripts extracted from Notion AI\n\n\nClick to view conversation transcript\n\nKempton: “Are people free on Tuesday for a quick check in regarding SwingVision or alternatives? I was thinking 11:30ish again.”\nEmma: “Works with me.”\nMitchell: “I have class at 11 but can talk with Emma after to cover things.”\nEmma: “Also, SwingVision update - our office just submitted the final thing to IT, so hopefully shouldn’t be much longer. But if you guys need to continue on because I know we’re in November and haven’t gotten it approved, I can keep providing you guys budget data and we can work on that side of things (sorry I know it’s boring, we all hate finances)!”\nCaleb: “No worries at all, that works for us! I’ll send it when you get a chance and I’ll work on implementing it into our code to see if it can update anything! The interactive budget thing should be back online so feel free to play around with it and see if it fits what you guys need.”\nEmma: “Okay yeah! I’ll play around with the budget site and we should be able to use that info for our budget meeting in December. I can also look around for dummy data sets from SwingVision so you guys can potentially use it to develop a system.”\nCaleb: “If it turns out we can’t get the data in a timely manner we might be able to use some dummy data to build some sort of system that would be useful once you guys have the data! I personally don’t mind working on it a bit as we get into finals/next semester.”\nEmma: “Thank you guys for doing all this!!”\nCaleb: “Okay, perfect. If you have any questions or requests to improve anything just let us know. But of course, happy to help! Thank y’all for being so helpful, as well, we’ve been ahead of every group since week 1 because we were able to get everything coordinated so fast.”\nEmma: “Oh fire okay lovely and yes will do!”\n\n\n\nTopics Discussed\n\nReview of initial website structure and navigation\nFinancial data organization and categorization\nBudget planning tool requirements and features\nRanking system parameters (K-factor, initial ratings, challenge rules)\nVT branding preferences (colors, logos, styling)\n\n\n\nProgress Presented\n\nBasic website framework with navigation\nInitial financial data import from Google Sheets\nResearch on Elo ranking systems for sports applications\nPreliminary visualizations of historical spending\n\n\n\nDecisions Made\n\nAdopt VT’s official color scheme (Chicago Maroon #861F41 and Burnt Orange #E87722)\nInclude legacy challenge ladder rules for context\nInteractive budget tool should allow scenario planning\nSwingVision procurement likely won’t be approved in time - pivot focus to financial tools and budget analysis\nRanking system will use Elo with K-factor of 32 for initial implementation\n\n\n\nAction Items\n\nImplement VT theme across entire website\nComplete financial analysis with historical trends\nDevelop interactive budget planning tool\nCreate initial Elo ranking system page\n\n\n\nClient Feedback\n\nGrateful for team’s flexibility and responsiveness\nAppreciative of continued work despite SwingVision procurement delays\nExcited about using budget tool for December budget meeting\nValued team’s willingness to continue work into finals/next semester if needed\n\n\n\nNext Steps\n\nFinish financial tools and test with client\nDevelop ranking system simulation with real roster\nPrepare progress update for next meeting"
   },
   {
-    "objectID": "project_log.html#topics-discussed",
-    "href": "project_log.html#topics-discussed",
-    "title": "Project Log",
-    "section": "### Topics Discussed",
-    "text": "### Topics Discussed"
+    "objectID": "project_log.html#meeting-3---november-9-2024-saturday",
+    "href": "project_log.html#meeting-3---november-9-2024-saturday",
+    "title": "Communication Log",
+    "section": "Meeting 3 - November 9, 2024 (Saturday)",
+    "text": "Meeting 3 - November 9, 2024 (Saturday)\nDevelopment Review & Demonstrations\n\nAttendees\n\nStatistical Collaborators: Yusi Yao, Kempton Thacker, Caleb Bradbury, Parker Duffey\nVT Club Tennis Representatives: Mitchell Freeman, Emma Casazza\n\n\n\nMethodologies Applied\n\nPOWER Process: Structured review of completed work\nActive Listening: Gathered detailed feedback on usability\nEffective Feedback: Solicited specific suggestions for improvements\nCollaborative Problem-Solving: Addressed technical questions together\n\n\n\nMeeting Minutes\nNote: Transcripts extracted from Notion AI\n\n\nClick to view conversation transcript\n\nCaleb: “Let’s start with the financial dashboard. You can see the embedded Google Sheets here pulls your live transaction data.”\nEmma: “Wow, this updates automatically? That’s so much better than manually updating charts!”\nKempton: “Exactly. And look at these spending pattern visualizations - you can see tournament fees peak in spring and fall.”\nMitchell: “This is really helpful. We’ve always wondered where most of our money goes. Equipment spending is higher than I thought!”\nYusi: “Now let me show you the budget planning tool. You can adjust income sources and expenses to see different scenarios.”\nEmma: “Can we try modeling what happens if we raise dues by $10 per member?”\nParker: “Sure, let me adjust that… and you can see the projected balance through the semester updates in real-time.”\nMitchell: “This is going to make our planning meetings so much easier! What about the ranking system?”\nCaleb: “We implemented the Elo system with your full 40-player roster. Here’s a simulation of 200 matches showing how ratings evolve.”\nEmma: “I love that you included our old challenge ladder rules for comparison. This makes it clear why Elo is better.”\nMitchell: “The interactive table is great - we can search for specific players. Is this ready to use with real matches?”\nYusi: “Almost! We need to add a few more visual elements and create a page documenting this whole process for your records.”\nEmma: “Could you add some of our team photos? And maybe an ‘About Us’ section introducing the club?”\nKempton: “Absolutely. We’ll have that ready for our final meeting.”\n\n\n\nTopics Discussed\n\nDemonstration of financial analysis dashboard\nWalkthrough of interactive budget planning tool\nReview of Elo ranking system with 40-player simulation\nWebsite navigation and user experience\nGoogle Sheets integration for live data updates\n\n\n\nDeliverables Demonstrated\n\nFinancial Analysis\n\nHistorical transaction analysis with visualizations\nEmbedded Google Sheets ledger\nSpending patterns by category\nBalance tracking over time\n\nBudget Planning Tool\n\nInteractive Shiny app for scenario planning\nIncome and expense projections\nReal-time balance calculations\n\nElo Ranking System\n\nComplete explanation of Elo methodology\nLegacy challenge ladder comparison\n200-match simulation with real roster\nInteractive ranking tables and visualizations\n\n\n\n\nDecisions Made\n\nAdd “About Us” page with team photos\nCreate “Project Log” page to document collaboration process\nEmbed Google Sheets directly in Historical Review page\nAdd more visual elements throughout site\nPivot ranking system from pure Elo to UTR-inspired model based on Mitchell’s feedback\n\n\n\nClient Feedback\n\nVery satisfied with financial tools and visualizations\nMitchell raised concerns that pure Elo system might not work for their specific needs\nSuggested exploring UTR (Universal Tennis Rating) style system instead\nRequested minor styling adjustments\nWanted project documentation for their records\n\n\n\nAction Items\n\nAdd About Us page with team photos\nCreate Project Log with meeting documentation\nEmbed Google Sheets in Historical Review\nFinal testing and bug fixes\nPrepare final presentation materials\n\n\n\nReflection\n\nRewarding: Seeing client’s excitement about the tools\nChallenging: Balancing technical complexity with user-friendliness\nLearning: Importance of iterative feedback and testing\n\n\n\nNext Steps\n\nComplete remaining action items\nConduct final testing with client input\nPrepare wrap-up meeting and final presentation"
   },
   {
-    "objectID": "project_log.html#decisions-made",
-    "href": "project_log.html#decisions-made",
-    "title": "Project Log",
-    "section": "### Decisions Made",
-    "text": "### Decisions Made\n\nAction Items\n\n[ ]"
-  },
-  {
-    "objectID": "project_log.html#next-steps",
-    "href": "project_log.html#next-steps",
-    "title": "Project Log",
-    "section": "### Next Steps",
-    "text": "### Next Steps"
-  },
-  {
-    "objectID": "project_log.html#meeting-3---date",
-    "href": "project_log.html#meeting-3---date",
-    "title": "Project Log",
-    "section": "Meeting 3 - [Date]",
-    "text": "Meeting 3 - [Date]"
-  },
-  {
-    "objectID": "project_log.html#attendees-1",
-    "href": "project_log.html#attendees-1",
-    "title": "Project Log",
-    "section": "### Attendees",
-    "text": "### Attendees"
-  },
-  {
-    "objectID": "project_log.html#topics-discussed-1",
-    "href": "project_log.html#topics-discussed-1",
-    "title": "Project Log",
-    "section": "### Topics Discussed",
-    "text": "### Topics Discussed"
-  },
-  {
-    "objectID": "project_log.html#decisions-made-1",
-    "href": "project_log.html#decisions-made-1",
-    "title": "Project Log",
-    "section": "### Decisions Made",
-    "text": "### Decisions Made\n\nAction Items\n\n[ ]"
-  },
-  {
-    "objectID": "project_log.html#next-steps-1",
-    "href": "project_log.html#next-steps-1",
-    "title": "Project Log",
-    "section": "### Next Steps",
-    "text": "### Next Steps"
-  },
-  {
-    "objectID": "project_log.html#meeting-2---date",
-    "href": "project_log.html#meeting-2---date",
-    "title": "Project Log",
-    "section": "Meeting 2 - [Date]",
-    "text": "Meeting 2 - [Date]"
-  },
-  {
-    "objectID": "project_log.html#attendees-2",
-    "href": "project_log.html#attendees-2",
-    "title": "Project Log",
-    "section": "### Attendees",
-    "text": "### Attendees"
-  },
-  {
-    "objectID": "project_log.html#topics-discussed-2",
-    "href": "project_log.html#topics-discussed-2",
-    "title": "Project Log",
-    "section": "### Topics Discussed",
-    "text": "### Topics Discussed"
-  },
-  {
-    "objectID": "project_log.html#decisions-made-2",
-    "href": "project_log.html#decisions-made-2",
-    "title": "Project Log",
-    "section": "### Decisions Made",
-    "text": "### Decisions Made\n\nAction Items\n\n[ ]"
-  },
-  {
-    "objectID": "project_log.html#next-steps-2",
-    "href": "project_log.html#next-steps-2",
-    "title": "Project Log",
-    "section": "### Next Steps",
-    "text": "### Next Steps"
-  },
-  {
-    "objectID": "project_log.html#meeting-1---date",
-    "href": "project_log.html#meeting-1---date",
-    "title": "Project Log",
-    "section": "Meeting 1 - [Date]",
-    "text": "Meeting 1 - [Date]"
-  },
-  {
-    "objectID": "project_log.html#attendees-3",
-    "href": "project_log.html#attendees-3",
-    "title": "Project Log",
-    "section": "### Attendees",
-    "text": "### Attendees"
-  },
-  {
-    "objectID": "project_log.html#topics-discussed-3",
-    "href": "project_log.html#topics-discussed-3",
-    "title": "Project Log",
-    "section": "### Topics Discussed",
-    "text": "### Topics Discussed"
-  },
-  {
-    "objectID": "project_log.html#decisions-made-3",
-    "href": "project_log.html#decisions-made-3",
-    "title": "Project Log",
-    "section": "### Decisions Made",
-    "text": "### Decisions Made\n\nAction Items\n\n[ ]"
-  },
-  {
-    "objectID": "project_log.html#next-steps-3",
-    "href": "project_log.html#next-steps-3",
-    "title": "Project Log",
-    "section": "### Next Steps",
-    "text": "### Next Steps"
+    "objectID": "project_log.html#meeting-4---november-20-2024-wednesday",
+    "href": "project_log.html#meeting-4---november-20-2024-wednesday",
+    "title": "Communication Log",
+    "section": "Meeting 4 - November 20, 2024 (Wednesday)",
+    "text": "Meeting 4 - November 20, 2024 (Wednesday)\nFinal Review & Wrap-up\n\nAttendees\n\nStatistical Collaborators: Yusi Yao, Kempton Thacker, Caleb Bradbury, Parker Duffey\nVT Club Tennis Representatives: Emma Casazza\n\n\n\nMethodologies Applied\n\nPOWER Process - End & Reflect: Comprehensive project wrap-up\nEffective Feedback: Provided training and documentation for ongoing use\nActive Listening: Addressed any remaining questions or concerns\n\n\n\nMeeting Minutes\nNote: Transcripts extracted from Notion AI\n\n\nClick to view conversation transcript\n\nEmma: “Everything looks amazing! The About Us page with our team photos really brings it together.”\nParker: “Thanks! Let’s go through how to maintain everything. For the financial data, you just update the Google Sheet and the website refreshes automatically.”\nEmma: “That’s so convenient. What if we want to add a new budget category?”\nYusi: “Just add a new row in the sheet with the category name. The visualizations will automatically include it in the charts.”\nEmma: “Perfect. How do we update the Elo rankings when matches happen?”\nCaleb: “You’ll use the same calculation we showed you - the winner gains points, loser loses points. The amount depends on the rating difference.”\nEmma: “Can we adjust the K-factor if we want rankings to change faster or slower?”\nKempton: “Yes! K-factor of 32 is standard, but you could increase it for faster changes or decrease it for more stability.”\nEmma: “This is all documented in the Project Log, right? I want to show Mitchell everything we discussed.”\nYusi: “Yes, every meeting is documented with all the methodologies we used and decisions we made. It’s all there for your records.”\nEmma: “I really appreciate how you’ve taught us to use these tools rather than just building them. We feel confident maintaining this.”\nParker: “That was our goal! Is there anything else you’d like us to add or change?”\nEmma: “No, this exceeds our expectations. The club officers are going to love presenting this data at our next meeting. Thank you all so much!”\n\n\n\nTopics Discussed\n\nFinal walkthrough of all deliverables\nTraining on updating and maintaining the tools\nAnswering client’s questions about future usage\nDiscussion of potential future enhancements\nReflection on collaboration process\n\n\n\nFinal Deliverables Review\n\nComplete website with VT branding\nFinancial analysis tools with live data integration\nInteractive budget planning application\nElo ranking system with comprehensive documentation\nProject log documenting entire collaboration\n\n\n\nClient Training Provided\n\nHow to update Google Sheets for automatic website updates\nUsing the budget planning tool for future scenarios\nUnderstanding and applying the Elo ranking system\nWebsite maintenance and GitHub Pages updates\n\n\n\nDecisions Made\n\nClient will maintain Google Sheets ledger\nFuture collaboration opportunities discussed\nPermission granted to use project in final presentation\n\n\n\nClient Final Feedback\n\nExtremely satisfied with all deliverables\nAppreciated thorough documentation and explanations\nTools will be immediately useful for club operations\nValued the collaborative and educational approach\n\n\n\nReflection on Entire Process\n\nMost Rewarding: Empowering client with statistical tools and knowledge\nBiggest Challenge: Balancing multiple complex deliverables in one semester\nKey Surprise: How engaged and collaborative the client was throughout\nSkills Developed: Real-world application of statistical collaboration, communication, and web development\nTools Used from Class: POWER process, QQQ framework, active listening, effective feedback\n\n\n\nNext Steps\n\nFinal presentation preparation (December 2-9)\nDocumentation completion\nProject delivery and handoff"
   },
   {
     "objectID": "project_log.html#key-milestones-summary",
     "href": "project_log.html#key-milestones-summary",
-    "title": "Project Log",
+    "title": "Communication Log",
     "section": "Key Milestones Summary",
-    "text": "Key Milestones Summary\n\n\n\n\n\nDate\nMilestone\nStatus\n\n\n\n\nSept 1\nInitial Client Meeting\n✅ Completed\n\n\nSept 15\nRequirements Gathering Complete\n✅ Completed\n\n\nOct 1\nDevelopment Phase Begins\n🔄 In Progress\n\n\nNov 1\nTesting Phase Begins\n⏳ Upcoming\n\n\nNov 25\nClient Review & Feedback\n⏳ Upcoming\n\n\nDec 10\nFinal Delivery\n⏳ Upcoming\n\n\n\n\n\n\nLast Updated: November 18, 2025"
+    "text": "Key Milestones Summary\n\n\n\n\n\nDate\nMilestone\nStatus\n\n\n\n\nSep 30\nMeeting 1: Initial Check-in & Data Request\n✅ Completed\n\n\nOct 14\nMeeting 2: SwingVision Update & Budget Review\n✅ Completed\n\n\nNov 9\nMeeting 3: Development Update\n✅ Completed\n\n\nNov 20\nMeeting 4: Final Review\n✅ Completed\n\n\nDec 9\nProject Delivery\n⏳ Upcoming\n\n\n\n\n\n\nLast Updated: November 18, 2025"
   },
   {
     "objectID": "financial_analysis.html",

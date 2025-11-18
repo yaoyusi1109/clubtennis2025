@@ -100,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./project_log.html"> 
-<span class="menu-text">Project Log</span></a>
+<span class="menu-text">Communication Log</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-financial-analysis" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -153,6 +153,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#out-client" id="toc-out-client" class="nav-link active" data-scroll-target="#out-client">Out Client</a></li>
+  <li><a href="#our-team" id="toc-our-team" class="nav-link" data-scroll-target="#our-team">Our Team</a></li>
   </ul>
 </nav>
     </div>
@@ -193,6 +194,13 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+</section>
+<section id="our-team" class="level2">
+<h2 class="anchored" data-anchor-id="our-team">Our Team</h2>
+<p>Yusi - CTO</p>
+<p>Kempton - CCO</p>
+<p>Caleb - COO</p>
+<p>Parker - CIO</p>
 <hr>
 <p><em>Go Hokies!</em> 🎾</p>
 
@@ -301,7 +309,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/yaoyusi1109\.github\.io\/clubtennis2025\/");
+        var filterRegex = new RegExp('/' + window.location.host + '/');
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
