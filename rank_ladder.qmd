@@ -8,18 +8,57 @@ format:
     code-fold: show
 ---
 
-## 1. What is the Elo Rating System?
+## 1. From Challenge Ladder to Elo: A More Quantitative Approach
+
+### Previous Challenge Ladder System
+
+VT Club Tennis previously used a traditional challenge ladder system with the following rules:
+
+**Challenge Rules (Legacy System):**
+
+1. Everyone on the team must challenge someone at least once a semester (except for the #1 ranked player)
+2. If you're ranked inside the top 10, you can challenge someone a maximum of 3 spots above you
+3. If you're ranked outside the top 10, you can challenge someone a maximum of 5 spots above you (but cannot challenge past #7)
+4. If you're ranked outside the top 20, you can challenge someone a maximum of 7 spots above you (but cannot challenge past #16)
+5. All challenge matches are best of 3 sets
+6. You may only challenge the same player once a month
+7. Injured players are not eligible to compete in challenge matches
+8. Please challenge other members via email, copying vtmensclubtennis@gmail.com
+9. Players have 48 hours to respond to a challenge
+10. The challenge match must be played within 7 days after acceptance
+
+### Why We're Moving to Elo
+
+While the challenge ladder system served us well, we're transitioning to an **Elo rating system** to create a **more quantitative and linear ranking approach**. Here's why:
+
+**Problems with the Traditional System:**
+- **Arbitrary restrictions**: Different challenge limits for different ranking tiers created complexity
+- **Limited mobility**: Top players were harder to challenge, creating ranking stagnation
+- **Binary outcomes**: Win/loss only, no consideration of opponent strength
+- **Administrative burden**: Tracking challenge eligibility, timing, and violations required constant oversight
+
+**Benefits of Elo:**
+- ✅ **Linear and quantitative**: Everyone has a numerical rating that changes predictably
+- ✅ **No artificial barriers**: Any player can play anyone, anytime
+- ✅ **Rewards skill-appropriate competition**: Beating stronger players = bigger rating gains
+- ✅ **Self-regulating**: No need to track who can challenge whom
+- ✅ **Transparent**: Everyone can see exactly how ratings change after each match
+- ✅ **Fairer assessment**: Your rating reflects your true skill level over time
+
+---
+
+## 2. What is the Elo Rating System?
 
 Think of Elo like a video game ranking system where everyone starts at the same level. When you win matches, you gain points; when you lose, you lose points. The cool part? **Beating stronger players earns you more points than beating weaker ones.**
 
 ### Key Concepts:
 
-- **Everyone starts at 1300 points**
+- **Everyone starts with an initial rating** (assigned based on current ladder position)
 - **Win = gain points, Lose = lose points**
 - **Bigger upset = bigger point swing**
-- **The system balances itself** - total points stay constant
+- **The system balances itself** - ratings reflect true skill over time
 
-## 2. How Does It Work? (Simple Explanation)
+## 3. How Does It Work? (Simple Explanation)
 
 ### Step 1: Predict the outcome
 Before each match, we calculate who *should* win based on current ratings.
@@ -45,7 +84,7 @@ Where:
 - **Actual Result** = 1 if you won, 0 if you lost
 - **Expected Result** = Probability you were supposed to win (0 to 1)
 
-## 3. Let's See It In Action: VT Club Tennis Roster Simulation
+## 4. Let's See It In Action: VT Club Tennis Roster Simulation
 
 We'll apply the Elo rating system to the **actual VT Club Tennis men's roster** and simulate a season of matches to see how rankings evolve.
 

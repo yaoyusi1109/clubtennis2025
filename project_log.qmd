@@ -1,0 +1,197 @@
+---
+title: "Project Log"
+subtitle: "Meeting Notes & Progress Updates"
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(knitr)
+
+# VT Colors
+vt_maroon <- "#861F41"
+vt_orange <- "#E87722"
+```
+
+This page documents our ongoing collaboration with VT Club Tennis, tracking meetings, decisions, and project milestones.
+
+---
+
+## Project Timeline Visualization
+
+```{r timeline-viz, echo=FALSE, fig.width=10, fig.height=6}
+# Create timeline data
+timeline_data <- data.frame(
+  phase = c("Initial Meeting", "Requirements", "Development", "Testing", "Delivery"),
+  start_date = as.Date(c("2025-09-01", "2025-09-15", "2025-10-01", "2025-11-01", "2025-11-25")),
+  end_date = as.Date(c("2025-09-14", "2025-09-30", "2025-10-31", "2025-11-24", "2025-12-10")),
+  status = c("Completed", "Completed", "In Progress", "Upcoming", "Upcoming"),
+  y_pos = c(1, 2, 3, 4, 5)
+)
+
+# Create the timeline visualization
+ggplot(timeline_data, aes(x = start_date, y = y_pos)) +
+  geom_segment(aes(x = start_date, xend = end_date, y = y_pos, yend = y_pos, color = status),
+               size = 8, lineend = "round") +
+  geom_point(aes(x = start_date, color = status), size = 5) +
+  geom_point(aes(x = end_date, color = status), size = 5) +
+  geom_text(aes(label = phase, x = start_date + (end_date - start_date)/2), 
+            vjust = -1.5, size = 4, fontface = "bold") +
+  scale_color_manual(values = c("Completed" = vt_maroon, 
+                                 "In Progress" = vt_orange,
+                                 "Upcoming" = "gray60")) +
+  scale_y_continuous(limits = c(0.5, 5.5)) +
+  labs(title = "Project Timeline",
+       subtitle = "Fall 2025 Semester",
+       x = "Date",
+       y = "",
+       color = "Status") +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", color = vt_maroon),
+    plot.subtitle = element_text(size = 12, color = "gray40"),
+    legend.position = "bottom"
+  )
+```
+
+---
+
+## Progress Overview
+
+```{r progress-viz, echo=FALSE, fig.width=10, fig.height=5}
+# Create deliverables progress data
+deliverables <- data.frame(
+  item = c("Financial Analysis", "Budget Tool", "Elo Ranking", 
+           "Performance Analytics", "Final Presentation"),
+  progress = c(85, 90, 75, 60, 20),
+  category = c("Financial", "Financial", "Performance", "Performance", "General")
+)
+
+deliverables$item <- factor(deliverables$item, levels = rev(deliverables$item))
+
+ggplot(deliverables, aes(x = progress, y = item, fill = category)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = paste0(progress, "%")), hjust = -0.2, size = 4, fontface = "bold") +
+  scale_fill_manual(values = c("Financial" = vt_maroon, 
+                                "Performance" = vt_orange,
+                                "General" = "gray60")) +
+  scale_x_continuous(limits = c(0, 110), expand = c(0, 0)) +
+  labs(title = "Deliverables Progress",
+       subtitle = "Completion Status",
+       x = "Progress (%)",
+       y = "",
+       fill = "Category") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", color = vt_maroon),
+    plot.subtitle = element_text(size = 12, color = "gray40"),
+    legend.position = "bottom",
+    panel.grid.major.y = element_blank()
+  )
+```
+
+---
+
+## Meeting 4 - [Date]
+
+### Attendees
+- 
+
+### Topics Discussed
+- 
+
+### Decisions Made
+- 
+
+### Action Items
+- [ ] 
+
+### Next Steps
+- 
+
+---
+
+## Meeting 3 - [Date]
+
+### Attendees
+- 
+
+### Topics Discussed
+- 
+
+### Decisions Made
+- 
+
+### Action Items
+- [ ] 
+
+### Next Steps
+- 
+
+---
+
+## Meeting 2 - [Date]
+
+### Attendees
+- 
+
+### Topics Discussed
+- 
+
+### Decisions Made
+- 
+
+### Action Items
+- [ ] 
+
+### Next Steps
+- 
+
+---
+
+## Meeting 1 - [Date]
+
+### Attendees
+- 
+
+### Topics Discussed
+- 
+
+### Decisions Made
+- 
+
+### Action Items
+- [ ] 
+
+### Next Steps
+- 
+
+---
+
+## Key Milestones Summary
+
+```{r milestones-table, echo=FALSE}
+milestones <- data.frame(
+  Date = c("Sept 1", "Sept 15", "Oct 1", "Nov 1", "Nov 25", "Dec 10"),
+  Milestone = c(
+    "Initial Client Meeting",
+    "Requirements Gathering Complete",
+    "Development Phase Begins",
+    "Testing Phase Begins",
+    "Client Review & Feedback",
+    "Final Delivery"
+  ),
+  Status = c("✅ Completed", "✅ Completed", "🔄 In Progress", 
+             "⏳ Upcoming", "⏳ Upcoming", "⏳ Upcoming")
+)
+
+kable(milestones, align = c('l', 'l', 'c'))
+```
+
+---
+
+*Last Updated: November 18, 2025*

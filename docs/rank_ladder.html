@@ -80,6 +80,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="chat-widget.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -102,6 +103,14 @@ ul.task-list li input[type="checkbox"] {
   <li class="nav-item">
     <a class="nav-link" href="./main.html"> 
 <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About Us</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./project_log.html"> 
+<span class="menu-text">Project Log</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-financial-analysis" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -153,26 +162,31 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-the-elo-rating-system" id="toc-what-is-the-elo-rating-system" class="nav-link active" data-scroll-target="#what-is-the-elo-rating-system"><span class="header-section-number">1</span> 1. What is the Elo Rating System?</a>
+  <li><a href="#from-challenge-ladder-to-elo-a-more-quantitative-approach" id="toc-from-challenge-ladder-to-elo-a-more-quantitative-approach" class="nav-link active" data-scroll-target="#from-challenge-ladder-to-elo-a-more-quantitative-approach"><span class="header-section-number">1</span> 1. From Challenge Ladder to Elo: A More Quantitative Approach</a>
   <ul class="collapse">
-  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts"><span class="header-section-number">1.1</span> Key Concepts:</a></li>
+  <li><a href="#previous-challenge-ladder-system" id="toc-previous-challenge-ladder-system" class="nav-link" data-scroll-target="#previous-challenge-ladder-system"><span class="header-section-number">1.1</span> Previous Challenge Ladder System</a></li>
+  <li><a href="#why-were-moving-to-elo" id="toc-why-were-moving-to-elo" class="nav-link" data-scroll-target="#why-were-moving-to-elo"><span class="header-section-number">1.2</span> Why We’re Moving to Elo</a></li>
   </ul></li>
-  <li><a href="#how-does-it-work-simple-explanation" id="toc-how-does-it-work-simple-explanation" class="nav-link" data-scroll-target="#how-does-it-work-simple-explanation"><span class="header-section-number">2</span> 2. How Does It Work? (Simple Explanation)</a>
+  <li><a href="#what-is-the-elo-rating-system" id="toc-what-is-the-elo-rating-system" class="nav-link" data-scroll-target="#what-is-the-elo-rating-system"><span class="header-section-number">2</span> 2. What is the Elo Rating System?</a>
   <ul class="collapse">
-  <li><a href="#step-1-predict-the-outcome" id="toc-step-1-predict-the-outcome" class="nav-link" data-scroll-target="#step-1-predict-the-outcome"><span class="header-section-number">2.1</span> Step 1: Predict the outcome</a></li>
-  <li><a href="#step-2-compare-prediction-to-reality" id="toc-step-2-compare-prediction-to-reality" class="nav-link" data-scroll-target="#step-2-compare-prediction-to-reality"><span class="header-section-number">2.2</span> Step 2: Compare prediction to reality</a></li>
-  <li><a href="#step-3-adjust-ratings" id="toc-step-3-adjust-ratings" class="nav-link" data-scroll-target="#step-3-adjust-ratings"><span class="header-section-number">2.3</span> Step 3: Adjust ratings</a></li>
+  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts"><span class="header-section-number">2.1</span> Key Concepts:</a></li>
   </ul></li>
-  <li><a href="#lets-see-it-in-action-vt-club-tennis-roster-simulation" id="toc-lets-see-it-in-action-vt-club-tennis-roster-simulation" class="nav-link" data-scroll-target="#lets-see-it-in-action-vt-club-tennis-roster-simulation"><span class="header-section-number">3</span> 3. Let’s See It In Action: VT Club Tennis Roster Simulation</a>
+  <li><a href="#how-does-it-work-simple-explanation" id="toc-how-does-it-work-simple-explanation" class="nav-link" data-scroll-target="#how-does-it-work-simple-explanation"><span class="header-section-number">3</span> 3. How Does It Work? (Simple Explanation)</a>
   <ul class="collapse">
-  <li><a href="#initial-roster" id="toc-initial-roster" class="nav-link" data-scroll-target="#initial-roster"><span class="header-section-number">3.1</span> Initial Roster</a></li>
-  <li><a href="#match-1-alice-vs-bob-both-start-at-1300" id="toc-match-1-alice-vs-bob-both-start-at-1300" class="nav-link" data-scroll-target="#match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.2</span> Match 1: Alice vs Bob (Both start at 1300)</a></li>
-  <li><a href="#match-2-alice-vs-charlie-alice-now-favored" id="toc-match-2-alice-vs-charlie-alice-now-favored" class="nav-link" data-scroll-target="#match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.3</span> Match 2: Alice vs Charlie (Alice now favored)</a></li>
-  <li><a href="#simulating-a-season-of-matches" id="toc-simulating-a-season-of-matches" class="nav-link" data-scroll-target="#simulating-a-season-of-matches"><span class="header-section-number">3.4</span> Simulating a Season of Matches</a></li>
-  <li><a href="#final-rankings-after-200-matches" id="toc-final-rankings-after-200-matches" class="nav-link" data-scroll-target="#final-rankings-after-200-matches"><span class="header-section-number">3.5</span> Final Rankings After 200 Matches</a></li>
-  <li><a href="#rating-evolution-for-top-10-players" id="toc-rating-evolution-for-top-10-players" class="nav-link" data-scroll-target="#rating-evolution-for-top-10-players"><span class="header-section-number">3.6</span> Rating Evolution for Top 10 Players</a></li>
-  <li><a href="#match-activity-summary" id="toc-match-activity-summary" class="nav-link" data-scroll-target="#match-activity-summary"><span class="header-section-number">3.7</span> Match Activity Summary</a></li>
-  <li><a href="#key-insights-from-the-simulation" id="toc-key-insights-from-the-simulation" class="nav-link" data-scroll-target="#key-insights-from-the-simulation"><span class="header-section-number">3.8</span> Key Insights from the Simulation</a></li>
+  <li><a href="#step-1-predict-the-outcome" id="toc-step-1-predict-the-outcome" class="nav-link" data-scroll-target="#step-1-predict-the-outcome"><span class="header-section-number">3.1</span> Step 1: Predict the outcome</a></li>
+  <li><a href="#step-2-compare-prediction-to-reality" id="toc-step-2-compare-prediction-to-reality" class="nav-link" data-scroll-target="#step-2-compare-prediction-to-reality"><span class="header-section-number">3.2</span> Step 2: Compare prediction to reality</a></li>
+  <li><a href="#step-3-adjust-ratings" id="toc-step-3-adjust-ratings" class="nav-link" data-scroll-target="#step-3-adjust-ratings"><span class="header-section-number">3.3</span> Step 3: Adjust ratings</a></li>
+  </ul></li>
+  <li><a href="#lets-see-it-in-action-vt-club-tennis-roster-simulation" id="toc-lets-see-it-in-action-vt-club-tennis-roster-simulation" class="nav-link" data-scroll-target="#lets-see-it-in-action-vt-club-tennis-roster-simulation"><span class="header-section-number">4</span> 4. Let’s See It In Action: VT Club Tennis Roster Simulation</a>
+  <ul class="collapse">
+  <li><a href="#initial-roster" id="toc-initial-roster" class="nav-link" data-scroll-target="#initial-roster"><span class="header-section-number">4.1</span> Initial Roster</a></li>
+  <li><a href="#match-1-alice-vs-bob-both-start-at-1300" id="toc-match-1-alice-vs-bob-both-start-at-1300" class="nav-link" data-scroll-target="#match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">4.2</span> Match 1: Alice vs Bob (Both start at 1300)</a></li>
+  <li><a href="#match-2-alice-vs-charlie-alice-now-favored" id="toc-match-2-alice-vs-charlie-alice-now-favored" class="nav-link" data-scroll-target="#match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">4.3</span> Match 2: Alice vs Charlie (Alice now favored)</a></li>
+  <li><a href="#simulating-a-season-of-matches" id="toc-simulating-a-season-of-matches" class="nav-link" data-scroll-target="#simulating-a-season-of-matches"><span class="header-section-number">4.4</span> Simulating a Season of Matches</a></li>
+  <li><a href="#final-rankings-after-200-matches" id="toc-final-rankings-after-200-matches" class="nav-link" data-scroll-target="#final-rankings-after-200-matches"><span class="header-section-number">4.5</span> Final Rankings After 200 Matches</a></li>
+  <li><a href="#rating-evolution-for-top-10-players" id="toc-rating-evolution-for-top-10-players" class="nav-link" data-scroll-target="#rating-evolution-for-top-10-players"><span class="header-section-number">4.6</span> Rating Evolution for Top 10 Players</a></li>
+  <li><a href="#match-activity-summary" id="toc-match-activity-summary" class="nav-link" data-scroll-target="#match-activity-summary"><span class="header-section-number">4.7</span> Match Activity Summary</a></li>
+  <li><a href="#key-insights-from-the-simulation" id="toc-key-insights-from-the-simulation" class="nav-link" data-scroll-target="#key-insights-from-the-simulation"><span class="header-section-number">4.8</span> Key Insights from the Simulation</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -199,32 +213,59 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="what-is-the-elo-rating-system" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="what-is-the-elo-rating-system"><span class="header-section-number">1</span> 1. What is the Elo Rating System?</h2>
+<section id="from-challenge-ladder-to-elo-a-more-quantitative-approach" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="from-challenge-ladder-to-elo-a-more-quantitative-approach"><span class="header-section-number">1</span> 1. From Challenge Ladder to Elo: A More Quantitative Approach</h2>
+<section id="previous-challenge-ladder-system" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="previous-challenge-ladder-system"><span class="header-section-number">1.1</span> Previous Challenge Ladder System</h3>
+<p>VT Club Tennis previously used a traditional challenge ladder system with the following rules:</p>
+<p><strong>Challenge Rules (Legacy System):</strong></p>
+<ol type="1">
+<li>Everyone on the team must challenge someone at least once a semester (except for the #1 ranked player)</li>
+<li>If you’re ranked inside the top 10, you can challenge someone a maximum of 3 spots above you</li>
+<li>If you’re ranked outside the top 10, you can challenge someone a maximum of 5 spots above you (but cannot challenge past #7)</li>
+<li>If you’re ranked outside the top 20, you can challenge someone a maximum of 7 spots above you (but cannot challenge past #16)</li>
+<li>All challenge matches are best of 3 sets</li>
+<li>You may only challenge the same player once a month</li>
+<li>Injured players are not eligible to compete in challenge matches</li>
+<li>Please challenge other members via email, copying vtmensclubtennis@gmail.com</li>
+<li>Players have 48 hours to respond to a challenge</li>
+<li>The challenge match must be played within 7 days after acceptance</li>
+</ol>
+</section>
+<section id="why-were-moving-to-elo" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="why-were-moving-to-elo"><span class="header-section-number">1.2</span> Why We’re Moving to Elo</h3>
+<p>While the challenge ladder system served us well, we’re transitioning to an <strong>Elo rating system</strong> to create a <strong>more quantitative and linear ranking approach</strong>. Here’s why:</p>
+<p><strong>Problems with the Traditional System:</strong> - <strong>Arbitrary restrictions</strong>: Different challenge limits for different ranking tiers created complexity - <strong>Limited mobility</strong>: Top players were harder to challenge, creating ranking stagnation - <strong>Binary outcomes</strong>: Win/loss only, no consideration of opponent strength - <strong>Administrative burden</strong>: Tracking challenge eligibility, timing, and violations required constant oversight</p>
+<p><strong>Benefits of Elo:</strong> - ✅ <strong>Linear and quantitative</strong>: Everyone has a numerical rating that changes predictably - ✅ <strong>No artificial barriers</strong>: Any player can play anyone, anytime - ✅ <strong>Rewards skill-appropriate competition</strong>: Beating stronger players = bigger rating gains - ✅ <strong>Self-regulating</strong>: No need to track who can challenge whom - ✅ <strong>Transparent</strong>: Everyone can see exactly how ratings change after each match - ✅ <strong>Fairer assessment</strong>: Your rating reflects your true skill level over time</p>
+<hr>
+</section>
+</section>
+<section id="what-is-the-elo-rating-system" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="what-is-the-elo-rating-system"><span class="header-section-number">2</span> 2. What is the Elo Rating System?</h2>
 <p>Think of Elo like a video game ranking system where everyone starts at the same level. When you win matches, you gain points; when you lose, you lose points. The cool part? <strong>Beating stronger players earns you more points than beating weaker ones.</strong></p>
-<section id="key-concepts" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="key-concepts"><span class="header-section-number">1.1</span> Key Concepts:</h3>
+<section id="key-concepts" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="key-concepts"><span class="header-section-number">2.1</span> Key Concepts:</h3>
 <ul>
-<li><strong>Everyone starts at 1300 points</strong></li>
+<li><strong>Everyone starts with an initial rating</strong> (assigned based on current ladder position)</li>
 <li><strong>Win = gain points, Lose = lose points</strong></li>
 <li><strong>Bigger upset = bigger point swing</strong></li>
-<li><strong>The system balances itself</strong> - total points stay constant</li>
+<li><strong>The system balances itself</strong> - ratings reflect true skill over time</li>
 </ul>
 </section>
 </section>
-<section id="how-does-it-work-simple-explanation" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="how-does-it-work-simple-explanation"><span class="header-section-number">2</span> 2. How Does It Work? (Simple Explanation)</h2>
-<section id="step-1-predict-the-outcome" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="step-1-predict-the-outcome"><span class="header-section-number">2.1</span> Step 1: Predict the outcome</h3>
+<section id="how-does-it-work-simple-explanation" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="how-does-it-work-simple-explanation"><span class="header-section-number">3</span> 3. How Does It Work? (Simple Explanation)</h2>
+<section id="step-1-predict-the-outcome" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="step-1-predict-the-outcome"><span class="header-section-number">3.1</span> Step 1: Predict the outcome</h3>
 <p>Before each match, we calculate who <em>should</em> win based on current ratings.</p>
 <p><strong>Example:</strong> Player A (1400 rating) vs Player B (1300 rating) - Player A is expected to win about 64% of the time - Player B is expected to win about 36% of the time</p>
 </section>
-<section id="step-2-compare-prediction-to-reality" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="step-2-compare-prediction-to-reality"><span class="header-section-number">2.2</span> Step 2: Compare prediction to reality</h3>
+<section id="step-2-compare-prediction-to-reality" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="step-2-compare-prediction-to-reality"><span class="header-section-number">3.2</span> Step 2: Compare prediction to reality</h3>
 <p>After the match, we see what actually happened and compare it to the prediction.</p>
 </section>
-<section id="step-3-adjust-ratings" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="step-3-adjust-ratings"><span class="header-section-number">2.3</span> Step 3: Adjust ratings</h3>
+<section id="step-3-adjust-ratings" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="step-3-adjust-ratings"><span class="header-section-number">3.3</span> Step 3: Adjust ratings</h3>
 <ul>
 <li><strong>If the favorite wins</strong>: Small point change (expected result)</li>
 <li><strong>If the underdog wins</strong>: Large point change (upset!)</li>
@@ -234,11 +275,11 @@ ul.task-list li input[type="checkbox"] {
 <p>Where: - <strong>K</strong> = How many points are at stake (32 for new players, 12-24 for experienced players) - <strong>Actual Result</strong> = 1 if you won, 0 if you lost - <strong>Expected Result</strong> = Probability you were supposed to win (0 to 1)</p>
 </section>
 </section>
-<section id="lets-see-it-in-action-vt-club-tennis-roster-simulation" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="lets-see-it-in-action-vt-club-tennis-roster-simulation"><span class="header-section-number">3</span> 3. Let’s See It In Action: VT Club Tennis Roster Simulation</h2>
+<section id="lets-see-it-in-action-vt-club-tennis-roster-simulation" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="lets-see-it-in-action-vt-club-tennis-roster-simulation"><span class="header-section-number">4</span> 4. Let’s See It In Action: VT Club Tennis Roster Simulation</h2>
 <p>We’ll apply the Elo rating system to the <strong>actual VT Club Tennis men’s roster</strong> and simulate a season of matches to see how rankings evolve.</p>
-<section id="initial-roster" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="initial-roster"><span class="header-section-number">3.1</span> Initial Roster</h3>
+<section id="initial-roster" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="initial-roster"><span class="header-section-number">4.1</span> Initial Roster</h3>
 <p>Here are the 40 members of the VT Club Tennis men’s team, starting with their current ladder rankings:</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -247,8 +288,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="match-1-alice-vs-bob-both-start-at-1300" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">3.2</span> Match 1: Alice vs Bob (Both start at 1300)</h3>
+<section id="match-1-alice-vs-bob-both-start-at-1300" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="match-1-alice-vs-bob-both-start-at-1300"><span class="header-section-number">4.2</span> Match 1: Alice vs Bob (Both start at 1300)</h3>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -348,8 +389,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <hr>
 </section>
-<section id="match-2-alice-vs-charlie-alice-now-favored" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">3.3</span> Match 2: Alice vs Charlie (Alice now favored)</h3>
+<section id="match-2-alice-vs-charlie-alice-now-favored" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="match-2-alice-vs-charlie-alice-now-favored"><span class="header-section-number">4.3</span> Match 2: Alice vs Charlie (Alice now favored)</h3>
 <p><strong>Before Match:</strong> - Alice: 1316 rating (favorite) - Charlie: 1300 rating (underdog) - Expected: Alice should win 52% of the time</p>
 <p><strong>Charlie wins! (UPSET)</strong></p>
 <p><strong>Calculation:</strong> - K-factor: 32 (both still new) - Charlie expected to win: 0.48 (48%) - Charlie actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.48) = <strong>+17 points</strong> (more than Match 1 because of the upset!)</p>
@@ -422,8 +463,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <hr>
 </section>
-<section id="simulating-a-season-of-matches" class="level3" data-number="3.4">
-<h3 data-number="3.4" class="anchored" data-anchor-id="simulating-a-season-of-matches"><span class="header-section-number">3.4</span> Simulating a Season of Matches</h3>
+<section id="simulating-a-season-of-matches" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="simulating-a-season-of-matches"><span class="header-section-number">4.4</span> Simulating a Season of Matches</h3>
 <p>Now let’s simulate <strong>200 random matches</strong> to see how the rankings evolve over time. The simulation assumes:</p>
 <ul>
 <li>Players closer in the ladder are more likely to play each other</li>
@@ -431,8 +472,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Every match updates both players’ ratings using the Elo formula</li>
 </ul>
 </section>
-<section id="final-rankings-after-200-matches" class="level3" data-number="3.5">
-<h3 data-number="3.5" class="anchored" data-anchor-id="final-rankings-after-200-matches"><span class="header-section-number">3.5</span> Final Rankings After 200 Matches</h3>
+<section id="final-rankings-after-200-matches" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="final-rankings-after-200-matches"><span class="header-section-number">4.5</span> Final Rankings After 200 Matches</h3>
 <p>Here’s how the ladder looks after the simulation. Notice how some players have moved significantly from their initial positions!</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -441,8 +482,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="rating-evolution-for-top-10-players" class="level3" data-number="3.6">
-<h3 data-number="3.6" class="anchored" data-anchor-id="rating-evolution-for-top-10-players"><span class="header-section-number">3.6</span> Rating Evolution for Top 10 Players</h3>
+<section id="rating-evolution-for-top-10-players" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="rating-evolution-for-top-10-players"><span class="header-section-number">4.6</span> Rating Evolution for Top 10 Players</h3>
 <p>This chart shows how the ratings of the top 10 players evolved throughout the 200-match season:</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -454,8 +495,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="match-activity-summary" class="level3" data-number="3.7">
-<h3 data-number="3.7" class="anchored" data-anchor-id="match-activity-summary"><span class="header-section-number">3.7</span> Match Activity Summary</h3>
+<section id="match-activity-summary" class="level3" data-number="4.7">
+<h3 data-number="4.7" class="anchored" data-anchor-id="match-activity-summary"><span class="header-section-number">4.7</span> Match Activity Summary</h3>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -580,8 +621,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="key-insights-from-the-simulation" class="level3" data-number="3.8">
-<h3 data-number="3.8" class="anchored" data-anchor-id="key-insights-from-the-simulation"><span class="header-section-number">3.8</span> Key Insights from the Simulation</h3>
+<section id="key-insights-from-the-simulation" class="level3" data-number="4.8">
+<h3 data-number="4.8" class="anchored" data-anchor-id="key-insights-from-the-simulation"><span class="header-section-number">4.8</span> Key Insights from the Simulation</h3>
 <ol type="1">
 <li><strong>Rankings Changed</strong>: The simulation shows natural movement in the ladder as players compete</li>
 <li><strong>Higher-Rated Players Win More</strong>: But upsets still happen, making the system dynamic</li>
@@ -695,7 +736,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/yaoyusi1109\.github\.io\/clubtennis2025\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

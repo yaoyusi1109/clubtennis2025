@@ -8,6 +8,10 @@ website:
     left:
       - href: main.qmd
         text: Home
+      - href: about.qmd
+        text: "About Us"
+      - href: project_log.qmd
+        text: "Project Log"
       - text: "Financial Analysis"
         menu:
           - href: financial_analysis.qmd
@@ -26,6 +30,8 @@ website:
 format:
   html:
     theme: cosmo
-    css: chat-widget.css
+    css: 
+      - chat-widget.css
+      - styles.css
     include-after-body: chat-widget.html
     toc: true

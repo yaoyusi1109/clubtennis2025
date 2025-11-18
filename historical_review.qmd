@@ -3,9 +3,17 @@ title: "Historical Review"
 format: html
 ---
 
+# Financial Transaction Ledger
+
+View and interact with the live financial data directly from our Google Sheets ledger:
+
+<iframe src="https://docs.google.com/spreadsheets/d/1QUmtSwyRjy1oQ6fqXGbksyNcvsLl_8wC0t6PSgTduJ8/edit?gid=0&rm=minimal&widget=true&headers=false" width="100%" height="600" frameborder="0"></iframe>
+
+---
+
 # Financial Transaction Analysis
 
-This section presents a dynamic analysis of the club's financial activities. The underlying data is sourced directly from a real-time ledger maintained in Google Sheets. The visualizations herein are programmatically generated and will automatically update to reflect any modifications to the source ledger, ensuring continuous and accurate financial reporting.
+This section presents a dynamic analysis of the club's financial activities. The underlying data is sourced directly from the real-time ledger shown above. The visualizations are programmatically generated and will automatically update to reflect any modifications to the source ledger, ensuring continuous and accurate financial reporting.
 
 ```{r transaction-analysis-from-google-sheet, message=FALSE, warning=FALSE}
 # Load necessary libraries

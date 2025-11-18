@@ -14,74 +14,18 @@
     "text": "Interactive Budget Tool\n#| '!! shinylive warning !!': |\n#|   shinylive does not work in self-contained HTML documents.\n#|   Please set `embed-resources: false` in your metadata.\n#| standalone: true\n#| viewerHeight: 800\n\n# Load libraries\nlibrary(shiny)\nlibrary(bslib)\nlibrary(dplyr)\nlibrary(lubridate)\n\n# VT colors\nvt_maroon = \"#861F41\"\nvt_orange = \"#E87722\"\n\n# Shiny: parameter-driven budget tool (VT theme)\nvt_theme = bs_theme(\n  version = 5,\n  bootswatch = \"flatly\",\n  primary = vt_maroon,\n  secondary = vt_orange\n)\n\nmonth_choices = setNames(1:12, month.name)\n\nfuture_months = function(start_month, horizon = c(\"Month\",\"Semester\",\"Academic Year\")) {\n  horizon = match.arg(horizon)\n  start = floor_date(start_month, \"month\")\n  if (horizon == \"Month\") return(start)\n  if (horizon == \"Semester\") {\n    m = month(start)\n    sem = if (m %in% 8:12) \"Fall\" else if (m %in% 1:5) \"Spring\" else \"Summer\"\n    span = if (sem == \"Fall\") 0:(12 - m) else if (sem == \"Spring\") 0:(5 - m) else 0:(7 - m)\n    return(start %m+% months(span))\n  }\n  y0 = year(start) - if (month(start) &lt; 8) 1 else 0\n  seq(ymd(paste0(y0, \"-08-01\")), ymd(paste0(y0 + 1, \"-07-01\")), by = \"1 month\")\n}\n\nui = fluidPage(\n  theme = vt_theme,\n  titlePanel(\"VT Club Tennis Budget What-If\"),\n  sidebarLayout(\n    sidebarPanel(\n      h4(\"Income assumptions\"),\n      numericInput(\"members\", \"Members\", value = 30, min = 0, step = 1),\n      numericInput(\"dues\", \"Dues per member (each selected month) $\", value = 150, min = 0, step = 10),\n      checkboxGroupInput(\"dues_months\", \"Months dues are collected\", choices = month_choices, selected = c(9, 1)),\n      numericInput(\"other_income\", \"Other income per month $\", value = 0, min = 0, step = 50),\n      hr(),\n      h4(\"Expense assumptions\"),\n      checkboxInput(\"buy_uniforms\", \"Uniform purchase in start month\", value = TRUE),\n      numericInput(\"uniform_per_member\", \"Uniform cost per member $\", value = 75, min = 0, step = 5),\n      numericInput(\"n_trips\", \"Trips in horizon\", value = 2, min = 0, step = 1),\n      numericInput(\"trip_cost\", \"Avg cost per trip $\", value = 2500, min = 0, step = 100),\n      numericInput(\"court_hours\", \"Indoor court hours per month\", value = 0, min = 0, step = 1),\n      numericInput(\"court_rate\",  \"Hourly court rate $\", value = 50, min = 0, step = 5),\n      numericInput(\"n_tourneys\", \"Tournaments in horizon\", value = 2, min = 0, step = 1),\n      numericInput(\"fee_per_tourney\", \"Tournament fee $\", value = 300, min = 0, step = 10),\n      numericInput(\"admin_other\", \"Other fixed monthly expenses $\", value = 0, min = 0, step = 25),\n      hr(),\n      h4(\"Projection settings\"),\n      radioButtons(\"horizon\", \"Horizon\", choices = c(\"Month\",\"Semester\",\"Academic Year\"), inline = TRUE),\n      dateInput(\"start\", \"Start month\", value = Sys.Date()),\n      radioButtons(\"spread_mode\", \"One-time costs\", choices = c(\"Now\",\"Evenly\"), selected = \"Evenly\", inline = TRUE)\n    ),\n    mainPanel(\n      h4(textOutput(\"proj_label\")),\n      verbatimTextOutput(\"proj_breakdown\"),\n      plotOutput(\"barIE\", height = 260)\n    )\n  )\n)\n\nserver = function(input, output, session) {\n  months_vec = reactive(future_months(input$start, input$horizon))\n  \n  horizon_income = reactive({\n    mons = month(months_vec())\n    dues_mask = mons %in% as.integer(input$dues_months)\n    (input$members * input$dues) * as.numeric(dues_mask) + input$other_income\n  })\n  \n  horizon_expense = reactive({\n    H = length(months_vec())\n    exp_vec = rep(0, H)\n    \n    uniforms_total = if (isTRUE(input$buy_uniforms)) input$members * input$uniform_per_member else 0\n    if (input$spread_mode == \"Now\") exp_vec[1] = exp_vec[1] + uniforms_total\n    else exp_vec = exp_vec + uniforms_total / max(1, H)\n    \n    trips_total = input$n_trips * input$trip_cost\n    exp_vec = exp_vec + trips_total / max(1, if (input$spread_mode == \"Now\") 1 else H)\n    \n    exp_vec = exp_vec + input$court_hours * input$court_rate\n    \n    tour_total = input$n_tourneys * input$fee_per_tourney\n    exp_vec = exp_vec + tour_total / max(1, if (input$spread_mode == \"Now\") 1 else H)\n    \n    exp_vec = exp_vec + input$admin_other\n    \n    exp_vec\n  })\n  \n  output$proj_label = renderText({\n    paste0(input$horizon, \" projection starting \", format(months_vec()[1], \"%b %Y\"))\n  })\n  \n  output$proj_breakdown = renderText({\n    inc = horizon_income()\n    exp = horizon_expense()\n    net = inc - exp\n    paste(\n      sprintf(\"Months: %s\", paste(format(months_vec(), \"%b\"), collapse = \" \")),\n      sprintf(\"Total income:  $%s\", format(round(sum(inc)), big.mark = \",\")),\n      sprintf(\"Total expense: $%s\", format(round(sum(exp)), big.mark = \",\")),\n      sprintf(\"Total net:     $%s\", format(round(sum(net)), big.mark = \",\")),\n      sep = \"\\n\"\n    )\n  })\n  \n  output$barIE = renderPlot({\n    ie = data.frame(\n      Type = c(\"Income\",\"Expense\"),\n      Amount = c(sum(horizon_income()), sum(horizon_expense()))\n    )\n    par(mar = c(4,4,2,1))\n    barplot(ie$Amount, names.arg = ie$Type, ylab = \"$\", col = c(vt_orange, vt_maroon))\n  })\n}\n\nshinyApp(ui, server)\n\n\n\n\n\n\nHow to Use\n\n\n\nThe interactive tool allows you to:\n\nIncome Parameters: Set member counts, dues amounts, and specify which months dues are collected\nExpense Planning: Model uniform purchases, tournament trips, court rentals, tournament fees, and other administrative costs\nTime Horizons: Project budgets by month, semester, or full academic year\nCost Allocation: Choose to apply one-time costs immediately or spread them evenly across the horizon\n\nTry different scenarios to find the optimal budget plan for your season!"
   },
   {
-    "objectID": "rank_ladder.html",
-    "href": "rank_ladder.html",
-    "title": "VT Club Tennis Elo Ranking System",
-    "section": "",
-    "text": "Think of Elo like a video game ranking system where everyone starts at the same level. When you win matches, you gain points; when you lose, you lose points. The cool part? Beating stronger players earns you more points than beating weaker ones.\n\n\n\nEveryone starts at 1300 points\nWin = gain points, Lose = lose points\nBigger upset = bigger point swing\nThe system balances itself - total points stay constant"
-  },
-  {
-    "objectID": "rank_ladder.html#what-is-the-elo-rating-system",
-    "href": "rank_ladder.html#what-is-the-elo-rating-system",
-    "title": "VT Club Tennis Elo Ranking System",
-    "section": "",
-    "text": "Think of Elo like a video game ranking system where everyone starts at the same level. When you win matches, you gain points; when you lose, you lose points. The cool part? Beating stronger players earns you more points than beating weaker ones.\n\n\n\nEveryone starts at 1300 points\nWin = gain points, Lose = lose points\nBigger upset = bigger point swing\nThe system balances itself - total points stay constant"
-  },
-  {
-    "objectID": "rank_ladder.html#how-does-it-work-simple-explanation",
-    "href": "rank_ladder.html#how-does-it-work-simple-explanation",
-    "title": "VT Club Tennis Elo Ranking System",
-    "section": "2 2. How Does It Work? (Simple Explanation)",
-    "text": "2 2. How Does It Work? (Simple Explanation)\n\n2.1 Step 1: Predict the outcome\nBefore each match, we calculate who should win based on current ratings.\nExample: Player A (1400 rating) vs Player B (1300 rating) - Player A is expected to win about 64% of the time - Player B is expected to win about 36% of the time\n\n\n2.2 Step 2: Compare prediction to reality\nAfter the match, we see what actually happened and compare it to the prediction.\n\n\n2.3 Step 3: Adjust ratings\n\nIf the favorite wins: Small point change (expected result)\nIf the underdog wins: Large point change (upset!)\n\nThe formula is simple:\nNew Rating = Old Rating + K × (Actual Result - Expected Result)\nWhere: - K = How many points are at stake (32 for new players, 12-24 for experienced players) - Actual Result = 1 if you won, 0 if you lost - Expected Result = Probability you were supposed to win (0 to 1)"
-  },
-  {
-    "objectID": "rank_ladder.html#lets-see-it-in-action-vt-club-tennis-roster-simulation",
-    "href": "rank_ladder.html#lets-see-it-in-action-vt-club-tennis-roster-simulation",
-    "title": "VT Club Tennis Elo Ranking System",
-    "section": "3 3. Let’s See It In Action: VT Club Tennis Roster Simulation",
-    "text": "3 3. Let’s See It In Action: VT Club Tennis Roster Simulation\nWe’ll apply the Elo rating system to the actual VT Club Tennis men’s roster and simulate a season of matches to see how rankings evolve.\n\n3.1 Initial Roster\nHere are the 40 members of the VT Club Tennis men’s team, starting with their current ladder rankings:\n\n\n\n\n\n\n\n\n3.2 Match 1: Alice vs Bob (Both start at 1300)\n\n\n\nStarting Ratings - Everyone at 1300\n\n\nname\nrating\n\n\n\n\nAlice\n1300\n\n\nBob\n1300\n\n\nCharlie\n1300\n\n\n\n\n\nBefore Match: - Alice: 1300 rating - Bob: 1300 rating - Expected Result: 50-50 (both equal)\nAlice wins!\nCalculation: - K-factor: 32 (both are new players) - Alice expected to win: 0.50 (50%) - Alice actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.50) = +16 points\n\n\n\nMatch 1 Results\n\n\nname\nold_rating\nexpected\nactual\nchange\nnew_rating\n\n\n\n\nAlice\n1300\n50%\nWon\n+16\n1316\n\n\nBob\n1300\n50%\nLost\n-16\n1284\n\n\n\n\n\nAfter Match 1:\n\n\n\nCurrent Standings After Match 1\n\n\nrank\nname\nrating\n\n\n\n\n1\nAlice\n1316\n\n\n2\nCharlie\n1300\n\n\n3\nBob\n1284\n\n\n\n\n\n\n\n\n3.3 Match 2: Alice vs Charlie (Alice now favored)\nBefore Match: - Alice: 1316 rating (favorite) - Charlie: 1300 rating (underdog) - Expected: Alice should win 52% of the time\nCharlie wins! (UPSET)\nCalculation: - K-factor: 32 (both still new) - Charlie expected to win: 0.48 (48%) - Charlie actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.48) = +17 points (more than Match 1 because of the upset!)\n\n\n\nMatch 2 Results - Upset!\n\n\nname\nold_rating\nexpected\nactual\nchange\nnew_rating\n\n\n\n\nCharlie\n1300\n48%\nWon\n+16.7\n1316.7\n\n\nAlice\n1316\n52%\nLost\n-16.7\n1299.3\n\n\n\n\n\nAfter Match 2:\n\n\n\nCurrent Standings After Match 2\n\n\nrank\nname\nrating\n\n\n\n\n1\nCharlie\n1316.7\n\n\n2\nAlice\n1299.3\n\n\n3\nBob\n1284.0\n\n\n\n\n\n\n\n\n3.4 Simulating a Season of Matches\nNow let’s simulate 200 random matches to see how the rankings evolve over time. The simulation assumes:\n\nPlayers closer in the ladder are more likely to play each other\nHigher-ranked players win more often, but upsets happen\nEvery match updates both players’ ratings using the Elo formula\n\n\n\n3.5 Final Rankings After 200 Matches\nHere’s how the ladder looks after the simulation. Notice how some players have moved significantly from their initial positions!\n\n\n\n\n\n\n\n\n3.6 Rating Evolution for Top 10 Players\nThis chart shows how the ratings of the top 10 players evolved throughout the 200-match season:\n\n\n\n\n\n\n\n\n\n\n\n3.7 Match Activity Summary\n\n\n\nTop 15 Most Active Players (by total matches played)\n\n\nPlayer\nTotal Matches\nWins\nLosses\nWin Rate (%)\n\n\n\n\nCarson Le\n37\n17\n20\n45.9\n\n\nNico Bermudez\n26\n11\n15\n42.3\n\n\nDiego Beltfort\n24\n14\n10\n58.3\n\n\nMitchell Freeman\n23\n13\n10\n56.5\n\n\nAustin Victory\n23\n9\n14\n39.1\n\n\nReed Kelly\n23\n14\n9\n60.9\n\n\nLuke Howell\n20\n12\n8\n60.0\n\n\nDavid Cho\n20\n13\n7\n65.0\n\n\nVaughn Harrington\n18\n9\n9\n50.0\n\n\nAndrew Kim\n18\n7\n11\n38.9\n\n\nRodrigo Lopez\n15\n7\n8\n46.7\n\n\nSarthak Vishwakarma\n14\n14\n0\n100.0\n\n\nEric Yoo\n12\n5\n7\n41.7\n\n\nNicola Cattaneo\n11\n9\n2\n81.8\n\n\nHarisharan Baskaran\n11\n6\n5\n54.5\n\n\n\n\n\n\n\n3.8 Key Insights from the Simulation\n\nRankings Changed: The simulation shows natural movement in the ladder as players compete\nHigher-Rated Players Win More: But upsets still happen, making the system dynamic\nActivity Matters: Players who played more matches had more opportunities to climb or fall\nElo is Self-Correcting: Over time, ratings stabilize to reflect true skill levels"
-  },
-  {
-    "objectID": "financial_analysis.html",
-    "href": "financial_analysis.html",
-    "title": "Financial Analysis",
-    "section": "",
-    "text": "This section focuses on strengthening the club’s financial health through data-driven strategies."
-  },
-  {
-    "objectID": "financial_analysis.html#a.-historical-review",
-    "href": "financial_analysis.html#a.-historical-review",
-    "title": "Financial Analysis",
-    "section": "A. Historical Review",
-    "text": "A. Historical Review\n\nObjective: Analyze financial data from the last 2–3 years to understand revenue streams and spending habits.\nData Sources: Dues, parent contributions, Giving Day revenue, and historical costs for travel, gear, and other expenses.\nGoal: Identify spending patterns, highlight inefficiencies, and establish a financial baseline."
-  },
-  {
-    "objectID": "financial_analysis.html#b.-fundraising-strategy",
-    "href": "financial_analysis.html#b.-fundraising-strategy",
-    "title": "Financial Analysis",
-    "section": "B. Fundraising Strategy",
-    "text": "B. Fundraising Strategy\n\nObjective: Develop and execute a targeted fundraising plan to maximize revenue.\nKey Initiatives:\n\nGiving Day (Feb 19):\n\nLaunch dedicated campaigns for parents and players.\nActively monitor hourly leaderboards to capture prize bonuses.\n\nSecondary Streams:\n\nExplore opportunities for selling merchandise.\nOrganize tennis clinics for the community.\nDevelop an alumni outreach and donation program."
-  },
-  {
-    "objectID": "financial_analysis.html#c.-budget-modeling",
-    "href": "financial_analysis.html#c.-budget-modeling",
-    "title": "Financial Analysis",
-    "section": "C. Budget Modeling",
-    "text": "C. Budget Modeling\n\nObjective: Create a dynamic and user-friendly tool for annual budget management.\nImplementation:\n\nTool: Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.\nFeatures:\n\nProvide scenarios for different season types (e.g., travel-heavy vs. local-heavy).\nAutomate recommendations for allocating funds to entry fees, travel, and equipment."
-  },
-  {
-    "objectID": "main.html",
-    "href": "main.html",
-    "title": "VT Club Tennis Project",
-    "section": "",
-    "text": "Welcome! This project has two primary goals:\n\nFinancial Analysis: To strengthen the club’s financial health through data-driven strategies.\nPerformance Analytics: To improve player and team performance using advanced analytics.\n\nYou can explore each of these sections through the navigation bar at the top of the page."
+    "objectID": "about.html#out-client",
+    "href": "about.html#out-client",
+    "title": "VT Club Tennis Analysis",
+    "section": "Out Client",
+    "text": "Out Client\nVirginia Tech Club Tennis offers a competitive yet fun atmosphere for athletes looking to continue playing tennis in college. Tryouts are held every Spring and Fall semester. We look for players who can be competitive while still having a fun and inclusive time for everyone.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGo Hokies! 🎾"
   },
   {
     "objectID": "historical_review.html",
     "href": "historical_review.html",
     "title": "Historical Review",
     "section": "",
-    "text": "This section presents a dynamic analysis of the club’s financial activities. The underlying data is sourced directly from a real-time ledger maintained in Google Sheets. The visualizations herein are programmatically generated and will automatically update to reflect any modifications to the source ledger, ensuring continuous and accurate financial reporting.\n\n# Load necessary libraries\nlibrary(googlesheets4)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(lubridate)\nlibrary(scales)\nlibrary(stringr)\n\n# --- Authenticate and Load Data from Google Sheets ---\n# This allows the script to read a public sheet without requiring a login each time.\ngs4_deauth()\n\n# The URL of your Google Sheet\nsheet_url &lt;- \"https://docs.google.com/spreadsheets/d/1QUmtSwyRjy1oQ6fqXGbksyNcvsLl_8wC0t6PSgTduJ8/edit?usp=sharing\" \n\n# Read the data from the first sheet of your Google Sheet\nraw_data &lt;- read_sheet(sheet_url, sheet = 1)\n\n# Standardize column names for easier use\ncolnames(raw_data) &lt;- make.names(colnames(raw_data), unique = TRUE)\n\ncleaned_data &lt;- raw_data %&gt;%\n  # Ensure Date column is in Date format\n  mutate(Date = as.Date(Date)) %&gt;%\n  # Rename columns for clarity. The data is already clean.\n  rename(Amount_Num = Amount, Total_Num = Total) %&gt;%\n  # Add a transaction type column\n  mutate(Type = ifelse(Amount_Num &gt;= 0, \"Income\", \"Spending\")) %&gt;%\n  # Filter out any rows where key data is missing\n  filter(!is.na(Date) & !is.na(Amount_Num))\n\n# Filter out the beginning balance for the income/spending chart\ntransactions &lt;- cleaned_data %&gt;%\n  filter(Vendor != \"Beginning balance\")\n\n# --- Visualization 1: Balance Over Time ---\nggplot(cleaned_data, aes(x = Date, y = Total_Num)) +\n  geom_line(color = \"#0073C2\", size = 1) +\n  geom_point(color = \"#0073C2\", size = 3) +\n  scale_y_continuous(labels = dollar_format()) +\n  labs(\n    title = \"Club Balance Over Time (2024-2025)\",\n    x = \"Date\",\n    y = \"Total Balance\"\n  ) +\n  theme_minimal(base_size = 14)\n\n\n\n\n\n\n\n# --- Visualization 2: Income vs. Spending ---\nggplot(transactions, aes(x = Date, y = Amount_Num, fill = Type)) +\n  geom_col(position = \"identity\") +\n  scale_fill_manual(values = c(\"Income\" = \"#4CAF50\", \"Spending\" = \"#F44336\")) +\n  scale_y_continuous(labels = dollar_format()) +\n  geom_hline(yintercept = 0, linetype = \"dashed\") +\n  labs(\n    title = \"Income and Spending Transactions\",\n    x = \"Date\",\n    y = \"Amount\"\n  ) +\n  theme_minimal(base_size = 14) +\n  theme(legend.title = element_blank())\n\n\n\n\n\n\n\n# --- Spending Pie Chart ---\n# Step 1: Isolate and categorize spending data.\nspending_categorized &lt;- cleaned_data %&gt;%\n  filter(Amount_Num &lt; 0) %&gt;%\n  mutate(\n    Category = case_when(\n      str_detect(Description, regex(\"trip|rooms|Inn|Suites|van|Hotel\", ignore_case = TRUE)) ~ \"Travel & Lodging\",\n      str_detect(Description, regex(\"Balls|Uniforms|Merch\", ignore_case = TRUE))           ~ \"Equipment & Gear\",\n      str_detect(Description, regex(\"Bagels|food\", ignore_case = TRUE))                    ~ \"Food & Refreshments\",\n      str_detect(Description, regex(\"Entry Fee|registration|Championship\", ignore_case = TRUE)) ~ \"Tournament & Entry Fees\",\n      str_detect(Description, regex(\"Certs|CPRO\", ignore_case = TRUE))                      ~ \"Training & Certification\",\n      str_detect(Description, regex(\"Indoor Courts\", ignore_case = TRUE))                  ~ \"Facility Rental\",\n      TRUE                                                                                 ~ \"Miscellaneous\"\n    ),\n    Spending = abs(Amount_Num)\n  )\n\n# Step 2: Summarize data for the pie chart.\nspending_summary &lt;- spending_categorized %&gt;%\n  group_by(Category) %&gt;%\n  summarise(TotalSpending = sum(Spending)) %&gt;%\n  mutate(Percentage = TotalSpending / sum(TotalSpending) * 100)\n\n# Step 3: Create the pie chart.\nggplot(spending_summary, aes(x = \"\", y = TotalSpending, fill = Category)) +\n  geom_bar(stat = \"identity\", width = 1) +\n  coord_polar(\"y\", start = 0) +\n  geom_text(aes(label = paste0(round(Percentage), \"%\\n\", \"(\", dollar(TotalSpending), \")\")), \n            position = position_stack(vjust = 0.5), \n            color = \"white\", \n            size = 3.5) +\n  labs(\n    title = \"Spending Distribution by Category\",\n    fill = \"Spending Category\"\n  ) +\n  theme_void() +\n  theme(plot.title = element_text(hjust = 0.5, size = 16))\n\n\n\n\n\n\n\n\n\nlibrary(readxl); library(dplyr); library(ggplot2); library(scales); library(googlesheets4)\n\n# TODO: swap back to read_sheet() when Sheet link is fixed\n# Data = read_sheet(sheet_id)\n\nData = read_excel(\"data/TennisClubFinancialData.xlsx\") %&gt;%\n  mutate(\n    Date = as.Date(Date),\n    YearMonth = format(Date, \"%Y-%m\")\n  )\n\nFinancialData = Data %&gt;%\n  mutate(\n    Date = as.Date(Date),\n    Year = format(Date, \"%Y\"),\n    YearMonth = format(Date, \"%Y-%m\")\n  )\n\nExpensesMonthly = FinancialData %&gt;%\n  filter(Flow == \"Expense\") %&gt;%\n  group_by(YearMonth, Category) %&gt;%\n  summarise(Spend = -sum(Amount, na.rm = TRUE), .groups=\"drop\") %&gt;%\n  mutate(YearMonth = factor(YearMonth, levels = sort(unique(YearMonth))))\n\nColorPalette = c(\n  \"Travel\"                 = \"#F77F00\",\n  \"Tournament Fees\"        = \"#00B4D8\",\n  \"Facility Rentals\"       = \"#43AA8B\",\n  \"Equipment & Supplies\"   = \"#577590\",\n  \"Uniforms & Merchandise\" = \"#9D4EDD\",\n  \"Miscellaneous/Admin\"    = \"#E5E5E5\"\n)\nbg = \"#861F41\"; fg = \"#FFFFFF\"; grid = \"#E0CFCF\"\n\nggplot(ExpensesMonthly, aes(YearMonth, Spend, fill = Category)) +\n  geom_col(width = 0.85) +\n  labs(title = \"Monthly Expense by Category\",\n       subtitle = \"Aug 2024 – Present\",\n       x = \"Month\", y = \"Spend (USD)\", fill = \"\",\n       caption = \"Source: VT Club Tennis\") +\n  scale_y_continuous(labels = dollar_format(accuracy = 1),\n                     expand = expansion(mult = c(0,.05))) +\n  scale_fill_manual(values = ColorPalette) +\n  theme_minimal(base_size = 13) +\n  theme(\n    plot.background  = element_rect(fill = bg, color = bg),\n    panel.background = element_rect(fill = bg, color = bg),\n    panel.grid.major = element_line(color = grid, linewidth = 0.25),\n    panel.grid.minor = element_blank(),\n    axis.text.x      = element_text(angle = 60, hjust = 1, color = fg),\n    axis.text.y      = element_text(color = fg),\n    axis.title.x     = element_text(color = fg, face = \"bold\"),\n    axis.title.y     = element_text(color = fg, face = \"bold\"),\n    plot.title       = element_text(hjust = 0.5, color = fg, face = \"bold\"),\n    plot.subtitle    = element_text(hjust = 0.5, color = fg),\n    plot.caption     = element_text(color = fg),\n    legend.background= element_rect(fill = bg, color = bg),\n    legend.key       = element_rect(fill = bg, color = bg),\n    legend.text      = element_text(color = fg)\n  )"
+    "text": "View and interact with the live financial data directly from our Google Sheets ledger:"
   },
   {
     "objectID": "historical_review.html#data-preparation",
@@ -138,6 +82,251 @@
     "title": "Historical Review",
     "section": "Key Insights",
     "text": "Key Insights\nBased on the historical data and predictive models:\n\nSeasonal Patterns: Financial activity shows clear seasonal patterns aligned with the academic calendar\nTop Expense Categories: The three largest expense categories account for the majority of spending\nPrediction Accuracy: The linear model with seasonal components significantly outperforms naive and mean-based predictions\nBudget Planning: Historical trends provide a solid foundation for future budget forecasting"
+  },
+  {
+    "objectID": "main.html",
+    "href": "main.html",
+    "title": "VT Club Tennis Project",
+    "section": "",
+    "text": "Welcome! This project has two primary goals:\n\nFinancial Analysis: To strengthen the club’s financial health through data-driven strategies.\nPerformance Analytics: To improve player and team performance using advanced analytics.\n\nYou can explore each of these sections through the navigation bar at the top of the page."
+  },
+  {
+    "objectID": "main.html#project-overview",
+    "href": "main.html#project-overview",
+    "title": "VT Club Tennis Project",
+    "section": "",
+    "text": "Welcome! This project has two primary goals:\n\nFinancial Analysis: To strengthen the club’s financial health through data-driven strategies.\nPerformance Analytics: To improve player and team performance using advanced analytics.\n\nYou can explore each of these sections through the navigation bar at the top of the page."
+  },
+  {
+    "objectID": "project_log.html",
+    "href": "project_log.html",
+    "title": "Project Log",
+    "section": "",
+    "text": "This page documents our ongoing collaboration with VT Club Tennis, tracking meetings, decisions, and project milestones."
+  },
+  {
+    "objectID": "project_log.html#project-timeline-visualization",
+    "href": "project_log.html#project-timeline-visualization",
+    "title": "Project Log",
+    "section": "Project Timeline Visualization",
+    "text": "Project Timeline Visualization\n\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead."
+  },
+  {
+    "objectID": "project_log.html#progress-overview",
+    "href": "project_log.html#progress-overview",
+    "title": "Project Log",
+    "section": "Progress Overview",
+    "text": "Progress Overview"
+  },
+  {
+    "objectID": "project_log.html#meeting-4---date",
+    "href": "project_log.html#meeting-4---date",
+    "title": "Project Log",
+    "section": "Meeting 4 - [Date]",
+    "text": "Meeting 4 - [Date]"
+  },
+  {
+    "objectID": "project_log.html#attendees",
+    "href": "project_log.html#attendees",
+    "title": "Project Log",
+    "section": "### Attendees",
+    "text": "### Attendees"
+  },
+  {
+    "objectID": "project_log.html#topics-discussed",
+    "href": "project_log.html#topics-discussed",
+    "title": "Project Log",
+    "section": "### Topics Discussed",
+    "text": "### Topics Discussed"
+  },
+  {
+    "objectID": "project_log.html#decisions-made",
+    "href": "project_log.html#decisions-made",
+    "title": "Project Log",
+    "section": "### Decisions Made",
+    "text": "### Decisions Made\n\nAction Items\n\n[ ]"
+  },
+  {
+    "objectID": "project_log.html#next-steps",
+    "href": "project_log.html#next-steps",
+    "title": "Project Log",
+    "section": "### Next Steps",
+    "text": "### Next Steps"
+  },
+  {
+    "objectID": "project_log.html#meeting-3---date",
+    "href": "project_log.html#meeting-3---date",
+    "title": "Project Log",
+    "section": "Meeting 3 - [Date]",
+    "text": "Meeting 3 - [Date]"
+  },
+  {
+    "objectID": "project_log.html#attendees-1",
+    "href": "project_log.html#attendees-1",
+    "title": "Project Log",
+    "section": "### Attendees",
+    "text": "### Attendees"
+  },
+  {
+    "objectID": "project_log.html#topics-discussed-1",
+    "href": "project_log.html#topics-discussed-1",
+    "title": "Project Log",
+    "section": "### Topics Discussed",
+    "text": "### Topics Discussed"
+  },
+  {
+    "objectID": "project_log.html#decisions-made-1",
+    "href": "project_log.html#decisions-made-1",
+    "title": "Project Log",
+    "section": "### Decisions Made",
+    "text": "### Decisions Made\n\nAction Items\n\n[ ]"
+  },
+  {
+    "objectID": "project_log.html#next-steps-1",
+    "href": "project_log.html#next-steps-1",
+    "title": "Project Log",
+    "section": "### Next Steps",
+    "text": "### Next Steps"
+  },
+  {
+    "objectID": "project_log.html#meeting-2---date",
+    "href": "project_log.html#meeting-2---date",
+    "title": "Project Log",
+    "section": "Meeting 2 - [Date]",
+    "text": "Meeting 2 - [Date]"
+  },
+  {
+    "objectID": "project_log.html#attendees-2",
+    "href": "project_log.html#attendees-2",
+    "title": "Project Log",
+    "section": "### Attendees",
+    "text": "### Attendees"
+  },
+  {
+    "objectID": "project_log.html#topics-discussed-2",
+    "href": "project_log.html#topics-discussed-2",
+    "title": "Project Log",
+    "section": "### Topics Discussed",
+    "text": "### Topics Discussed"
+  },
+  {
+    "objectID": "project_log.html#decisions-made-2",
+    "href": "project_log.html#decisions-made-2",
+    "title": "Project Log",
+    "section": "### Decisions Made",
+    "text": "### Decisions Made\n\nAction Items\n\n[ ]"
+  },
+  {
+    "objectID": "project_log.html#next-steps-2",
+    "href": "project_log.html#next-steps-2",
+    "title": "Project Log",
+    "section": "### Next Steps",
+    "text": "### Next Steps"
+  },
+  {
+    "objectID": "project_log.html#meeting-1---date",
+    "href": "project_log.html#meeting-1---date",
+    "title": "Project Log",
+    "section": "Meeting 1 - [Date]",
+    "text": "Meeting 1 - [Date]"
+  },
+  {
+    "objectID": "project_log.html#attendees-3",
+    "href": "project_log.html#attendees-3",
+    "title": "Project Log",
+    "section": "### Attendees",
+    "text": "### Attendees"
+  },
+  {
+    "objectID": "project_log.html#topics-discussed-3",
+    "href": "project_log.html#topics-discussed-3",
+    "title": "Project Log",
+    "section": "### Topics Discussed",
+    "text": "### Topics Discussed"
+  },
+  {
+    "objectID": "project_log.html#decisions-made-3",
+    "href": "project_log.html#decisions-made-3",
+    "title": "Project Log",
+    "section": "### Decisions Made",
+    "text": "### Decisions Made\n\nAction Items\n\n[ ]"
+  },
+  {
+    "objectID": "project_log.html#next-steps-3",
+    "href": "project_log.html#next-steps-3",
+    "title": "Project Log",
+    "section": "### Next Steps",
+    "text": "### Next Steps"
+  },
+  {
+    "objectID": "project_log.html#key-milestones-summary",
+    "href": "project_log.html#key-milestones-summary",
+    "title": "Project Log",
+    "section": "Key Milestones Summary",
+    "text": "Key Milestones Summary\n\n\n\n\n\nDate\nMilestone\nStatus\n\n\n\n\nSept 1\nInitial Client Meeting\n✅ Completed\n\n\nSept 15\nRequirements Gathering Complete\n✅ Completed\n\n\nOct 1\nDevelopment Phase Begins\n🔄 In Progress\n\n\nNov 1\nTesting Phase Begins\n⏳ Upcoming\n\n\nNov 25\nClient Review & Feedback\n⏳ Upcoming\n\n\nDec 10\nFinal Delivery\n⏳ Upcoming\n\n\n\n\n\n\nLast Updated: November 18, 2025"
+  },
+  {
+    "objectID": "financial_analysis.html",
+    "href": "financial_analysis.html",
+    "title": "Financial Analysis",
+    "section": "",
+    "text": "This section focuses on strengthening the club’s financial health through data-driven strategies."
+  },
+  {
+    "objectID": "financial_analysis.html#a.-historical-review",
+    "href": "financial_analysis.html#a.-historical-review",
+    "title": "Financial Analysis",
+    "section": "A. Historical Review",
+    "text": "A. Historical Review\n\nObjective: Analyze financial data from the last 2–3 years to understand revenue streams and spending habits.\nData Sources: Dues, parent contributions, Giving Day revenue, and historical costs for travel, gear, and other expenses.\nGoal: Identify spending patterns, highlight inefficiencies, and establish a financial baseline."
+  },
+  {
+    "objectID": "financial_analysis.html#b.-fundraising-strategy",
+    "href": "financial_analysis.html#b.-fundraising-strategy",
+    "title": "Financial Analysis",
+    "section": "B. Fundraising Strategy",
+    "text": "B. Fundraising Strategy\n\nObjective: Develop and execute a targeted fundraising plan to maximize revenue.\nKey Initiatives:\n\nGiving Day (Feb 19):\n\nLaunch dedicated campaigns for parents and players.\nActively monitor hourly leaderboards to capture prize bonuses.\n\nSecondary Streams:\n\nExplore opportunities for selling merchandise.\nOrganize tennis clinics for the community.\nDevelop an alumni outreach and donation program."
+  },
+  {
+    "objectID": "financial_analysis.html#c.-budget-modeling",
+    "href": "financial_analysis.html#c.-budget-modeling",
+    "title": "Financial Analysis",
+    "section": "C. Budget Modeling",
+    "text": "C. Budget Modeling\n\nObjective: Create a dynamic and user-friendly tool for annual budget management.\nImplementation:\n\nTool: Develop a flexible budget model using either Google Sheets or an R Shiny dashboard.\nFeatures:\n\nProvide scenarios for different season types (e.g., travel-heavy vs. local-heavy).\nAutomate recommendations for allocating funds to entry fees, travel, and equipment."
+  },
+  {
+    "objectID": "rank_ladder.html",
+    "href": "rank_ladder.html",
+    "title": "VT Club Tennis Elo Ranking System",
+    "section": "",
+    "text": "VT Club Tennis previously used a traditional challenge ladder system with the following rules:\nChallenge Rules (Legacy System):\n\nEveryone on the team must challenge someone at least once a semester (except for the #1 ranked player)\nIf you’re ranked inside the top 10, you can challenge someone a maximum of 3 spots above you\nIf you’re ranked outside the top 10, you can challenge someone a maximum of 5 spots above you (but cannot challenge past #7)\nIf you’re ranked outside the top 20, you can challenge someone a maximum of 7 spots above you (but cannot challenge past #16)\nAll challenge matches are best of 3 sets\nYou may only challenge the same player once a month\nInjured players are not eligible to compete in challenge matches\nPlease challenge other members via email, copying vtmensclubtennis@gmail.com\nPlayers have 48 hours to respond to a challenge\nThe challenge match must be played within 7 days after acceptance\n\n\n\n\nWhile the challenge ladder system served us well, we’re transitioning to an Elo rating system to create a more quantitative and linear ranking approach. Here’s why:\nProblems with the Traditional System: - Arbitrary restrictions: Different challenge limits for different ranking tiers created complexity - Limited mobility: Top players were harder to challenge, creating ranking stagnation - Binary outcomes: Win/loss only, no consideration of opponent strength - Administrative burden: Tracking challenge eligibility, timing, and violations required constant oversight\nBenefits of Elo: - ✅ Linear and quantitative: Everyone has a numerical rating that changes predictably - ✅ No artificial barriers: Any player can play anyone, anytime - ✅ Rewards skill-appropriate competition: Beating stronger players = bigger rating gains - ✅ Self-regulating: No need to track who can challenge whom - ✅ Transparent: Everyone can see exactly how ratings change after each match - ✅ Fairer assessment: Your rating reflects your true skill level over time"
+  },
+  {
+    "objectID": "rank_ladder.html#from-challenge-ladder-to-elo-a-more-quantitative-approach",
+    "href": "rank_ladder.html#from-challenge-ladder-to-elo-a-more-quantitative-approach",
+    "title": "VT Club Tennis Elo Ranking System",
+    "section": "",
+    "text": "VT Club Tennis previously used a traditional challenge ladder system with the following rules:\nChallenge Rules (Legacy System):\n\nEveryone on the team must challenge someone at least once a semester (except for the #1 ranked player)\nIf you’re ranked inside the top 10, you can challenge someone a maximum of 3 spots above you\nIf you’re ranked outside the top 10, you can challenge someone a maximum of 5 spots above you (but cannot challenge past #7)\nIf you’re ranked outside the top 20, you can challenge someone a maximum of 7 spots above you (but cannot challenge past #16)\nAll challenge matches are best of 3 sets\nYou may only challenge the same player once a month\nInjured players are not eligible to compete in challenge matches\nPlease challenge other members via email, copying vtmensclubtennis@gmail.com\nPlayers have 48 hours to respond to a challenge\nThe challenge match must be played within 7 days after acceptance\n\n\n\n\nWhile the challenge ladder system served us well, we’re transitioning to an Elo rating system to create a more quantitative and linear ranking approach. Here’s why:\nProblems with the Traditional System: - Arbitrary restrictions: Different challenge limits for different ranking tiers created complexity - Limited mobility: Top players were harder to challenge, creating ranking stagnation - Binary outcomes: Win/loss only, no consideration of opponent strength - Administrative burden: Tracking challenge eligibility, timing, and violations required constant oversight\nBenefits of Elo: - ✅ Linear and quantitative: Everyone has a numerical rating that changes predictably - ✅ No artificial barriers: Any player can play anyone, anytime - ✅ Rewards skill-appropriate competition: Beating stronger players = bigger rating gains - ✅ Self-regulating: No need to track who can challenge whom - ✅ Transparent: Everyone can see exactly how ratings change after each match - ✅ Fairer assessment: Your rating reflects your true skill level over time"
+  },
+  {
+    "objectID": "rank_ladder.html#what-is-the-elo-rating-system",
+    "href": "rank_ladder.html#what-is-the-elo-rating-system",
+    "title": "VT Club Tennis Elo Ranking System",
+    "section": "2 2. What is the Elo Rating System?",
+    "text": "2 2. What is the Elo Rating System?\nThink of Elo like a video game ranking system where everyone starts at the same level. When you win matches, you gain points; when you lose, you lose points. The cool part? Beating stronger players earns you more points than beating weaker ones.\n\n2.1 Key Concepts:\n\nEveryone starts with an initial rating (assigned based on current ladder position)\nWin = gain points, Lose = lose points\nBigger upset = bigger point swing\nThe system balances itself - ratings reflect true skill over time"
+  },
+  {
+    "objectID": "rank_ladder.html#how-does-it-work-simple-explanation",
+    "href": "rank_ladder.html#how-does-it-work-simple-explanation",
+    "title": "VT Club Tennis Elo Ranking System",
+    "section": "3 3. How Does It Work? (Simple Explanation)",
+    "text": "3 3. How Does It Work? (Simple Explanation)\n\n3.1 Step 1: Predict the outcome\nBefore each match, we calculate who should win based on current ratings.\nExample: Player A (1400 rating) vs Player B (1300 rating) - Player A is expected to win about 64% of the time - Player B is expected to win about 36% of the time\n\n\n3.2 Step 2: Compare prediction to reality\nAfter the match, we see what actually happened and compare it to the prediction.\n\n\n3.3 Step 3: Adjust ratings\n\nIf the favorite wins: Small point change (expected result)\nIf the underdog wins: Large point change (upset!)\n\nThe formula is simple:\nNew Rating = Old Rating + K × (Actual Result - Expected Result)\nWhere: - K = How many points are at stake (32 for new players, 12-24 for experienced players) - Actual Result = 1 if you won, 0 if you lost - Expected Result = Probability you were supposed to win (0 to 1)"
+  },
+  {
+    "objectID": "rank_ladder.html#lets-see-it-in-action-vt-club-tennis-roster-simulation",
+    "href": "rank_ladder.html#lets-see-it-in-action-vt-club-tennis-roster-simulation",
+    "title": "VT Club Tennis Elo Ranking System",
+    "section": "4 4. Let’s See It In Action: VT Club Tennis Roster Simulation",
+    "text": "4 4. Let’s See It In Action: VT Club Tennis Roster Simulation\nWe’ll apply the Elo rating system to the actual VT Club Tennis men’s roster and simulate a season of matches to see how rankings evolve.\n\n4.1 Initial Roster\nHere are the 40 members of the VT Club Tennis men’s team, starting with their current ladder rankings:\n\n\n\n\n\n\n\n\n4.2 Match 1: Alice vs Bob (Both start at 1300)\n\n\n\nStarting Ratings - Everyone at 1300\n\n\nname\nrating\n\n\n\n\nAlice\n1300\n\n\nBob\n1300\n\n\nCharlie\n1300\n\n\n\n\n\nBefore Match: - Alice: 1300 rating - Bob: 1300 rating - Expected Result: 50-50 (both equal)\nAlice wins!\nCalculation: - K-factor: 32 (both are new players) - Alice expected to win: 0.50 (50%) - Alice actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.50) = +16 points\n\n\n\nMatch 1 Results\n\n\nname\nold_rating\nexpected\nactual\nchange\nnew_rating\n\n\n\n\nAlice\n1300\n50%\nWon\n+16\n1316\n\n\nBob\n1300\n50%\nLost\n-16\n1284\n\n\n\n\n\nAfter Match 1:\n\n\n\nCurrent Standings After Match 1\n\n\nrank\nname\nrating\n\n\n\n\n1\nAlice\n1316\n\n\n2\nCharlie\n1300\n\n\n3\nBob\n1284\n\n\n\n\n\n\n\n\n4.3 Match 2: Alice vs Charlie (Alice now favored)\nBefore Match: - Alice: 1316 rating (favorite) - Charlie: 1300 rating (underdog) - Expected: Alice should win 52% of the time\nCharlie wins! (UPSET)\nCalculation: - K-factor: 32 (both still new) - Charlie expected to win: 0.48 (48%) - Charlie actually won: 1.0 (100%) - Point change: 32 × (1.0 - 0.48) = +17 points (more than Match 1 because of the upset!)\n\n\n\nMatch 2 Results - Upset!\n\n\nname\nold_rating\nexpected\nactual\nchange\nnew_rating\n\n\n\n\nCharlie\n1300\n48%\nWon\n+16.7\n1316.7\n\n\nAlice\n1316\n52%\nLost\n-16.7\n1299.3\n\n\n\n\n\nAfter Match 2:\n\n\n\nCurrent Standings After Match 2\n\n\nrank\nname\nrating\n\n\n\n\n1\nCharlie\n1316.7\n\n\n2\nAlice\n1299.3\n\n\n3\nBob\n1284.0\n\n\n\n\n\n\n\n\n4.4 Simulating a Season of Matches\nNow let’s simulate 200 random matches to see how the rankings evolve over time. The simulation assumes:\n\nPlayers closer in the ladder are more likely to play each other\nHigher-ranked players win more often, but upsets happen\nEvery match updates both players’ ratings using the Elo formula\n\n\n\n4.5 Final Rankings After 200 Matches\nHere’s how the ladder looks after the simulation. Notice how some players have moved significantly from their initial positions!\n\n\n\n\n\n\n\n\n4.6 Rating Evolution for Top 10 Players\nThis chart shows how the ratings of the top 10 players evolved throughout the 200-match season:\n\n\n\n\n\n\n\n\n\n\n\n4.7 Match Activity Summary\n\n\n\nTop 15 Most Active Players (by total matches played)\n\n\nPlayer\nTotal Matches\nWins\nLosses\nWin Rate (%)\n\n\n\n\nCarson Le\n37\n17\n20\n45.9\n\n\nNico Bermudez\n26\n11\n15\n42.3\n\n\nDiego Beltfort\n24\n14\n10\n58.3\n\n\nMitchell Freeman\n23\n13\n10\n56.5\n\n\nAustin Victory\n23\n9\n14\n39.1\n\n\nReed Kelly\n23\n14\n9\n60.9\n\n\nLuke Howell\n20\n12\n8\n60.0\n\n\nDavid Cho\n20\n13\n7\n65.0\n\n\nVaughn Harrington\n18\n9\n9\n50.0\n\n\nAndrew Kim\n18\n7\n11\n38.9\n\n\nRodrigo Lopez\n15\n7\n8\n46.7\n\n\nSarthak Vishwakarma\n14\n14\n0\n100.0\n\n\nEric Yoo\n12\n5\n7\n41.7\n\n\nNicola Cattaneo\n11\n9\n2\n81.8\n\n\nHarisharan Baskaran\n11\n6\n5\n54.5\n\n\n\n\n\n\n\n4.8 Key Insights from the Simulation\n\nRankings Changed: The simulation shows natural movement in the ladder as players compete\nHigher-Rated Players Win More: But upsets still happen, making the system dynamic\nActivity Matters: Players who played more matches had more opportunities to climb or fall\nElo is Self-Correcting: Over time, ratings stabilize to reflect true skill levels"
   },
   {
     "objectID": "performance_analysis.html",

@@ -1,0 +1,25 @@
+![](img/first.png){width=70% fig-align="center"}
+
+## Out Client
+
+Virginia Tech Club Tennis offers a competitive yet fun atmosphere for athletes looking to continue playing tennis in college. Tryouts are held every Spring and Fall semester. We look for players who can be competitive while still having a fun and inclusive time for everyone.
+
+::: {layout-ncol=2}
+![](img/team-rl-img-7563.jpg)
+
+![](img/team-rl-img-7605.jpg)
+:::
+
+::: {layout-ncol=3}
+![](img/img-0460.jpg)
+
+![](img/img-6434.jpeg)
+
+![](img/unnamed.jpg)
+:::
+
+---
+
+*Go Hokies!* 🎾
+
+
