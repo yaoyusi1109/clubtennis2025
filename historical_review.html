@@ -128,6 +128,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="./main.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About Us</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./project_log.html"> 
+<span class="menu-text">Project Log</span></a>
+  </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-financial-analysis" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Financial Analysis</span>
@@ -178,7 +186,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#financial-transaction-analysis" id="toc-financial-transaction-analysis" class="nav-link active" data-scroll-target="#financial-transaction-analysis">Financial Transaction Analysis</a></li>
+  <li><a href="#financial-transaction-ledger" id="toc-financial-transaction-ledger" class="nav-link active" data-scroll-target="#financial-transaction-ledger">Financial Transaction Ledger</a></li>
+  <li><a href="#financial-transaction-analysis" id="toc-financial-transaction-analysis" class="nav-link" data-scroll-target="#financial-transaction-analysis">Financial Transaction Analysis</a></li>
   <li><a href="#advanced-financial-analysis" id="toc-advanced-financial-analysis" class="nav-link" data-scroll-target="#advanced-financial-analysis">Advanced Financial Analysis</a>
   <ul class="collapse">
   <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a></li>
@@ -223,9 +232,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="financial-transaction-ledger" class="level1">
+<h1>Financial Transaction Ledger</h1>
+<p>View and interact with the live financial data directly from our Google Sheets ledger:</p>
+<iframe src="https://docs.google.com/spreadsheets/d/1QUmtSwyRjy1oQ6fqXGbksyNcvsLl_8wC0t6PSgTduJ8/edit?gid=0&amp;rm=minimal&amp;widget=true&amp;headers=false" width="100%" height="600" frameborder="0">
+</iframe>
+<hr>
+</section>
 <section id="financial-transaction-analysis" class="level1">
 <h1>Financial Transaction Analysis</h1>
-<p>This section presents a dynamic analysis of the club’s financial activities. The underlying data is sourced directly from a real-time ledger maintained in Google Sheets. The visualizations herein are programmatically generated and will automatically update to reflect any modifications to the source ledger, ensuring continuous and accurate financial reporting.</p>
+<p>This section presents a dynamic analysis of the club’s financial activities. The underlying data is sourced directly from the real-time ledger shown above. The visualizations are programmatically generated and will automatically update to reflect any modifications to the source ledger, ensuring continuous and accurate financial reporting.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googlesheets4)</span>
