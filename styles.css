@@ -1,0 +1,162 @@
+/* Virginia Tech Custom Theme */
+/* Colors: Chicago Maroon (#861F41) and Burnt Orange (#E87722) */
+
+:root {
+  --vt-maroon: #861F41;
+  --vt-orange: #E87722;
+  --vt-maroon-dark: #630031;
+  --vt-orange-light: #F19E4A;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: var(--vt-maroon) !important;
+}
+
+.navbar-brand {
+  color: white !important;
+  font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+  color: white !important;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--vt-orange) !important;
+}
+
+.navbar-nav .dropdown-menu {
+  background-color: var(--vt-maroon-dark);
+}
+
+.navbar-nav .dropdown-item {
+  color: white !important;
+}
+
+.navbar-nav .dropdown-item:hover {
+  background-color: var(--vt-orange);
+  color: white !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--vt-maroon);
+}
+
+h1 {
+  border-bottom: 3px solid var(--vt-orange);
+  padding-bottom: 10px;
+}
+
+/* Links */
+a {
+  color: var(--vt-orange);
+}
+
+a:hover {
+  color: var(--vt-maroon);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--vt-maroon);
+  border-color: var(--vt-maroon);
+}
+
+.btn-primary:hover {
+  background-color: var(--vt-maroon-dark);
+  border-color: var(--vt-maroon-dark);
+}
+
+.btn-secondary {
+  background-color: var(--vt-orange);
+  border-color: var(--vt-orange);
+}
+
+.btn-secondary:hover {
+  background-color: var(--vt-orange-light);
+  border-color: var(--vt-orange-light);
+}
+
+/* Tables */
+table {
+  border-color: var(--vt-maroon);
+}
+
+thead {
+  background-color: var(--vt-maroon);
+  color: white;
+}
+
+tbody tr:hover {
+  background-color: rgba(232, 119, 34, 0.1);
+}
+
+/* Code blocks */
+code {
+  color: var(--vt-maroon);
+}
+
+pre {
+  border-left: 3px solid var(--vt-orange);
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid var(--vt-orange);
+  padding-left: 1rem;
+  color: var(--vt-maroon);
+}
+
+/* Footer */
+footer {
+  background-color: var(--vt-maroon);
+  color: white;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+/* Sidebar TOC */
+.sidebar nav[role=doc-toc] ul>li>a.active {
+  border-left: 2px solid var(--vt-orange);
+  color: var(--vt-maroon) !important;
+}
+
+/* DataTables styling */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+  color: var(--vt-maroon);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background-color: var(--vt-maroon) !important;
+  border-color: var(--vt-maroon) !important;
+  color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: var(--vt-orange) !important;
+  border-color: var(--vt-orange) !important;
+  color: white !important;
+}
+
+/* Custom accent elements */
+.callout-note {
+  border-left-color: var(--vt-orange);
+}
+
+.callout-important {
+  border-left-color: var(--vt-maroon);
+}
+
+/* Title page elements */
+.title {
+  color: var(--vt-maroon);
+}
+
+.subtitle {
+  color: var(--vt-orange);
+}
