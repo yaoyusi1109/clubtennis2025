@@ -143,7 +143,7 @@ ggplot(deliverables, aes(x = progress, y = item, fill = category)) +
 **Needs Assessment & Project Kickoff**
 
 ### Attendees
-- Statistical Collaborators: Yusi Yao, Kempton Thacker, Caleb Bradbury, Parker Duffey
+- Statistical Collaborators: Yusi Yao, Kempton von Glinsky-Gregoire, Caleb Ramsey, Parker Trahan
 - VT Club Tennis Representatives: Mitchell Freeman, Emma Casazza
 
 ### Methodologies Applied
@@ -228,7 +228,7 @@ ggplot(deliverables, aes(x = progress, y = item, fill = category)) +
 **SwingVision Update & Budget Tool Progress**
 
 ### Attendees
-- Statistical Collaborators: Yusi Yao, Kempton Thacker, Caleb Bradbury, Parker Duffey
+- Statistical Collaborators: Yusi Yao, Kempton von Glinsky, Caleb Ramsey, Parker Trahan
 - VT Club Tennis Representatives: Mitchell Freeman
 
 ### Methodologies Applied
@@ -309,7 +309,7 @@ ggplot(deliverables, aes(x = progress, y = item, fill = category)) +
 **Development Review & Demonstrations**
 
 ### Attendees
-- Statistical Collaborators: Yusi Yao, Kempton Thacker, Caleb Bradbury, Parker Duffey
+- Statistical Collaborators: Yusi Yao, Kempton von Glinsky-Gregoire, Caleb Ramsey, Parker Trahan
 - VT Club Tennis Representatives: Mitchell Freeman, Emma Casazza
 
 ### Methodologies Applied
@@ -415,7 +415,7 @@ ggplot(deliverables, aes(x = progress, y = item, fill = category)) +
 **Final Review & Wrap-up**
 
 ### Attendees
-- Statistical Collaborators: Yusi Yao, Kempton Thacker, Caleb Bradbury, Parker Duffey
+- Statistical Collaborators: Yusi Yao, Kempton von Ginsky-Gregoire, Caleb Ramsey, Parker Trahan
 - VT Club Tennis Representatives: Emma Casazza
 
 ### Methodologies Applied
