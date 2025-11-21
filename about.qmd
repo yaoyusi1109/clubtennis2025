@@ -20,14 +20,19 @@ Virginia Tech Club Tennis offers a competitive yet fun atmosphere for athletes l
 
 ## Our Team
 
-Yusi - CTO 
+We may be a team of four, but we've got more C-level officers than a Fortune 500 company. Small but mighty—each member holds an executive title because, well, why not? Welcome to our perfectly over-titled squad:
 
-Kempton - CCO
+**Yusi Yao – CTO (Chief Technology Officer)**  
+Designs and implements the entire technical framework including both backend and frontend architecture. Developed the performance analysis system and Elo ranking ladder that powers the club's competitive tracking.
 
-Caleb - COO
+**Kempton von Glinsky-Gregoire – COO (Chief Operating Officer)**  
+Manages client relationships and serves as the primary liaison with VT Club Tennis. Documents client requirements and translates them into actionable development tasks for the team.
 
-Parker - CIO
+**Caleb Ramsey – COO (Chief Operating Officer)**  
+Develops financial and analytical tools for the project. Coordinates team activities and ensures all deliverables meet project timelines and quality standards.
 
+**Parker Trahan – CIO (Chief Information Officer)**  
+Supports major tool development initiatives across the platform. Assists with technical implementation and helps maintain the project's information systems and workflows.
 ---
 
 *Go Hokies!* 🎾

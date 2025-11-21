@@ -2,7 +2,7 @@
 
 View and interact with the live financial data directly from our Google Sheets ledger:
 
-<iframe src="https://docs.google.com/spreadsheets/d/1QUmtSwyRjy1oQ6fqXGbksyNcvsLl_8wC0t6PSgTduJ8/edit?gid=0&rm=minimal&widget=true&headers=false" width="100%" height="600" frameborder="0"></iframe>
+<iframe src="https://docs.google.com/spreadsheets/d/1uD75rtNejhOyuODyKw7iv-JyBv7bRaQF/edit?usp=sharing&ouid=112554211918368260344&rtpof=true&sd=true" width="100%" height="600" frameborder="0"></iframe>
 
 ---
 
@@ -23,11 +23,23 @@ library(stringr)
 # This allows the script to read a public sheet without requiring a login each time.
 gs4_deauth()
 
-# The URL of your Google Sheet
-sheet_url <- "https://docs.google.com/spreadsheets/d/1QUmtSwyRjy1oQ6fqXGbksyNcvsLl_8wC0t6PSgTduJ8/edit?usp=sharing" 
+# --- Google Sheet Access (robust) ---
+# Use just the Sheet ID or a simplified share URL; googlesheets4 can fail on long share URLs with extra params.
+sheet_id <- "1uD75rtNejhOyuODyKw7iv-JyBv7bRaQF"  # Provided ID
 
-# Read the data from the first sheet of your Google Sheet
-raw_data <- read_sheet(sheet_url, sheet = 1)
+raw_data <- tryCatch(
+  {
+    # Attempt unauthenticated read (sheet must be "Anyone with the link: Viewer")
+    read_sheet(sheet_id, sheet = 1)
+  },
+  error = function(e) {
+    message("Google Sheet read failed (", conditionMessage(e), "). Using local Excel fallback.")
+    # Fallback to local cached Excel version so the document still renders
+    fallback_path <- file.path("data", "TennisClubFinancialData.xlsx")
+    stopifnot(file.exists(fallback_path))
+    readxl::read_excel(fallback_path)
+  }
+)
 
 # Standardize column names for easier use
 colnames(raw_data) <- make.names(colnames(raw_data), unique = TRUE)
